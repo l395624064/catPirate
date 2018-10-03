@@ -1,10 +1,9 @@
-bin
-.DS_Store
-*actionScriptProperties.lprj
-*abbey.as3proj.lprj
+*.xml
+*.iml
+*.log
+*.apk
+
+*.iml
+
 .idea/
 xls/
-.laya
-
-.settings/
-*.iml
