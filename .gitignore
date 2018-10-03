@@ -1,2 +1,10 @@
+bin
+.DS_Store
+*actionScriptProperties.lprj
+*abbey.as3proj.lprj
 .idea/
 xls/
+.laya
+
+.settings/
+*.iml
