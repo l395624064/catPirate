@@ -95,7 +95,7 @@ public class UiManager {
     private function setUiBaseDepth():void
     {
         //_panel.visible=true;
-        //111
+        //
         Laya.stage.addChild(_panel);
         //parent=stage
 
