@@ -41,10 +41,8 @@ public class LayaSample {
 		{
             GameInit.instance.init();
             UiManager.instance.loadView("Loadview",null,1);
-            UiManager.instance.loadView("Loadview",null,1);
-            UiManager.instance.loadView("Loadview",null,1);
-            UiManager.instance.loadView("Loadview",null,1);
-            UiManager.instance.loadView("Loadview",null,1);
+            UiManager.instance.loadView("Loadview", null, 1);
+			//文档类
 
             /*Laya.timer.once(5000,this,function () {
 				console.log("-------");

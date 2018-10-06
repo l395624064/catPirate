@@ -1,7 +1,7 @@
 /**Created by the LayaAirIDE,do not modify.*/
 package ui {
 	import laya.ui.*;
-	import laya.display.*; 
+	import laya.display.*;
 
 	public class GameMainUI extends View {
 		public var dropSp:Sprite;

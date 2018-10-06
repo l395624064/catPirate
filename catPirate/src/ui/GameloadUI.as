@@ -1,7 +1,7 @@
 /**Created by the LayaAirIDE,do not modify.*/
 package ui {
 	import laya.ui.*;
-	import laya.display.*; 
+	import laya.display.*;
 
 	public class GameloadUI extends View {
 		public var loadBar:ProgressBar;
