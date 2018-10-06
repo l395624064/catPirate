@@ -2,6 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
+    "selecteID":2,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -14,7 +15,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":0,"x":0,"width":640,"skin":"scene/GameSea0.jpg","height":1136},
+            "props":{"y":0,"x":0,"width":640,"skin":"scene/gameScene_0.jpg","height":1136},
             "nodeParent":1,
             "label":"Image",
             "isOpen":true,
@@ -107,15 +108,16 @@
             "props":{"y":870,"x":66,"var":"dropSolder"},
             "nodeParent":1,
             "label":"Box(dropSolder)",
-            "isOpen":null,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":19,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
-                    "props":{"y":32,"skin":"ui/common_ex/fishscroll.png"},
+                    "props":{"y":32,"skin":"ui/gamemain/fishscroll.png"},
                     "nodeParent":19,
                     "label":"Image",
                     "isDirectory":false,
@@ -126,8 +128,9 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
-                    "props":{"y":54,"x":76,"width":54,"skin":"ui/common_ex/fishhook.png","pivotY":54,"pivotX":27,"height":53},
+                    "props":{"y":54,"x":76,"width":54,"skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53},
                     "nodeParent":19,
                     "label":"Image",
                     "isDirectory":false,
@@ -138,11 +141,12 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":24,"x":75},
                     "nodeParent":19,
                     "label":"Box",
-                    "isOpen":null,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
@@ -150,7 +154,7 @@
                     "child":[
                         {
                             "type":"Image",
-                            "props":{"x":357,"skin":"ui/common_ex/color_yellow.png"},
+                            "props":{"x":357,"skin":"ui/gamemain/color_yellow.png"},
                             "nodeParent":18,
                             "label":"Image",
                             "isDirectory":false,
@@ -162,7 +166,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"x":125,"skin":"ui/common_ex/color_blue.png"},
+                            "props":{"x":125,"skin":"ui/gamemain/color_blue.png"},
                             "nodeParent":18,
                             "label":"Image",
                             "isDirectory":false,
@@ -174,7 +178,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":27,"skin":"ui/common_ex/gfer.png","renderType":"mask"},
+                            "props":{"y":27,"skin":"ui/gamemain/gfer.png","renderType":"mask"},
                             "nodeParent":18,
                             "label":"Image",
                             "isOpen":true,
@@ -195,15 +199,16 @@
             "props":{"y":755,"x":311,"width":584,"var":"shipSp","rotation":0,"pivotY":489,"pivotX":293,"height":485},
             "nodeParent":1,
             "label":"Box(shipSp)",
-            "isOpen":null,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":26,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
-                    "props":{"y":484,"x":303,"width":603,"skin":"ui/common/ship2.png","pivotY":484,"pivotX":303,"height":487},
+                    "props":{"y":484,"x":303,"width":603,"skin":"ui/common/ship_A_1.png","pivotY":484,"pivotX":303,"height":487},
                     "nodeParent":26,
                     "label":"Image",
                     "isDirectory":false,
@@ -214,8 +219,9 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
-                    "props":{"y":290,"x":364,"width":120,"skin":"ui/common/1.png","pivotY":136,"pivotX":59,"height":141},
+                    "props":{"y":290,"x":364,"width":120,"skin":"ui/common/Role_A_1.png","pivotY":136,"pivotX":59,"height":141},
                     "nodeParent":26,
                     "label":"Image",
                     "isDirectory":false,
@@ -226,8 +232,9 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
-                    "props":{"y":298,"x":102,"width":112,"skin":"ui/common/5.png","pivotY":133,"pivotX":58,"height":131},
+                    "props":{"y":298,"x":102,"width":112,"skin":"ui/common/Role_B_1.png","pivotY":133,"pivotX":58,"height":131},
                     "nodeParent":26,
                     "label":"Image",
                     "isDirectory":false,

@@ -24,7 +24,8 @@
             "compId":2,
             "child":[
                 ],
-            "$LOCKED":false
+            "$LOCKED":false,
+            "$HIDDEN":false
         },
         {
             "x":15,

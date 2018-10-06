@@ -18,7 +18,7 @@ public class GamemainC {
 
     private function openGame():void
     {
-        console.log("--GameMainPanelOpen");
+        //console.log("--GameMainPanelOpen");
     }
 
 

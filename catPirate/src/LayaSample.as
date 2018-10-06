@@ -41,14 +41,14 @@ public class LayaSample {
 		{
             GameInit.instance.init();
             UiManager.instance.loadView("Loadview",null,1);
-            UiManager.instance.loadView("Loadview", null, 1);
+            //UiManager.instance.loadView("Loadview", null, 1);
 			//文档类
 
             /*Laya.timer.once(5000,this,function () {
 				console.log("-------");
-				Laya.stage.removeChildren();
+                UiManager.instance.closePanel("Loadview");
 				Laya.timer.once(2000,this,function () {
-                    UiManager.instance.loadView("Loadview",null,1);
+                    UiManager.instance.loadView("Loadview", null, 1);
                 })
             })*/
 		}

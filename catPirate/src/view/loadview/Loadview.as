@@ -4,6 +4,7 @@ import laya.utils.Handler;
 
 import manager.GameEvent;
 import manager.GameEventDispatch;
+import manager.UiManager;
 
 import ui.GameloadUI;
 
@@ -15,12 +16,12 @@ public class Loadview extends GameloadUI implements PanelVo{
     private var loadRes:Array=[
         {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS},
         {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS},
-        {url:"res/atlas/ui/common_ex.atlas",        type:Loader.ATLAS},
+        {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS},
 
-        {url:"scene/bg.jpg",                        type:Loader.IMAGE},
+        {url:"scene/gameScene_0.jpg",                type:Loader.IMAGE},
 
-        {url:"sound/destroy.wav",                        type:Loader.SOUND},
-        {url:"sound/hit.wav",                            type:Loader.SOUND}
+        {url:"sound/destroy.wav",                    type:Loader.SOUND},
+        {url:"sound/hit.wav",                        type:Loader.SOUND}
     ];
 
     public function Loadview() {
@@ -43,9 +44,11 @@ public class Loadview extends GameloadUI implements PanelVo{
     }
     private function loadComplete():void
     {
-        console.log("-load complete-");
         setloadBar(1);
-        GameEventDispatch.instance.event(GameEvent.GameMainPanelOpen);
+        Laya.timer.once(2000,this,function () {
+            UiManager.instance.closePanel("Loadview");
+            UiManager.instance.loadView("Gamemain");
+        })
     }
     private function onProgress(res:Number):void
     {

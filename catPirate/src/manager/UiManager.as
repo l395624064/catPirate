@@ -1,6 +1,8 @@
 package manager {
 import laya.debug.tools.StringTool;
+import laya.display.Sprite;
 import laya.net.Loader;
+import laya.ui.Image;
 import laya.utils.ClassUtils;
 import laya.utils.Handler;
 
@@ -14,6 +16,8 @@ public class UiManager {
     private var _emptyResUi:Object;
     private var _panel:*;
     private var _pngNum:Number=0;
+    //private var _uiType:String="UITYPE_SCENE";//UITYPE_SCENE UITYPE_NORMAL UITYPE_DLG  UITYPE_TIP
+
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
     private var _task:Object;
@@ -22,7 +26,6 @@ public class UiManager {
         _caches={};
         _emptyResUi={};
         setEmptyRes();
-        console.log("---UiManager init");
     }
 
     public static function get instance():UiManager
@@ -49,10 +52,10 @@ public class UiManager {
             _pngNum=pngNum;
             _panel= _caches[_name];
             if(_panel){
-                console.log("--panel find out");
+                //console.log("--panel find out");
                 loadComplete();
             }else{
-                console.log("--panel not find And please wait");
+                //console.log("--panel not find And please wait");
                 _taskState="Busy";
                 Laya.loader.load(res,Handler.create(this, loadComplete));
             }
@@ -60,7 +63,7 @@ public class UiManager {
             _task={};
             _task={name:name,param:param,pngNum:pngNum};
             _taskArr.push(_task);
-            console.log("-into panelTaskRank")
+            //console.log("-into panelTaskRank")
         }
     }
 
@@ -72,8 +75,10 @@ public class UiManager {
             _caches[_name]=_panel;
         }
 
-        setUiBaseDepth();
-
+        _panel.openPanel(_param);
+        _panel.register();
+        Laya.stage.addChild(_panel);
+        //setUiBaseDepth();
         if(_taskArr.length){
             var obj:Object={};
             if(_taskArr.length>1){
@@ -87,22 +92,46 @@ public class UiManager {
     }
 
 
-    private function getUiBaseDepth(type:String):int
-    {
 
-    }
 
     private function setUiBaseDepth():void
     {
         //_panel.visible=true;
-        //
-        Laya.stage.addChild(_panel);
+        //console.log("-_panel.visible:",_panel.visible);
         //parent=stage
-
         //parent=currentScene
-
         //parent=currentPanel
     }
+
+    private function getUiBaseDepth(type:String):int
+    {
+        //UITYPE_SCENE UITYPE_NORMAL UITYPE_DLG  UITYPE_TIP
+        var deep:int=0;
+        switch (type){
+            case "UITYPE_SCENE":
+            {
+                break;
+            }
+            case "UITYPE_NORMAL":
+            {
+                break;
+            }
+            case "UITYPE_DLG":
+            {
+                break;
+            }
+            case "UITYPE_TIP":
+            {
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        return deep;
+    }
+
 
     private function get res():Array
     {
@@ -122,6 +151,16 @@ public class UiManager {
         }
         return arr;
     }
+
+    public function closePanel(name:String):void
+    {
+        var panel:*=_caches[name];
+        if(panel!=null){
+            panel.removeSelf();
+            panel.unRegister();
+        }
+    }
+
 
 
 
