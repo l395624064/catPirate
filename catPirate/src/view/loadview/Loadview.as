@@ -45,7 +45,7 @@ public class Loadview extends GameloadUI implements PanelVo{
     private function loadComplete():void
     {
         setloadBar(1);
-        Laya.timer.once(2000,this,function () {
+        Laya.timer.once(1000,this,function () {
             UiManager.instance.closePanel("Loadview");
             UiManager.instance.loadView("Gamemain");
         })
@@ -79,7 +79,7 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public function closePanel():void
     {
-        _instance.removeSelf();
+        this.removeSelf();
     }
 }
 }

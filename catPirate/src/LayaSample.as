@@ -4,8 +4,14 @@ import laya.net.URL;
 import laya.utils.Handler;
 import laya.webgl.WebGL;
 
+import manager.GameEvent;
+
+import manager.GameEventDispatch;
+
 import manager.GameInit;
 import manager.UiManager;
+
+import src.model.PlayerInfoM;
 
 import view.loadview.Loadview;
 
@@ -43,14 +49,27 @@ public class LayaSample {
             UiManager.instance.loadView("Loadview",null,1);
             //UiManager.instance.loadView("Loadview", null, 1);
 			//文档类
-
-            /*Laya.timer.once(5000,this,function () {
+            /*
+            Laya.timer.once(5000,this,function () {
 				console.log("-------");
-                UiManager.instance.closePanel("Loadview");
+                PlayerInfoM.instance.setGoldNum(999);
+                PlayerInfoM.instance.setPlankNum(999);
+                GameEventDispatch.instance.event(GameEvent.GoldRefresh);
 				Laya.timer.once(2000,this,function () {
-                    UiManager.instance.loadView("Loadview", null, 1);
+                    console.log("----closePanel Gamemain");
+                    UiManager.instance.closePanel("Gamemain");
+                    PlayerInfoM.instance.setGoldNum(888);
+                    PlayerInfoM.instance.setPlankNum(888);
+                    GameEventDispatch.instance.event(GameEvent.GoldRefresh);
+                    //UiManager.instance.loadView("Loadview", null, 1);
+					Laya.timer.once(5000,this,function () {
+                        console.log("----open Gamemain");
+                        UiManager.instance.loadView("Gamemain");
+                        //UiManager.instance.loadView("Loadview",null,1);
+                    })
                 })
-            })*/
+            })
+            */
 		}
 
 	}

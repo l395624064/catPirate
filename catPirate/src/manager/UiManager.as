@@ -156,8 +156,9 @@ public class UiManager {
     {
         var panel:*=_caches[name];
         if(panel!=null){
-            panel.removeSelf();
             panel.unRegister();
+            panel.clearAll();
+            panel.closePanel();
         }
     }
 
