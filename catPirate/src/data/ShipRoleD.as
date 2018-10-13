@@ -1,4 +1,4 @@
-package src.data {
+package data {
 public class ShipRoleD {
     public var skin:String="";
     public var exp:Number=0;

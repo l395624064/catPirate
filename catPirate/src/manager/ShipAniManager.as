@@ -1,4 +1,4 @@
-package src.manager {
+package manager {
 import laya.ui.Box;
 import laya.utils.Handler;
 import laya.utils.Tween;

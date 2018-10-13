@@ -7,9 +7,10 @@ import laya.utils.Tween;
 import manager.GameEvent;
 import manager.GameEventDispatch;
 
-import src.manager.ShipAniManager;
-import src.model.PlayerInfoM;
-import src.view.gamemain.SimpleRole;
+import manager.ShipAniManager;
+
+import model.PlayerInfoM;
+
 
 import ui.GameMainUI;
 
@@ -65,7 +66,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         roleDic={"captain":captain,"shipmate":shipmate,"shipchef":shipchef,"shipsoldier":shipsoldier};
     }
 
-    private function getshipRole(name:String):void
+    private function getshipRole(name:String):*
     {
         return roleDic[name];
     }
@@ -156,7 +157,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public function closePanel():void
     {
-        this.removeSelf();
+        this.visible=false;
+        //this.removeSelf();
     }
 
     public function clearAll():void

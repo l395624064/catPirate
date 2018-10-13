@@ -1,8 +1,8 @@
 package control {
+
 import manager.GameEvent;
 import manager.GameEventDispatch;
 
-import view.gamemain.Gamemain;
 
 public class GamemainC {
     public static var _instance:GamemainC;

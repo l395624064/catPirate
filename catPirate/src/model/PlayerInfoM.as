@@ -1,4 +1,4 @@
-package src.model {
+package model {
 public class PlayerInfoM {
 
     public static var _instance:PlayerInfoM;

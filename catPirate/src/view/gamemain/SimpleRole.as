@@ -1,16 +1,13 @@
-package src.view.gamemain {
+package view.gamemain {
 import laya.events.Event;
 import laya.ui.Image;
 
-import manager.GameEvent;
+import model.ShipRoleM;
 
-import manager.GameEventDispatch;
-
-import src.model.ShipRoleM;
 
 public class SimpleRole {
     public var _name:String="";
-    private var _roleData:Object={}:
+    private var _roleData:Object={};
     private var _img:Image;
 
     private var _exp:Number;

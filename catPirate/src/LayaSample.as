@@ -1,19 +1,11 @@
-﻿package {
-import laya.net.Loader;
-import laya.net.URL;
-import laya.utils.Handler;
+﻿package src {
+import laya.display.Sprite;
+import laya.utils.ClassUtils;
 import laya.webgl.WebGL;
-
 import manager.GameEvent;
-
 import manager.GameEventDispatch;
-
 import manager.GameInit;
 import manager.UiManager;
-
-import src.model.PlayerInfoM;
-
-import view.loadview.Loadview;
 
 public class LayaSample {
 		
@@ -47,7 +39,22 @@ public class LayaSample {
 		{
             GameInit.instance.init();
             UiManager.instance.loadView("Loadview",null,1);
-            //UiManager.instance.loadView("Loadview", null, 1);
+
+
+			/*
+            Laya.timer.once(5000, this, function () {
+                GameEventDispatch.instance.event(GameEvent.OpenWait);
+				var sp:Sprite=new Sprite();
+				sp.graphics.drawCircle(0,0,200,"#ffffff","#ff5555",10);
+				sp.pos(500,500);
+                sp.zOrder=200;
+				Laya.stage.addChild(sp);
+				Laya.timer.once(2000, this, function () {
+                    sp.zOrder=20002;
+                    //GameEventDispatch.instance.event(GameEvent.CloseWait);
+                })
+            })
+            */
 			//文档类
             /*
             Laya.timer.once(5000,this,function () {

@@ -1,5 +1,5 @@
-package src.model {
-import src.data.ShipRoleD;
+package model {
+import data.ShipRoleD;
 
 public class ShipRoleM {
 

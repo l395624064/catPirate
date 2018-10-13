@@ -2,9 +2,8 @@ package view.loadview {
 import laya.net.Loader;
 import laya.utils.Handler;
 
-import manager.GameEvent;
-import manager.GameEventDispatch;
 import manager.UiManager;
+
 
 import ui.GameloadUI;
 
@@ -17,6 +16,7 @@ public class Loadview extends GameloadUI implements PanelVo{
         {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS},
         {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS},
+        {url:"res/atlas/ui/common_img.atlas",         type:Loader.ATLAS},
 
         {url:"scene/gameScene_0.jpg",                type:Loader.IMAGE},
 
@@ -45,6 +45,8 @@ public class Loadview extends GameloadUI implements PanelVo{
     private function loadComplete():void
     {
         setloadBar(1);
+        UiManager.instance.baseTipInit();
+
         Laya.timer.once(1000,this,function () {
             UiManager.instance.closePanel("Loadview");
             UiManager.instance.loadView("Gamemain");
@@ -60,7 +62,6 @@ public class Loadview extends GameloadUI implements PanelVo{
         this.loadBar.value=_value;
         this.loadHead.centerX=-loadBar.width/2+loadBar.width*_value;
     }
-
 
 
     public function register():void
@@ -79,7 +80,7 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public function closePanel():void
     {
-        this.removeSelf();
+        this.visible=false;
     }
 }
 }
