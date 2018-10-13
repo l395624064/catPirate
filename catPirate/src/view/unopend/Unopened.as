@@ -55,7 +55,7 @@ public class Unopened extends ui.UnopenedUI implements PanelVo{
         GameEventDispatch.instance.off(GameEvent.UnopenedShow, this, imgAdaptive);
         GameEventDispatch.instance.off(GameEvent.Unopenedhide, this, closePanel);
     }
-    public function clearAll():void
+    public function clearAllNum():void
     {
 
     }

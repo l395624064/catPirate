@@ -41,6 +41,16 @@ public class LayaSample {
             UiManager.instance.loadView("Loadview",null,1);
 
 
+
+			/*
+			Laya.timer.once(5000,this,function () {
+                UiManager.instance.closePanel("Gamemain");
+				Laya.timer.once(2000,this,function () {
+                    UiManager.instance.loadView("Gamemain");
+                })
+            })
+			*/
+
 			/*
             Laya.timer.once(5000, this, function () {
                 GameEventDispatch.instance.event(GameEvent.OpenWait);

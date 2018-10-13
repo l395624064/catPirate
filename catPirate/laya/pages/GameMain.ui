@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":30,
+    "selecteID":19,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -149,40 +149,46 @@
                 {
                     "x":30,
                     "type":"Box",
-                    "props":{"y":24,"x":75},
+                    "props":{"y":24,"x":75,"width":468,"var":"fishhookMask","height":135},
                     "nodeParent":19,
-                    "label":"Box",
-                    "isOpen":false,
+                    "label":"Box(fishhookMask)",
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":18,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"x":357,"skin":"ui/gamemain/color_yellow.png"},
+                            "props":{"y":45,"x":-100,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5},
                             "nodeParent":18,
-                            "label":"Image",
+                            "label":"Image(yellowImg)",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":15,
                             "child":[
-                                ]
+                                ],
+                            "$LOCKED":true
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"x":125,"skin":"ui/gamemain/color_blue.png"},
+                            "props":{"y":45,"x":-100,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5},
                             "nodeParent":18,
-                            "label":"Image",
+                            "label":"Image(blueImg)",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":17,
                             "child":[
-                                ]
+                                ],
+                            "$LOCKED":true,
+                            "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"y":27,"skin":"ui/gamemain/gfer.png","renderType":"mask"},
                             "nodeParent":18,
@@ -195,6 +201,7 @@
                             "child":[
                                 ]
                         }],
+                    "$LOCKED":true,
                     "$HIDDEN":false
                 }],
             "$HIDDEN":false
@@ -205,14 +212,13 @@
             "props":{"y":755,"x":311,"width":584,"var":"shipBox","rotation":0,"pivotY":489,"pivotX":293,"height":485},
             "nodeParent":1,
             "label":"Box(shipBox)",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":26,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":97,"x":356,"width":111,"var":"captainImg","pivotY":131,"pivotX":54,"height":131},
                     "nodeParent":26,
@@ -226,7 +232,6 @@
                     "$LOCKED":false
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":484,"x":303,"width":603,"skin":"ui/common/ship_A_1.png","pivotY":484,"pivotX":303,"height":487},
                     "nodeParent":26,
@@ -240,7 +245,6 @@
                     "$LOCKED":true
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":297,"x":420,"width":112,"var":"shipmateImg","pivotY":133,"pivotX":58,"height":131},
                     "nodeParent":26,
@@ -253,7 +257,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":210,"x":229,"width":111,"var":"shipchefImg","pivotY":135,"pivotX":57,"height":133},
                     "nodeParent":26,
@@ -266,7 +269,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":297,"x":92,"width":114,"var":"shipsoldierImg","pivotY":128,"pivotX":58,"height":128},
                     "nodeParent":26,

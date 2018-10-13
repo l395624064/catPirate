@@ -6,6 +6,8 @@ public class PlayerInfoM {
     private var _goldNum:Number=0;
     private var _plankNum:Number=0;
 
+    private var _luckNum:Number=0;
+
     public function PlayerInfoM() {
     }
 
@@ -14,23 +16,33 @@ public class PlayerInfoM {
         return _instance || (_instance=new PlayerInfoM());
     }
 
+    public function getluckNum():Number
+    {
+        return _luckNum;
+    }
+    public function setluckNum(value:Number):void
+    {
+        _luckNum=value;
+    }
+
+
 
     public function getGoldNum():Number
     {
         return _goldNum;
     }
-    public function setGoldNum(gold:Number):void
+    public function setGoldNum(value:Number):void
     {
-        _goldNum=gold;
+        _goldNum=value;
     }
 
     public function getPlankNum():Number
     {
         return _plankNum;
     }
-    public function setPlankNum(plank:Number):void
+    public function setPlankNum(value:Number):void
     {
-        _plankNum=plank;
+        _plankNum=value;
     }
 
 

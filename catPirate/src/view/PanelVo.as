@@ -9,6 +9,6 @@ public interface PanelVo {
 
     function unRegister():void;
 
-    function clearAll():void;
+    function clearAllNum():void;
 }
 }

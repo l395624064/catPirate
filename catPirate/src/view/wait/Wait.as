@@ -58,7 +58,7 @@ public class Wait extends WaitUI implements PanelVo{
         GameEventDispatch.instance.off(GameEvent.CloseWait, this, closePanel);
     }
 
-    public function clearAll():void
+    public function clearAllNum():void
     {
 
     }

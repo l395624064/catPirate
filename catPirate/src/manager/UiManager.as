@@ -1,5 +1,6 @@
 package manager {
 import laya.debug.tools.StringTool;
+import laya.display.Sprite;
 import laya.net.Loader;
 import laya.utils.ClassUtils;
 import laya.utils.Handler;
@@ -204,9 +205,20 @@ public class UiManager {
     {
         var panel:*=_caches[name];
         if(panel!=null){
+            removeEvent(panel);
+
             panel.unRegister();
-            panel.clearAll();
+            panel.clearAllNum();
             panel.closePanel();
+        }
+        Laya.loader.clearTextureRes("res/atlas/ui/" + StringTool.toLowHead(name) + ".png");
+    }
+
+    private function removeEvent(panel:*):void
+    {
+        for(var i:int=0;i<panel.numChildren;i++){
+            var panelNode=panel.getChildAt(i);
+            panelNode.offAll();
         }
     }
 

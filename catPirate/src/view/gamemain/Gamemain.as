@@ -1,11 +1,17 @@
 package view.gamemain {
+import data.EffectD;
+
 import laya.events.Event;
+import laya.maths.Point;
 import laya.ui.Box;
 import laya.utils.Handler;
 import laya.utils.Tween;
 
+import manager.GameEffect;
+
 import manager.GameEvent;
 import manager.GameEventDispatch;
+import manager.GameMath;
 
 import manager.ShipAniManager;
 
@@ -20,6 +26,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public static var _instance:Gamemain;
     private var roleDic:Object={};
+
+    private var canDrop:Boolean;
+    private var fishhookPoint:Point;
 
     private const minFishhook:int=75;
     private const maxFishhook:int=530;
@@ -38,18 +47,21 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public function openPanel(param:Object=null):void
     {
-        initRole();
+        creatRole();
         initSeaWave(shipBox);
-
-        initScoreBox(true);
-        initDropFishBox(false);
-
-        updateScore();
         initListener();
+
+
+        //update view
+        changeScoreBoxState("start");
+        changeDropFishBoxState("over");
+
+        //update Num
+        initNum();
     }
 
     //creat role
-    private function initRole():void
+    private function creatRole():void
     {
         var captain:SimpleRole=new SimpleRole();
         captain.init("captain",this.captainImg);
@@ -71,38 +83,23 @@ public class Gamemain extends GameMainUI implements PanelVo {
         return roleDic[name];
     }
 
+    private function initNum():void
+    {
+
+        changeScoreBoxState("update");
+    }
+
     private function initListener():void
     {
-        dropSp.once(Event.MOUSE_DOWN,this,onAngling);
-    }
-
-
-
-
-    private function onAngling(e:Event):void
-    {
-        e.stopPropagation();
-        initDropFishBox(true);
-
-        fishhookImg.x=minFishhook;
-        fishhookIndex=0;
-
-
-
-        fishhookMove();
-        Laya.stage.once(Event.MOUSE_DOWN,this,function () {
-            Tween.clearAll(fishhookImg);
-            //over effect
-            dropSp.once(Event.MOUSE_DOWN,this,onAngling);
-        })
-    }
-    private function fishhookMove():void
-    {
-        console.log("-fishhookIndex 2:",fishhookIndex);
-        Tween.to(fishhookImg,{x:(fishhookIndex%2)? minFishhook:maxFishhook},2000,null,Handler.create(this,function () {
-            fishhookIndex++;
-            fishhookMove();
-        }))
+        dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {
+            if(!canDrop) return;
+            console.log("--dropSp Click");
+            e.stopPropagation();
+            changeDropFishBoxState("start");
+            Laya.stage.once(Event.MOUSE_DOWN,this,function () {
+                changeDropFishBoxState("stop");
+            })
+        });
     }
 
 
@@ -117,51 +114,89 @@ public class Gamemain extends GameMainUI implements PanelVo {
         ShipAniManager.instance.shipAniControl(lv);
     }
 
-    private function initScoreBox(ifShow:Boolean):void
+    private function changeScoreBoxState(action:String):void
     {
-        if(ifShow){
+        if(action=="start"){
             scoreBox.visible=true;
-        }else{
+        }else if(action=="over"){
             scoreBox.visible=false;
+        }else if(action="update"){
+            gold_txt.text=PlayerInfoM.instance.getGoldNum() as String;
+            plank_txt.text=PlayerInfoM.instance.getPlankNum() as String;
         }
     }
-    private function updateScore():void
-    {
-        gold_txt.text=PlayerInfoM.instance.getGoldNum() as String;
-        plank_txt.text=PlayerInfoM.instance.getPlankNum() as String;
-    }
 
 
-    private function initDropFishBox(ifShow:Boolean):void
+    //鱼钩box状态
+    private function changeDropFishBoxState(action:String):void
     {
-        if(ifShow){
+        if(action=="start"){
+            var dxArr:Array=GameMath.instance.gethookColorImg();
+            blueImg.x=dxArr[0];
+            yellowImg.x=dxArr[1];
+            fishhookImg.x=minFishhook;
+            fishhookIndex=0;
+            canDrop=false;
+
             dropFishBox.visible=true;
-        }else{
+            changeDropFishBoxState("move");
+        }else if(action=="move"){
+            Tween.to(fishhookImg,{x:(fishhookIndex%2)? minFishhook:maxFishhook},2000,null,Handler.create(this,function () {
+                fishhookIndex++;
+                changeDropFishBoxState(action);
+            }))
+        }else if(action=="over"){
+            blueImg.x=-100;
+            yellowImg.x=-100;
+            canDrop=true;
+
             dropFishBox.visible=false;
+            Tween.clearAll(fishhookImg);
+        }else if(action=="stop"){
+
+            //over effect
+            fishhookPoint=fishhookMask.globalToLocal(dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y)));
+            //console.log("--fishhookImg C:",fishhookPoint);
+            //get pop
+            var efData:EffectD=new EffectD();
+            efData.startPoint=fishhookMask.localToGlobal(fishhookPoint);
+            efData.endPoint=new Point(scoreBox.x,scoreBox.y);
+            GameEffect.instance.creatSignPopMove("plank",efData,Handler.create(this,handerTest));
+
+            Tween.clearAll(fishhookImg);
+            Laya.timer.once(1000, this, function () {
+                changeDropFishBoxState("over");
+            })
         }
     }
+
+    private function handerTest():void
+    {
+        console.log("--handerTest");
+        //GameEffect.instance.clearEffectImg("plank");
+    }
+
 
 
 
     public function register():void
     {
-        GameEventDispatch.instance.on(GameEvent.GoldRefresh,this,updateScore);
-        GameEventDispatch.instance.on(GameEvent.PlankRefresh,this,updateScore);
+        GameEventDispatch.instance.on(GameEvent.GoldRefresh,this,changeScoreBoxState,["update"]);
+        GameEventDispatch.instance.on(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
     }
 
     public function unRegister():void
     {
-        GameEventDispatch.instance.off(GameEvent.GoldRefresh,this,updateScore);
-        GameEventDispatch.instance.off(GameEvent.PlankRefresh,this,updateScore);
+        GameEventDispatch.instance.off(GameEvent.GoldRefresh,this,changeScoreBoxState,["update"]);
+        GameEventDispatch.instance.off(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
     }
 
     public function closePanel():void
     {
         this.visible=false;
-        //this.removeSelf();
     }
 
-    public function clearAll():void
+    public function clearAllNum():void
     {
 
     }
