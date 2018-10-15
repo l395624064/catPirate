@@ -29,8 +29,7 @@ public class UiManager {
     private var _UITYPE_TIP_NUM:int;
     private var _UITYPE_ANI_NUM:int;
     private const _UITYPE_WAIT:int=2001;
-
-
+    private const _UITYPE_EFFECT:int=3000;
 
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
@@ -172,6 +171,10 @@ public class UiManager {
             case "UITYPE_WAIT":
             {
                 deep=_UITYPE_WAIT;
+            }
+            case "UITYPE_EFFECT":
+            {
+                deep=_UITYPE_EFFECT;
             }
             default:
             {

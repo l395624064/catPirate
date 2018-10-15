@@ -16,8 +16,10 @@ public class Loadview extends GameloadUI implements PanelVo{
         {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS},
         {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS},
-        {url:"res/atlas/ui/common_img.atlas",         type:Loader.ATLAS},
+        {url:"res/atlas/ui/common_img.atlas",        type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ef.atlas",         type:Loader.ATLAS},
+
+        {url:"res/atlas/font.atlas",                 type:Loader.ATLAS},
 
         {url:"scene/gameScene_0.jpg",                type:Loader.IMAGE},
 
