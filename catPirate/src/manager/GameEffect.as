@@ -54,7 +54,6 @@ public class GameEffect {
             if(ef.hasOwnProperty('die') && ef['die']){
                 ef['die']=false;
                 ef.removeSelf();
-                removeEvent(ef['type']);
             }
         }
     }
@@ -181,7 +180,6 @@ public class GameEffect {
                 img.removeSelf();
                 removeEvent(img['type']);
                 _effectImgArr.splice(i,1);
-
             }
         }
     }

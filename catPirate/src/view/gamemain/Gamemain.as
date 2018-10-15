@@ -210,19 +210,44 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
+    private function addScoreNum(type:String):void
+    {
+        if(type=="plank"){
+            var planknum:int=PlayerInfoM.instance.getPlankNum();
+            planknum++;
+            PlayerInfoM.instance.setPlankNum(planknum);
+        }
+        else if(type=="gold"){
+            var goldnum:int=PlayerInfoM.instance.getGoldNum();
+            goldnum++;
+            PlayerInfoM.instance.setGoldNum(goldnum);
+        }
+        changeScoreBoxState("update");
+    }
+
     private const scoreAniSize:Number=1.2;
     private const scoreAniTime:Number=300;
     private function PlankScoreANI(scaleNum:Number):void
     {
         Tween.to(plankScoreImg,{scaleX:scaleNum,scaleY:scaleNum},scoreAniTime,Ease.backOut,Handler.create(this,function () {
-            PlankScoreANI(1);
+            if(plankScoreImg.scaleX!=1){
+                PlankScoreANI(1);
+            }
         }),0,true);
+
+        if(scaleNum==1) return;
+        addScoreNum("plank");
     }
     private function GoldScoreANI(scaleNum:Number):void
     {
         Tween.to(goldScoreImg,{scaleX:scaleNum,scaleY:scaleNum},scoreAniTime,Ease.backOut,Handler.create(this,function () {
-            GoldScoreANI(1);
+            if(goldScoreImg.scaleX!=1){
+                GoldScoreANI(1);
+            }
         }),0,true);
+
+        if(scaleNum==1) return;
+        addScoreNum("gold");
     }
 
 
