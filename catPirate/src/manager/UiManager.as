@@ -3,8 +3,11 @@ import laya.debug.tools.StringTool;
 import laya.display.Sprite;
 import laya.net.Loader;
 import laya.utils.ClassUtils;
+import laya.utils.Ease;
 import laya.utils.Handler;
+import laya.utils.Tween;
 
+import view.gamemap.Gamemap;
 import view.gamemain.Gamemain;
 import view.loadview.Loadview;
 import view.unopend.Unopened;
@@ -121,10 +124,12 @@ public class UiManager {
             _panel.zOrder=getUiBaseDepth(_uiType);
             _panel['uiZorder']=_panel.zOrder;
         }
+
         _panel.visible=true;
         _panel.openPanel(_param);
         _panel.register();
         Laya.stage.addChild(_panel);
+        showAni(_panel);
 
         if(_taskArr.length){
             var obj:Object={};
@@ -136,6 +141,17 @@ public class UiManager {
             }
             loadView(obj['name'],obj['param'],obj['pngNum'],obj['uiZorder']);
         }
+    }
+
+    private function showAni(panel:*):void
+    {
+        if(_uiType=="UITYPE_SCENE") return;
+        Tween.from(panel,{
+            x:Laya.stage.mouseX,
+            y:Laya.stage.mouseY,
+            scaleX:0,
+            scaleY:0
+        },300,Ease.backOut)
     }
 
 

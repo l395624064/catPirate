@@ -14,7 +14,7 @@ package src {
 		public static var startScene:* = "test/TestScene.scene";
 		public static var sceneRoot:String = "";
 		public static var debug:Boolean = false;
-		public static var stat:Boolean = false;
+		public static var stat:Boolean = true;
 		public static var physicsDebug:Boolean = false;
 		public static var exportSceneToJson:Boolean = true;
 		

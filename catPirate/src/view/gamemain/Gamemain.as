@@ -4,8 +4,11 @@ import data.EffectD;
 import laya.display.Sprite;
 
 import laya.events.Event;
+import laya.map.TiledMap;
 import laya.maths.Point;
+import laya.maths.Rectangle;
 import laya.ui.Box;
+import laya.utils.Browser;
 import laya.utils.Ease;
 import laya.utils.Handler;
 import laya.utils.Tween;
@@ -17,6 +20,7 @@ import manager.GameEventDispatch;
 import manager.GameMath;
 
 import manager.ShipAniManager;
+import manager.UiManager;
 
 import model.PlayerInfoM;
 
@@ -94,19 +98,39 @@ public class Gamemain extends GameMainUI implements PanelVo {
         changeScoreBoxState("update");
     }
 
+
+
     private function initListener():void
     {
+        mapBtn.on(Event.MOUSE_DOWN,this,function (e:Event) {
+            if(!checkDropfish) return;
+            e.stopPropagation();
+            /*
+            var tilemap:TiledMap =new TiledMap();
+            var viewRect:Rectangle = new Rectangle(0, 0, Browser.width, Browser.height);
+            tilemap.createMap("TiledMap/tileMap.json",viewRect,Handler.create(this,function () {
+                console.log("--TiledMap load over");
+                UiManager.instance.closePanel("Gamemain");
+            }));*/
+            UiManager.instance.loadView("Gamemap",null,0,"UITYPE_NORMAL");
+        })
+        
         dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {
-            if(!canDrop) return;
-            console.log("--dropSp Click");
+            if(!checkDropfish) return;
+            //console.log("--dropSp Click");
             e.stopPropagation();
             changeDropFishBoxState("start");
             Laya.stage.once(Event.MOUSE_DOWN,this,function () {
+                //console.log("--stage click");
                 changeDropFishBoxState("stop");
             })
         });
     }
 
+    private function get checkDropfish():Boolean
+    {
+        return canDrop;
+    }
 
 
 

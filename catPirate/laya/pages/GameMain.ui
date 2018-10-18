@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":11,
-    "selecteID":7,
+    "selectedBox":1,
+    "selecteID":34,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -319,6 +319,19 @@
                 }],
             "$LOCKED":true,
             "$HIDDEN":false
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "props":{"y":180,"x":536,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png"},
+            "nodeParent":1,
+            "label":"Image(mapBtn)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":34,
+            "child":[
+                ]
         }],
     "animations":[
         {
