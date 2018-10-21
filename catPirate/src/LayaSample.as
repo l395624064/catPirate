@@ -8,6 +8,7 @@ import manager.GameEvent;
 import manager.GameEventDispatch;
 import manager.GameInit;
 import manager.UiManager;
+import view.gamemap.Gamemap;
 
 public class LayaSample {
 		
@@ -40,9 +41,7 @@ public class LayaSample {
 		private function gameinit():void
 		{
             GameInit.instance.init();
-            UiManager.instance.loadView("Loadview",null,1);
-
-
+            UiManager.instance.loadView("Loadview", null, 1);
 
 			/*
 			Laya.timer.once(5000,this,function () {

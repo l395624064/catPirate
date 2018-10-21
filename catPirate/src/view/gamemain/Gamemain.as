@@ -1,5 +1,6 @@
 package view.gamemain {
 import data.EffectD;
+import view.gamemap.Gamemap;
 
 import laya.display.Sprite;
 
@@ -105,14 +106,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         mapBtn.on(Event.MOUSE_DOWN,this,function (e:Event) {
             if(!checkDropfish) return;
             e.stopPropagation();
-            /*
-            var tilemap:TiledMap =new TiledMap();
-            var viewRect:Rectangle = new Rectangle(0, 0, Browser.width, Browser.height);
-            tilemap.createMap("TiledMap/tileMap.json",viewRect,Handler.create(this,function () {
-                console.log("--TiledMap load over");
-                UiManager.instance.closePanel("Gamemain");
-            }));*/
-            UiManager.instance.loadView("Gamemap",null,0,"UITYPE_NORMAL");
+            UiManager.instance.loadView("Gamemap", null, 0, "UITYPE_NORMAL");
         })
         
         dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {

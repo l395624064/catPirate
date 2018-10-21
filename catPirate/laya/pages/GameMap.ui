@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":6,
+    "selecteID":8,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -29,28 +29,30 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"width":610,"skin":"ui/common_ex/bei.png","sizeGrid":"23,25,30,23","height":745,"centerY":-24,"centerX":0},
+            "props":{"y":172,"x":15,"width":610,"skin":"ui/common_ex/bei.png","sizeGrid":"23,25,30,23","height":745},
             "nodeParent":1,
             "label":"Image",
             "isOpen":true,
-            "isDirectory":true,
+            "isDirectory":false,
             "isAniNode":true,
-            "hasChild":true,
+            "hasChild":false,
             "compId":4,
             "child":[
-                {
-                    "x":30,
-                    "type":"Panel",
-                    "props":{"y":13,"x":13,"width":585,"var":"mapPanel","height":719},
-                    "nodeParent":4,
-                    "label":"Panel(mapPanel)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":6,
-                    "child":[
-                        ]
-                }]
+                ],
+            "$HIDDEN":false
+        },
+        {
+            "x":15,
+            "type":"Panel",
+            "props":{"y":185,"x":28,"width":585,"var":"mapPanel","height":719},
+            "nodeParent":1,
+            "label":"Panel(mapPanel)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":6,
+            "child":[
+                ]
         },
         {
             "x":15,
@@ -62,6 +64,32 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":5,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Button",
+            "props":{"y":926,"x":23,"var":"setRoadBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelSize":30,"label":"设置"},
+            "nodeParent":1,
+            "label":"Button(setRoadBtn)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":7,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Button",
+            "props":{"y":926,"x":120,"var":"overRoadBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelSize":30,"label":"完成"},
+            "nodeParent":1,
+            "label":"Button(overRoadBtn)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":8,
             "child":[
                 ]
         }],

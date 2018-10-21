@@ -81,6 +81,10 @@ public class UiManager {
     }
 
 
+	public function getInstance(name:String):*
+	{
+		return _caches[name];
+	}
     public function loadView(name:String,param:Object=null,pngNum:Number=0,uiType:String="UITYPE_SCENE"):void
     {
         if(_taskState!="Busy"){
@@ -116,7 +120,8 @@ public class UiManager {
             if(_uiType!="UITYPE_SCENE"){
                 GameEventDispatch.instance.event(GameEvent.CloseWait);
             }
-            _panel=(_caches[_name] || ClassUtils.getInstance("view."+StringTool.toLowHead(_name)+"."+_name));
+            //_panel=(_caches[_name] || ClassUtils.getInstance("view."+StringTool.toLowHead(_name)+"."+_name));
+            _panel=(_caches[_name] || ClassUtils.getClass("view."+StringTool.toLowHead(_name)+"."+_name).instance);
             _caches[_name]=_panel;
         }
 
