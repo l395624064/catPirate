@@ -32,7 +32,20 @@ package view.gamemap
 		private var canmapMove:Boolean = true;
 		
 		private var myship:GridSprite;
-		
+
+        private var closeList:Array = [];
+        private var openList:Array = [];
+		private var waylist:Array=[];
+        private var targetGrid:GridMsg;
+
+        private var startGrid:GridMsg;
+        private var endGrid:GridMsg;
+
+		private var ifdrawTestGrid:Boolean=true;
+		private var testgridSp:Sprite;
+		private var testgridArr:Array=[];
+
+
 		public function Gamemap()
 		{
 			super();
@@ -82,7 +95,14 @@ package view.gamemap
 			tilemap.scale = 1;
 			tilemap.moveViewPort(mapX, mapY);
 			mapPanel.addChild(tilemap.mapSprite());
-			
+
+
+            testgridSp=new Sprite();
+            testgridSp.size(tilemap.width,tilemap.height);
+            testgridSp.mouseEnabled=false;
+            testgridSp.pos(tilemap.x, tilemap.y);
+            mapPanel.addChild(testgridSp);
+
 			mapPanel.on(Event.MOUSE_DOWN, this, onMapeDown);
 			Laya.stage.on(Event.RESIZE, this, resize);
 		}
@@ -95,6 +115,7 @@ package view.gamemap
 			}
 			else if (action == "over")
 			{
+                drawsideSp.graphics.clear();
 				canmapMove = true;
 			}
 		}
@@ -126,8 +147,9 @@ package view.gamemap
 			var moveY:Number = mapY - (mousePointInMap.y - lastMouseY);
 			moveX = repairPoint(moveX, moveY).x;
 			moveY = repairPoint(moveX, moveY).y;
-			
+
 			tilemap.moveViewPort(moveX, moveY);
+            testgridSp.pos(tilemap.x, tilemap.y);
 		}
 		
 		private function onMapUp():void
@@ -157,12 +179,7 @@ package view.gamemap
 			return p;
 		}
 		
-		private var closeList:Array = [];
-		private var openList:Array = [];
-		private var targetGrid:GridMsg;
-		
-		private var startGrid:GridMsg;
-		private var endGrid:GridMsg;
+
 		private function getBastWay():void
 		{
 			startGrid = new GridMsg(startPos);//startpos
@@ -172,34 +189,54 @@ package view.gamemap
 			endGrid = new GridMsg(endPos);//endPos
 			
 			//console.log("-getIdFromPos:", getGridIdFromPos("landlayer", pos.x, pos.y));
-			targetGrid = closeList[0];//target pos
-			
 			console.log("-startPos:", startPos);
 			console.log("-endPos:", endPos,getGridId("landlayer"));
-			
-			addOpenlist(targetGrid);
-			console.log(openList);
-			//findoutEndPoint();
+
+			findoutEndPoint();
 		}
 		
 		private function clearWay():void
 		{
+            waylist=[];
 			openList = [];
 			closeList = [];
+
 			startGrid = null;
 			endGrid = null;
 			targetGrid = null;
+
+            testgridSp.removeChildren();
 		}
 		
 		private function findoutEndPoint():void
 		{
-			while (targetGrid.dx != endGrid.dx && targetGrid.dy != endGrid.dy)
+            targetGrid = closeList[closeList.length-1];
+			var minFgrid:GridMsg;
+			while (addOpenlist(targetGrid))
 			{
-				//target周围点添加入openlist
-				
+				//get min F num From openlist,Find the gridMsg
+				minFgrid=findoutMinFromOpenlist();
+				//close list push the gridMsg,
+                addCloselist(minFgrid);
+				//check min G Num grid,or repair gridMsg F num, around gridMsg From openlist
+				checkMinGirdAround(minFgrid);
+                targetGrid = closeList[closeList.length-1];//target pos
+			}
+            console.log("--find out best way");
+			console.log("-endPos:",openList[openList.length-1]);
+
+            targetGrid=openList[openList.length-1];//reverse check
+			var cx:int;
+			var cy:int;
+			while (targetGrid.dx!=startPos.x && targetGrid.dy!=startPos.y){
+                waylist.push(targetGrid);
+				cx=targetGrid.pointer.x;
+				cy=targetGrid.pointer.y;
+                targetGrid=findoutGrid(closeList,cx,cy);
+				drawTestRect(cx,cy,"#ff17fb");
 			}
 		}
-		
+
 		public function get startPos():Point
 		{
 			var gridW:Number = tilemap.tileWidth;
@@ -217,7 +254,8 @@ package view.gamemap
 			//console.log("-id:", getGridId("landlayer"));
 			return new Point(pos.x, pos.y);
 		}
-		
+
+		//gridMsg get
 		public function gridPointer(dx:int,dy:int):Point
 		{
 			var msg:GridMsg;
@@ -230,9 +268,16 @@ package view.gamemap
 			}
 			return null;
 		}
+
+		private function addCloselist(grid:GridMsg):void
+		{
+            closeList.push(grid);
+            if(ifdrawTestGrid){
+                drawTestRect(grid.dx,grid.dy,"#ff5f00");
+            }
+		}
 		
-		
-		private function addOpenlist(grid:GridMsg):void
+		private function addOpenlist(grid:GridMsg):Boolean
 		{
 			const dx:int = grid.dx;
 			const dy:int = grid.dy;
@@ -243,7 +288,7 @@ package view.gamemap
 			var msg:Array = [];
 			var ax:int;
 			var ay:int;
-			while (addAction.length > 0)
+			while (index > 0)
 			{
 				index--;
 				msg = addAction[index];
@@ -251,39 +296,87 @@ package view.gamemap
 				ay = msg[1] + dy;
 				if (putInOpenlist(ax, ay))
 				{
-					addAction.pop();
 					gridmsg = new GridMsg(new Point(ax, ay));
-					gridmsg.inOpenList = true;
 					gridmsg.pointer = new Point(dx, dy);
+                    gridmsg.update();
 					openList.push(gridmsg);
+					if(ifdrawTestGrid){
+                        drawTestRect(ax,ay,"#fcff00");
+                        //drawTestRectline(gridmsg);
+					}
+					if(ax==endPos.x && ay==endPos.y){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		private function checkMinGirdAround(grid:GridMsg):void
+		{
+            const dx:int = grid.dx;
+            const dy:int = grid.dy;
+            var addAction:Array = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+            var msg:Array = [];
+            var ax:int;
+            var ay:int;
+
+            for (var i:int=addAction.length-1;i>=0;i--){
+                msg=addAction[i];
+				ax=msg[0]+dx;
+				ay=msg[1]+dy;
+				var aroundGrid:GridMsg=findoutGrid(openList,ax,ay);
+				if(aroundGrid){
+					var gNum:int=signGNum(new Point(aroundGrid.dx,aroundGrid.dy),new Point(grid.dx,grid.dy));
+					if(aroundGrid.G>grid.G+gNum){
+                        aroundGrid.G=grid.G+gNum;
+                        aroundGrid.pointer = new Point(dx, dy);
+                        aroundGrid.update();
+                        //drawTestRectline(aroundGrid);
+					}
 				}
 			}
 		}
-		
-		private function addCloselist(grid:GridMsg):void
+		private function  findoutMinFromOpenlist():GridMsg
 		{
-			if (grid.inOpenList)
-			{
-				grid.inOpenList = false;
-				grid.inCloselist = true;
-				var index:int = openList.indexOf(grid);
-				openList.splice(index, 1);
-			}
+            openList.sort(function (a:*,b:*):Number {
+				return a.F>b.F ? -1:1;
+            })
+			return openList.pop();
+            //console.log("--openlist a",openList);
 		}
-		
+
+        public function signGNum(startP:Point,endP:Point):int
+        {
+            if (Math.abs(startP.x-endP.x)==1 && Math.abs(startP.y-endP.y)==1){
+                return 14;
+            }
+            return 10;
+        }
+
+		private function findoutGrid(arr:Array,dx:int,dy:int):GridMsg
+		{
+			var gridmsg:GridMsg;
+			for (var i:int=arr.length-1;i>=0;i--){
+                gridmsg=arr[i];
+				if(gridmsg.dx==dx && gridmsg.dy==dy){
+					return gridmsg;
+				}
+			}
+			return null;
+		}
+
 		private function putInOpenlist(dx:int, dy:int):Boolean
 		{
-			for (var i:int = 0; i < openList.length; i++)
-			{
-				if (getGridIdFromPos("landlayer", dx, dy) != 169)
-				{
-					return false;
-				}
-				else if (openList[i].dx == dx && openList[i].dy == dy)
-				{
-					return false;
-				}
+            if (getGridIdFromPos("landlayer", dx, dy) != 169){
+                return false;
+            }
+			else if(findoutGrid(closeList,dx,dy)){
+				return false;
+			}else if(findoutGrid(openList,dx,dy)){
+				return false;
 			}
+
 			return true;
 		}
 		
@@ -297,6 +390,44 @@ package view.gamemap
 			drawsideSp.pos(p.x, p.y);
 			mapPanel.addChild(drawsideSp);
 		}
+
+		private function drawTestRect(dx:int,dy:int,color:String):void
+		{
+			const rectW:int=32;
+			var sp:Sprite=new Sprite();
+			sp.graphics.drawRect(0,0,rectW,rectW,color);
+			sp.pos(dx*rectW,dy*rectW);
+            sp.alpha=.5;
+            testgridSp.addChild(sp);
+            testgridArr.push(sp);
+		}
+
+		private function drawTestRectline(grid:GridMsg):void
+		{
+            const rectW:int=32;
+			const dx:int=grid.dx;
+			const dy:int=grid.dy;
+			const pointer:Point=grid.pointer;
+			var sp:Sprite;
+			var endX:int;
+			var endY:int;
+
+			for (var i:int=0;i<testgridArr.length;i++){
+				sp=testgridArr[i];
+				if(dx==sp.x && dy==sp.y){
+					if(dx==pointer.x) endX=rectW/2;
+					else (dx-pointer.x>0)? endX=0:endX=rectW;
+
+                    if(dy==pointer.y) endY=rectW/2;
+					else (dy-pointer.y>0)? endY=0:endY=rectW;
+
+					console.log("--s");
+                    sp.graphics.drawLine(rectW/2,rectW/2,endX,endY,"#ff00e3",3);
+				}
+			}
+		}
+
+
 		
 		private function getGridPoint(layerName:String):Point
 		{
@@ -374,7 +505,7 @@ package view.gamemap
 		public function closePanel():void
 		{
 			this.visible = false;
-			
+
 			clearMapMSG();
 			tilemap.destroy();
 		}
@@ -387,24 +518,26 @@ package view.gamemap
 		
 		public function clearAllNum():void
 		{
-		
+            clearWay();
+            changeMapRoadState("over");
 		}
 	
 	}
 }
 
 import laya.maths.Point;
+
+import view.gamemap.Gamemap;
 import view.gamemap.Gamemap;
 class GridMsg
 {
 	public var G:int;
 	public var H:int;
-	
+	public var F:int;
+
 	public var dx:int;
 	public var dy:int;
 	public var pointer:Point;
-	public var inCloselist:Boolean;
-	public var inOpenList:Boolean;
 	
 	public function GridMsg(pos:Point)
 	{
@@ -418,6 +551,7 @@ class GridMsg
 	{
 		updateH();
 		updateG();
+		updateF();
 	}
 	
 	private function updateH():void
@@ -428,31 +562,28 @@ class GridMsg
 	}
 	private function updateG():void
 	{
-		var stepPoint:Point = new Point(dx, dy);
-		var nextPoint:Point = new Point(pointer.x,pointer.y);
-		while (stepPoint != Gamemap.instance.startPos){
-			G += signGNum(stepPoint, nextPoint);
-			stepPoint.x = nextPoint.x;
-			stepPoint.y = nextPoint.y;
-			nextPoint = Gamemap.instance.gridPointer(stepPoint.x, stepPoint.y);
-			if (!nextPoint){
-				console.log("-can not fond pointer form openlist");
-				break;
-			}
+		var stepPos:Point = new Point(dx, dy);
+		var nextPos:Point = new Point(pointer.x,pointer.y);
+
+		var startPos:Point=Gamemap.instance.startPos;
+		do{
+            G += Gamemap.instance.signGNum(stepPos, nextPos);
+            stepPos.x = nextPos.x;
+            stepPos.y = nextPos.y;
+            nextPos = Gamemap.instance.gridPointer(stepPos.x, stepPos.y);
+            if (!nextPos){
+                console.log("-can not fond pointer form openlist");
+                break;
+            }
 		}
+		while (stepPos.x != startPos.x && stepPos.y != startPos.y)
 	}
-	private function signGNum(startP:Point,endP:Point):int
+
+	private function updateF():void
 	{
-		if (Math.abs(startP.x-endP.x)==1 && Math.abs(startP.y-endP.y)==1){
-			return 14;
-		}else{
-			return 10;
-		}
+		F=G+H;
 	}
-	
-	public function get F():int
-	{
-		return G + H;
-	}
+
+
 }
 
