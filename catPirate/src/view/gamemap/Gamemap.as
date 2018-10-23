@@ -8,7 +8,8 @@ package view.gamemap
 	import laya.maths.Point;
 	import laya.maths.Rectangle;
 	import laya.ui.Image;
-	import laya.utils.Handler;
+import laya.ui.Label;
+import laya.utils.Handler;
 	
 	import manager.UiManager;
 	
@@ -40,6 +41,7 @@ package view.gamemap
 
         private var startGrid:GridMsg;
         private var endGrid:GridMsg;
+		private var ifFindoutway:Boolean=false;
 
 		private var ifdrawTestGrid:Boolean=true;
 		private var testgridSp:Sprite;
@@ -192,7 +194,8 @@ package view.gamemap
 			console.log("-startPos:", startPos);
 			console.log("-endPos:", endPos,getGridId("landlayer"));
 
-			findoutEndPoint();
+            //findoutEndPoint();
+            findoutEndway();
 		}
 		
 		private function clearWay():void
@@ -205,7 +208,9 @@ package view.gamemap
 			endGrid = null;
 			targetGrid = null;
 
+            testgridArr=[];
             testgridSp.removeChildren();
+            ifFindoutway=false;
 		}
 		
 		private function findoutEndPoint():void
@@ -223,7 +228,8 @@ package view.gamemap
                 targetGrid = closeList[closeList.length-1];//target pos
 			}
             console.log("--find out best way");
-			console.log("-endPos:",openList[openList.length-1]);
+			//console.log("-endPos:",openList[openList.length-1]);
+			return;
 
             targetGrid=openList[openList.length-1];//reverse check
 			var cx:int;
@@ -233,9 +239,39 @@ package view.gamemap
 				cx=targetGrid.pointer.x;
 				cy=targetGrid.pointer.y;
                 targetGrid=findoutGrid(closeList,cx,cy);
-				drawTestRect(cx,cy,"#ff17fb");
+				drawTestRect(targetGrid,"#ff17fb");
 			}
+			console.log("-waylist:",waylist);
 		}
+
+		private function findoutEndway():void
+		{
+            var minFgrid:GridMsg;
+			//add rect around startPoint
+			do {
+                targetGrid = closeList[closeList.length-1];
+                addOpenlist(targetGrid);
+                minFgrid=findoutMinFromOpenlist();
+                checkMinGirdAround(minFgrid);
+                addCloselist(minFgrid);
+            }while (!ifFindoutway)
+
+            console.log("--find out best way",openList.length,closeList.length,testgridArr.length);
+			return;
+            targetGrid=openList[openList.length-1];//reverse check
+            var cx:int;
+            var cy:int;
+            while (targetGrid.dx!=startPos.x && targetGrid.dy!=startPos.y){
+                waylist.push(targetGrid);
+                cx=targetGrid.pointer.x;
+                cy=targetGrid.pointer.y;
+                targetGrid=findoutGrid(closeList,cx,cy);
+                drawTestRect(targetGrid,"#ff17fb");
+            }
+            console.log("-waylist:",waylist);
+		}
+
+
 
 		public function get startPos():Point
 		{
@@ -273,7 +309,8 @@ package view.gamemap
 		{
             closeList.push(grid);
             if(ifdrawTestGrid){
-                drawTestRect(grid.dx,grid.dy,"#ff5f00");
+                drawTestRect(grid,"#ff5f00");
+
             }
 		}
 		
@@ -281,7 +318,7 @@ package view.gamemap
 		{
 			const dx:int = grid.dx;
 			const dy:int = grid.dy;
-			var addAction:Array = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+            var addAction:Array = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
 			
 			var index:int = addAction.length;
 			var gridmsg:GridMsg;
@@ -301,10 +338,10 @@ package view.gamemap
                     gridmsg.update();
 					openList.push(gridmsg);
 					if(ifdrawTestGrid){
-                        drawTestRect(ax,ay,"#fcff00");
-                        //drawTestRectline(gridmsg);
+                        drawTestRect(gridmsg,"#fcff00");
 					}
 					if(ax==endPos.x && ay==endPos.y){
+						ifFindoutway=true;
 						return false;
 					}
 				}
@@ -316,7 +353,7 @@ package view.gamemap
 		{
             const dx:int = grid.dx;
             const dy:int = grid.dy;
-            var addAction:Array = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+            var addAction:Array = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
             var msg:Array = [];
             var ax:int;
             var ay:int;
@@ -331,8 +368,8 @@ package view.gamemap
 					if(aroundGrid.G>grid.G+gNum){
                         aroundGrid.G=grid.G+gNum;
                         aroundGrid.pointer = new Point(dx, dy);
-                        aroundGrid.update();
-                        //drawTestRectline(aroundGrid);
+                        aroundGrid.updateF();
+                        //aroundGrid.update();
 					}
 				}
 			}
@@ -354,13 +391,13 @@ package view.gamemap
             return 10;
         }
 
-		private function findoutGrid(arr:Array,dx:int,dy:int):GridMsg
+		private function findoutGrid(arr:Array,dx:int,dy:int):*
 		{
-			var gridmsg:GridMsg;
+			var grid:*;
 			for (var i:int=arr.length-1;i>=0;i--){
-                gridmsg=arr[i];
-				if(gridmsg.dx==dx && gridmsg.dy==dy){
-					return gridmsg;
+                grid=arr[i];
+				if(grid.dx==dx && grid.dy==dy){
+					return grid;
 				}
 			}
 			return null;
@@ -385,46 +422,65 @@ package view.gamemap
 		{
 			drawsideSp ||= new Sprite();
 			drawsideSp.graphics.clear();
-			//drawsideSp.graphics.drawRect(0,0,32,32,"#ffffff");
 			drawsideSp.graphics.drawLines(0, 0, [0, 0, 32, 0, 32, 32, 0, 32, 0, 0], "#ff0003", 3);
 			drawsideSp.pos(p.x, p.y);
 			mapPanel.addChild(drawsideSp);
 		}
 
-		private function drawTestRect(dx:int,dy:int,color:String):void
+		private function drawTestRect(grid:GridMsg,color:String):void
 		{
+			const dy:int=grid.dy;
+			const dx:int=grid.dx;
 			const rectW:int=32;
-			var sp:Sprite=new Sprite();
-			sp.graphics.drawRect(0,0,rectW,rectW,color);
+
+            var sp:Sprite=findoutGrid(testgridArr,grid.dx,grid.dy);
+			if(sp){
+                sp.graphics.clear();
+				sp.removeChildren();
+				sp.removeSelf();
+                sp=new Sprite();
+			}else{
+                sp=new Sprite();
+                testgridArr.push(sp);
+			}
+			sp.graphics.drawRect(0,0,rectW,rectW,color,"#fff2f9");
 			sp.pos(dx*rectW,dy*rectW);
             sp.alpha=.5;
+            sp['dx']=dx;
+			sp['dy']=dy;
+
+            var txtG:Label=new Label();
+			var txtH:Label=new Label();
+            txtH.fontSize=txtG.fontSize=1;
+			txtG.text=grid.G+"";
+            txtH.text=grid.H+"";
+            txtG.color="#000000";
+            txtH.color="#f1eaff";
+			txtG.pos(0,0);
+            txtH.pos(0,20);
+            sp.addChild(txtG);
+            sp.addChild(txtH);
             testgridSp.addChild(sp);
-            testgridArr.push(sp);
+
+            drawTestRectline(grid,sp);
 		}
 
-		private function drawTestRectline(grid:GridMsg):void
+		private function drawTestRectline(grid:GridMsg,sp:Sprite):void
 		{
             const rectW:int=32;
 			const dx:int=grid.dx;
 			const dy:int=grid.dy;
 			const pointer:Point=grid.pointer;
-			var sp:Sprite;
 			var endX:int;
 			var endY:int;
 
-			for (var i:int=0;i<testgridArr.length;i++){
-				sp=testgridArr[i];
-				if(dx==sp.x && dy==sp.y){
-					if(dx==pointer.x) endX=rectW/2;
-					else (dx-pointer.x>0)? endX=0:endX=rectW;
+			if(dx==pointer.x) endX=rectW/2;
+			else (dx-pointer.x>0)? endX=0:endX=rectW;
 
-                    if(dy==pointer.y) endY=rectW/2;
-					else (dy-pointer.y>0)? endY=0:endY=rectW;
+			if(dy==pointer.y) endY=rectW/2;
+			else (dy-pointer.y>0)? endY=0:endY=rectW;
 
-					console.log("--s");
-                    sp.graphics.drawLine(rectW/2,rectW/2,endX,endY,"#ff00e3",3);
-				}
-			}
+			sp.graphics.drawLine(rectW/2,rectW/2,endX,endY,"#0013ff",3);
 		}
 
 
@@ -564,8 +620,8 @@ class GridMsg
 	{
 		var stepPos:Point = new Point(dx, dy);
 		var nextPos:Point = new Point(pointer.x,pointer.y);
-
-		var startPos:Point=Gamemap.instance.startPos;
+        var startPos:Point=Gamemap.instance.startPos;
+		var ifstepEnd:Boolean=false;
 		do{
             G += Gamemap.instance.signGNum(stepPos, nextPos);
             stepPos.x = nextPos.x;
@@ -575,11 +631,14 @@ class GridMsg
                 console.log("-can not fond pointer form openlist");
                 break;
             }
+			if(stepPos.x == startPos.x && startPos.y == startPos.y){
+                ifstepEnd=true;
+			}
 		}
-		while (stepPos.x != startPos.x && stepPos.y != startPos.y)
+		while (!ifstepEnd)
 	}
 
-	private function updateF():void
+	public function updateF():void
 	{
 		F=G+H;
 	}
