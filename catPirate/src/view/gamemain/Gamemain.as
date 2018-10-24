@@ -107,6 +107,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
             if(!checkDropfish) return;
             e.stopPropagation();
             UiManager.instance.loadView("Gamemap", null, 0, "UITYPE_NORMAL");
+        });
+
+        remouldBtn.on(Event.MOUSE_DOWN,this,function () {
+            UiManager.instance.loadView("Shiprefit", null, 0, "UITYPE_NORMAL");
         })
         
         dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {

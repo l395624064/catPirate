@@ -10,6 +10,7 @@ import laya.utils.Tween;
 import view.gamemap.Gamemap;
 import view.gamemain.Gamemain;
 import view.loadview.Loadview;
+import view.shiprefit.Shiprefit;
 import view.unopend.Unopened;
 import view.wait.Wait;
 
@@ -67,6 +68,7 @@ public class UiManager {
     {
 //        _emptyResUi['Loadview']=true;
         _emptyResUi['CommonTip']=true;
+        _emptyResUi['Shiprefit']=true;
     }
     private function getEmptyRes(name:String):Boolean
     {
@@ -121,6 +123,7 @@ public class UiManager {
                 GameEventDispatch.instance.event(GameEvent.CloseWait);
             }
             //_panel=(_caches[_name] || ClassUtils.getInstance("view."+StringTool.toLowHead(_name)+"."+_name));
+            console.log("view."+StringTool.toLowHead(_name)+"."+_name);
             _panel=(_caches[_name] || ClassUtils.getClass("view."+StringTool.toLowHead(_name)+"."+_name).instance);
             _caches[_name]=_panel;
         }
