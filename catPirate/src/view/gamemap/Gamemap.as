@@ -212,7 +212,8 @@ import laya.utils.Handler;
             testgridSp.removeChildren();
             ifFindoutway=false;
 		}
-		
+
+		/*
 		private function findoutEndPoint():void
 		{
             targetGrid = closeList[closeList.length-1];
@@ -242,7 +243,7 @@ import laya.utils.Handler;
 				drawTestRect(targetGrid,"#ff17fb");
 			}
 			console.log("-waylist:",waylist);
-		}
+		}*/
 
 		private function findoutEndway():void
 		{
@@ -256,21 +257,24 @@ import laya.utils.Handler;
                 addCloselist(minFgrid);
             }while (!ifFindoutway)
 
-            console.log("--find out best way",openList.length,closeList.length,testgridArr.length);
-			return;
-            targetGrid=openList[openList.length-1];//reverse check
-            var cx:int;
-            var cy:int;
-            while (targetGrid.dx!=startPos.x && targetGrid.dy!=startPos.y){
-                waylist.push(targetGrid);
+            //targetGrid=openList[closeList.length-1];//reverse check
+			//console.log("--last closeList:",targetGrid);
+            var cx:int=targetGrid.dx;
+            var cy:int=targetGrid.dy;
+			var getStartPos:Boolean=false;
+            while (!getStartPos){
+                targetGrid=findoutGrid(closeList,cx,cy,true);
                 cx=targetGrid.pointer.x;
                 cy=targetGrid.pointer.y;
-                targetGrid=findoutGrid(closeList,cx,cy);
-                drawTestRect(targetGrid,"#ff17fb");
+                waylist.push(targetGrid);
+                drawTestRect(targetGrid,"#ff4b95");
+				if(targetGrid.dx == startPos.x && targetGrid.dy == startPos.y){
+                    getStartPos=true;
+				}
             }
-            console.log("-waylist:",waylist);
+            console.log("--find out best way",openList.length,closeList.length,waylist.length,testgridArr.length);
+            //console.log("-waylist:",waylist);
 		}
-
 
 
 		public function get startPos():Point
@@ -295,7 +299,7 @@ import laya.utils.Handler;
 		public function gridPointer(dx:int,dy:int):Point
 		{
 			var msg:GridMsg;
-			for (var i:int = 0; i < closeList.length; i++) 
+			for (var i:int = 0; i < closeList.length; i++)
 			{
 				msg = closeList[i];
 				if (msg.dx==dx && msg.dy==dy){
@@ -310,7 +314,6 @@ import laya.utils.Handler;
             closeList.push(grid);
             if(ifdrawTestGrid){
                 drawTestRect(grid,"#ff5f00");
-
             }
 		}
 		
@@ -364,7 +367,7 @@ import laya.utils.Handler;
 				ay=msg[1]+dy;
 				var aroundGrid:GridMsg=findoutGrid(openList,ax,ay);
 				if(aroundGrid){
-					var gNum:int=signGNum(new Point(aroundGrid.dx,aroundGrid.dy),new Point(grid.dx,grid.dy));
+					var gNum:int=signGNum(new Point(ax,ay),new Point(dx,dy));
 					if(aroundGrid.G>grid.G+gNum){
                         aroundGrid.G=grid.G+gNum;
                         aroundGrid.pointer = new Point(dx, dy);
@@ -380,23 +383,28 @@ import laya.utils.Handler;
 				return a.F>b.F ? -1:1;
             })
 			return openList.pop();
-            //console.log("--openlist a",openList);
 		}
 
         public function signGNum(startP:Point,endP:Point):int
         {
-            if (Math.abs(startP.x-endP.x)==1 && Math.abs(startP.y-endP.y)==1){
+			if(startP.x==endP.x && startP.y==endP.y){
+				return 0;
+			}
+            else if(Math.abs(startP.x-endP.x)==1 && Math.abs(startP.y-endP.y)==1){
                 return 14;
             }
             return 10;
         }
 
-		private function findoutGrid(arr:Array,dx:int,dy:int):*
+		private function findoutGrid(arr:Array,dx:int,dy:int,delet:Boolean=false):*
 		{
 			var grid:*;
 			for (var i:int=arr.length-1;i>=0;i--){
                 grid=arr[i];
 				if(grid.dx==dx && grid.dy==dy){
+					if(delet){
+						arr.splice(i,1);
+					}
 					return grid;
 				}
 			}
@@ -445,7 +453,7 @@ import laya.utils.Handler;
 			}
 			sp.graphics.drawRect(0,0,rectW,rectW,color,"#fff2f9");
 			sp.pos(dx*rectW,dy*rectW);
-            sp.alpha=.5;
+            sp.alpha=.6;
             sp['dx']=dx;
 			sp['dy']=dy;
 
@@ -454,8 +462,8 @@ import laya.utils.Handler;
             txtH.fontSize=txtG.fontSize=1;
 			txtG.text=grid.G+"";
             txtH.text=grid.H+"";
-            txtG.color="#000000";
-            txtH.color="#f1eaff";
+            txtG.color="#ff17fb";
+            txtH.color="#ff6393";
 			txtG.pos(0,0);
             txtH.pos(0,20);
             sp.addChild(txtG);
@@ -631,7 +639,7 @@ class GridMsg
                 console.log("-can not fond pointer form openlist");
                 break;
             }
-			if(stepPos.x == startPos.x && startPos.y == startPos.y){
+			if(stepPos.x == startPos.x && stepPos.y == startPos.y){
                 ifstepEnd=true;
 			}
 		}
