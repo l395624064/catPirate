@@ -2,6 +2,8 @@ package manager
 {
 import control.GamemainC;
 
+import model.ShiprefitM;
+
 public class GameInit
     {
         private static var _instance:GameInit;
@@ -18,6 +20,7 @@ public class GameInit
 
         public function ModelInit():void
         {
+            ShiprefitM.instance;
 
         }
 

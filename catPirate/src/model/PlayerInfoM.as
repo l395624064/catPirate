@@ -8,6 +8,14 @@ public class PlayerInfoM {
 
     private var _luckNum:Number=0;
 
+    private var _shipmoduleBuyArr=[
+        [1,1,1],
+        [1,1,1,1,1,1],
+        [1,1,1,1,1,1],
+        [1,1,1,1,1,1]
+    ];
+
+
     public function PlayerInfoM() {
     }
 
@@ -25,6 +33,23 @@ public class PlayerInfoM {
         _luckNum=value;
     }
 
+    public function getshipmoduleBuyArr():Array
+    {
+        return _shipmoduleBuyArr;
+    }
+    public function setshipmoduleBuyArr(arr:Array):void
+    {
+        _shipmoduleBuyArr=arr;
+    }
+
+    public function setshipmoduleBuy(tabId:int,id:int):void
+    {
+        _shipmoduleBuyArr[tabId][id]=0;
+    }
+    public function getshipmoduleBuy(tabId:int,id:int):int
+    {
+        return _shipmoduleBuyArr[tabId][id];
+    }
 
 
     public function getGoldNum():Number

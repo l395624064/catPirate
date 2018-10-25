@@ -2,6 +2,8 @@ package view.loadview {
 import laya.net.Loader;
 import laya.utils.Handler;
 
+import manager.ConfigManager;
+
 import manager.UiManager;
 
 
@@ -25,7 +27,9 @@ public class Loadview extends GameloadUI implements PanelVo{
         {url:"scene/gameScene_0.jpg",                type:Loader.IMAGE},
 
         {url:"sound/destroy.wav",                    type:Loader.SOUND},
-        {url:"sound/hit.wav",                        type:Loader.SOUND}
+        {url:"sound/hit.wav",                        type:Loader.SOUND},
+
+        {url:ConfigManager.getConfigPath(),           type:Loader.JSON}
     ];
 
     public function Loadview() {
@@ -49,6 +53,7 @@ public class Loadview extends GameloadUI implements PanelVo{
     private function loadComplete():void
     {
         setloadBar(1);
+        ConfigManager.init();
         UiManager.instance.baseTipInit();
 
         Laya.timer.once(1000,this,function () {
