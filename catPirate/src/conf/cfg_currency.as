@@ -13,9 +13,11 @@ package conf
             
             a.res=sheet[0];
             
-            a.id=sheet[1];
+            a.property=sheet[1];
             
-            a.name=sheet[2];
+            a.id=sheet[2];
+            
+            a.name=sheet[3];
             
 
 			return a;
@@ -28,6 +30,8 @@ package conf
 
         
         public var res:String;
+        
+        public var property:String;
         
         public var id:int;
         

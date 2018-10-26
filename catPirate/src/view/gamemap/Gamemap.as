@@ -66,7 +66,9 @@ import laya.utils.Handler;
 		
 		private function initListener():void
 		{
-			this.closeBtn.on(Event.MOUSE_DOWN, this, closePanel);
+			this.closeBtn.on(Event.MOUSE_DOWN, this, function () {
+				UiManager.instance.closePanel("Gamemap");
+            });
 			this.setRoadBtn.on(Event.MOUSE_DOWN, this, changeMapRoadState, ["start"]);
 			this.overRoadBtn.on(Event.MOUSE_DOWN, this, changeMapRoadState, ["over"]);
 		}

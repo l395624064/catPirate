@@ -3,8 +3,8 @@ public class PlayerInfoM {
 
     public static var _instance:PlayerInfoM;
 
-    private var _goldNum:Number=0;
-    private var _plankNum:Number=0;
+    private var _goldNum:Number=1000;
+    private var _plankNum:Number=1000;
 
     private var _luckNum:Number=0;
 

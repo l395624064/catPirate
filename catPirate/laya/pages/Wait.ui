@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":3,
+    "selecteID":6,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -27,29 +27,40 @@
         },
         {
             "x":15,
-            "type":"Image",
-            "props":{"y":568,"x":320,"width":139,"var":"aniImg","skin":"ui/common_img/wait.png","rotation":0,"height":139,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
+            "type":"Box",
+            "props":{"width":342,"height":549,"centerY":0,"centerX":0},
             "nodeParent":1,
-            "label":"Image(aniImg)",
-            "isDirectory":false,
+            "label":"Box",
+            "isOpen":null,
+            "isDirectory":true,
             "isAniNode":true,
-            "hasChild":false,
-            "compId":4,
+            "hasChild":true,
+            "compId":6,
             "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Text",
-            "props":{"y":701,"x":238,"width":178,"text":"Loading...","strokeColor":"#ffffff","stroke":6,"height":51,"fontSize":50,"font":"SimHei","color":"#0999f9","bold":true},
-            "nodeParent":1,
-            "label":"Text",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":5,
-            "child":[
-                ]
+                {
+                    "type":"Image",
+                    "props":{"y":261.5,"x":159.5,"width":139,"var":"aniImg","skin":"ui/common_img/wait.png","rotation":0,"height":139,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
+                    "nodeParent":6,
+                    "label":"Image(aniImg)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":4,
+                    "child":[
+                        ]
+                },
+                {
+                    "type":"Text",
+                    "props":{"y":394.5,"x":77.5,"width":178,"text":"Loading...","strokeColor":"#ffffff","stroke":6,"height":51,"fontSize":50,"font":"SimHei","color":"#0999f9","bold":true},
+                    "nodeParent":6,
+                    "label":"Text",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":5,
+                    "child":[
+                        ]
+                }]
         }],
     "animations":[
         {

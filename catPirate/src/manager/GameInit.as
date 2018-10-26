@@ -1,6 +1,7 @@
 package manager
 {
 import control.GamemainC;
+import control.ShopBuy;
 
 import model.ShiprefitM;
 
@@ -27,6 +28,7 @@ public class GameInit
         public function ControlInit():void
         {
             GamemainC.instance;
+            ShopBuy.instance;
         }
 
         public function init():void

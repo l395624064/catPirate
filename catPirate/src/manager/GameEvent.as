@@ -18,5 +18,10 @@ package manager
         public static const PlankScoreANI:String="PlankScoreANI";
         public static const GoldScoreANI:String="GoldScoreANI";
 
+        public static const MinusScoreANI:String="MinusScoreANI";
+
+        //ShopBuy
+        public static const ShopBuy:String="ShopBuy";
+
     }
 }

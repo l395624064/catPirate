@@ -7,6 +7,8 @@ package conf
     
     import conf.cfg_module_ship;
     
+    import conf.cfg_tip;
+    
 
     public class manifest
     {
@@ -15,6 +17,8 @@ package conf
                 "cfg_currency":cfg_currency,
                 
                 "cfg_module_ship":cfg_module_ship,
+                
+                "cfg_tip":cfg_tip,
                 
         }
 

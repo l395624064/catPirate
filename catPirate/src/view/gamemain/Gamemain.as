@@ -154,6 +154,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
     }
 
 
+
     //鱼钩box状态
     private function changeDropFishBoxState(action:String):void
     {
@@ -231,6 +232,32 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
+    private function minusScoreANI(param:Object):void
+    {
+        var gold,plank:int;
+        if(param.hasOwnProperty('gold')) gold=param['gold'];
+        if(param.hasOwnProperty('plank')) plank=param['gold'];
+
+        var endNum:int=param['endNum'];
+        const aniTime:int=10;
+        var delay:int=Math.floor(Math.cos(endNum)*aniTime);
+
+        if(gold>0){
+            var gold:int=PlayerInfoM.instance.getGoldNum();
+            gold--;
+            PlayerInfoM.instance.setGoldNum(gold);
+            gold_txt.text=PlayerInfoM.instance.getGoldNum() as String;
+        }
+        if(plank>0){
+            var plank:int=PlayerInfoM.instance.getPlankNum();
+            plank--;
+            PlayerInfoM.instance.setPlankNum(plank);
+            plank_txt.text=PlayerInfoM.instance.getPlankNum() as String;
+        }
+
+        param['endNum']--;
+        if(endNum>1) Laya.timer.once(delay,this,minusScoreANI,[param]);//接收事件 endNum多执行了一次
+    }
 
     private function addScoreNum(type:String):void
     {
@@ -279,6 +306,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.on(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
         GameEventDispatch.instance.on(GameEvent.PlankScoreANI,this,PlankScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.on(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
+        GameEventDispatch.instance.on(GameEvent.MinusScoreANI,this,minusScoreANI);
     }
 
     public function unRegister():void
@@ -287,6 +315,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.off(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
         GameEventDispatch.instance.off(GameEvent.PlankScoreANI,this,PlankScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.off(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
+        GameEventDispatch.instance.off(GameEvent.MinusScoreANI,this,minusScoreANI);
     }
 
     public function closePanel():void

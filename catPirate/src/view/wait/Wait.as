@@ -64,7 +64,6 @@ public class Wait extends WaitUI implements PanelVo{
     }
     public function closePanel():void
     {
-        console.log("--close wait");
         this.ani1.stop();
         this.visible=false;
         //this.removeSelf();

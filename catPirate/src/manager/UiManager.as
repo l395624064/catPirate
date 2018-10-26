@@ -11,6 +11,8 @@ import view.gamemap.Gamemap;
 import view.gamemain.Gamemain;
 import view.loadview.Loadview;
 import view.shiprefit.Shiprefit;
+import view.tips.Tips;
+import view.smalltips.Smalltips;
 import view.unopend.Unopened;
 import view.wait.Wait;
 
@@ -23,17 +25,20 @@ public class UiManager {
     private var _emptyResUi:Object;
     private var _panel:*;
     private var _pngNum:Number=0;
-    private var _uiType:String="UITYPE_SCENE";//UITYPE_SCENE UITYPE_NORMAL  UITYPE_TIP  UITYPE_ANI
+    private var _uiType:String="UITYPE_SCENE";//UITYPE_SCENE UITYPE_NORMAL  _UITYPE_SMALL_ZORDERARR  UITYPE_ANI
     private const _UITYPE_SCENE_ZORDERARR:Array=[0,100];
     private const _UITYPE_NORMAL_ZORDERARR:Array=[100,200];
-    private const _UITYPE_TIP_ZORDERARR:Array=[200,300];
+    private const _UITYPE_SMALL_ZORDERARR:Array=[200,300];
     private const _UITYPE_ANI_ZORDERARR:Array=[300,400];
     private var _UITYPE_SCENE_NUM:int;
     private var _UITYPE_NORMAL_NUM:int;
-    private var _UITYPE_TIP_NUM:int;
+    private var _UITYPE_SMALL_NUM:int;
     private var _UITYPE_ANI_NUM:int;
-    private const _UITYPE_WAIT:int=2001;
-    private const _UITYPE_EFFECT:int=3000;
+
+    private const _UITYPE_TIP:int=2001;
+    private const _UITYPE_STIP:int=2002;
+    private const _UITYPE_WAIT:int=2003;
+    private const _UITYPE_EFFECT:int=2004;
 
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
@@ -69,6 +74,8 @@ public class UiManager {
 //        _emptyResUi['Loadview']=true;
         _emptyResUi['CommonTip']=true;
         _emptyResUi['Shiprefit']=true;
+        _emptyResUi['Tips']=true;
+        _emptyResUi['Smalltips']=true;
     }
     private function getEmptyRes(name:String):Boolean
     {
@@ -78,7 +85,7 @@ public class UiManager {
     {
         _UITYPE_SCENE_NUM=_UITYPE_SCENE_ZORDERARR[0];
         _UITYPE_NORMAL_NUM=_UITYPE_NORMAL_ZORDERARR[0];
-        _UITYPE_TIP_NUM=_UITYPE_TIP_ZORDERARR[0];
+        _UITYPE_SMALL_NUM=_UITYPE_SMALL_ZORDERARR[0];
         _UITYPE_ANI_NUM=_UITYPE_ANI_ZORDERARR[0];
     }
 
@@ -118,12 +125,11 @@ public class UiManager {
     {
         _taskState="Empty";
         if(!_panel){
-            console.log("--openpanelName:",_name);
             if(_uiType!="UITYPE_SCENE"){
                 GameEventDispatch.instance.event(GameEvent.CloseWait);
             }
             //_panel=(_caches[_name] || ClassUtils.getInstance("view."+StringTool.toLowHead(_name)+"."+_name));
-            console.log("view."+StringTool.toLowHead(_name)+"."+_name);
+            //console.log("view."+StringTool.toLowHead(_name)+"."+_name);
             _panel=(_caches[_name] || ClassUtils.getClass("view."+StringTool.toLowHead(_name)+"."+_name).instance);
             _caches[_name]=_panel;
         }
@@ -180,10 +186,10 @@ public class UiManager {
                 if(_UITYPE_NORMAL_NUM>_UITYPE_NORMAL_ZORDERARR[1]) throw new Error("UITYPE_NORMAL zorder Max");
                 break;
             }
-            case "UITYPE_TIP":
+            case "_UITYPE_SMALL_ZORDERARR":
             {
-                deep=_UITYPE_TIP_NUM++;
-                if(_UITYPE_TIP_NUM>_UITYPE_TIP_ZORDERARR[1]) throw new Error("UITYPE_TIP zorder Max");
+                deep=_UITYPE_SMALL_NUM++;
+                if(_UITYPE_SMALL_NUM>_UITYPE_SMALL_ZORDERARR[1]) throw new Error("UITYPE_SMALL_ZORDERARR zorder Max");
                 break;
             }
             case "UITYPE_ANI":
@@ -192,16 +198,29 @@ public class UiManager {
                 if(_UITYPE_ANI_NUM>_UITYPE_ANI_ZORDERARR[1]) throw new Error("UITYPE_ANI zorder Max");
                 break;
             }
+            case "UITYPE_TIP":
+            {
+                deep=_UITYPE_TIP;
+                break;
+            }
+            case "UITYPE_STIP":
+            {
+                deep=_UITYPE_STIP;
+                break;
+            }
             case "UITYPE_WAIT":
             {
                 deep=_UITYPE_WAIT;
+                break;
             }
             case "UITYPE_EFFECT":
             {
                 deep=_UITYPE_EFFECT;
+                break;
             }
             default:
             {
+                throw new Error(_name,"UITYPE zorder undefind");
                 break;
             }
         }

@@ -1,6 +1,8 @@
 package view.shiprefit {
 import conf.cfg_module_ship;
 
+import data.TipsD;
+
 import laya.display.Text;
 
 import laya.events.Event;
@@ -8,6 +10,10 @@ import laya.ui.Box;
 import laya.ui.Button;
 import laya.ui.Image;
 import laya.utils.Handler;
+
+import manager.GameEvent;
+
+import manager.GameEventDispatch;
 
 import manager.UiManager;
 
@@ -55,11 +61,11 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
     private function onSelectTab(index:int):void
     {
         tabType=index;
+        modelist.mouseEnabled=true;
         modelist.array=ShiprefitM.instance.getTablistArray(index);
         modelist.refresh();
         setpageNum();
         console.log("--tabBtn",pageNumArr,modelist.array.length);
-        //console.log("--array",index,modelist.array);
     }
     private function setpageNum(str:String=""):void
     {
@@ -86,8 +92,6 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
         var ele_img_pop:Image=ele_img_box.getChildByName("pop_img") as Image;
         var ele_img_lock:Image=ele_img_box.getChildByName("lock_img") as Image;
 
-
-
         ele_img_pop.skin=config['res'];
         ele_img_lock.visible=PlayerInfoM.instance.getshipmoduleBuy(tabType,pageNumArr[tabType]);
 
@@ -110,8 +114,16 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
 
         ele_btn_buy.offAll();
         ele_btn_buy.on(Event.MOUSE_DOWN,this,function () {
-            
+            var info:TipsD=new TipsD();
+            info.conFirmArgs=config;
+            info.buySucceedCallback=Handler.create(this,buySucceed);
+            UiManager.instance.loadView("Tips",info,0,"UITYPE_TIP");
         })
+    }
+
+    private function buySucceed(param:Object):void
+    {
+        console.log("-onbuy succeed",param);
     }
 
 
@@ -134,11 +146,11 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
 
     public function register():void
     {
-
+        GameEventDispatch.instance.on(GameEvent.ShiprefitBuy,this,onBuy);
     }
     public function unRegister():void
     {
-
+        GameEventDispatch.instance.off(GameEvent.ShiprefitBuy,this,onBuy);
     }
     public function closePanel():void
     {
