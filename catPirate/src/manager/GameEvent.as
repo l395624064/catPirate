@@ -21,8 +21,14 @@ package manager
         public static const MinusGoldANI:String="MinusGoldANI";
         public static const MinusPlankANI:String="MinusPlankANI";
 
-        //ShopbuyC
+        //GainnewpopC
+        public static const GainNewPOP:String="GainNewPOP";
+        //ShowbuyC
         public static const ShopBuy:String="ShopBuy";
+        //TipsC
+        public static const ShowTips:String="ShowTips";
+        //Stips
+        public static const ShowStips:String="ShowStips";
 
     }
 }

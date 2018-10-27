@@ -1,7 +1,10 @@
 package manager
 {
+import control.GainnewpopC;
 import control.GamemainC;
 import control.ShopbuyC;
+import control.SmallTipsC;
+import control.TipsC;
 
 import model.ShiprefitM;
 
@@ -29,6 +32,9 @@ public class GameInit
         {
             GamemainC.instance;
             ShopbuyC.instance;
+            SmallTipsC.instance;
+            TipsC.instance;
+            GainnewpopC.instance;
         }
 
         public function init():void

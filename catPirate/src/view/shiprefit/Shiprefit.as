@@ -166,7 +166,7 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
                 var info:TipsD=new TipsD();
                 info.conFirmArgs=config;
                 info.buySucceedCallback=Handler.create(this,buySucceed);
-                UiManager.instance.loadView("Tips",info,0,"UITYPE_TIP");
+                GameEventDispatch.instance.event(GameEvent.ShowTips,[info]);
             })
         }else{
             ele_btn_buy.label="装备";

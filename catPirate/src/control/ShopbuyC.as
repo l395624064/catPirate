@@ -47,14 +47,14 @@ public class ShopbuyC {
             typeName=cfg_currency.instance(type+"")['property'];
             if(typeName=="gold"){
                 if(PlayerInfoM.instance.getGoldNum()<buyNum*num){
-                    UiManager.instance.loadView("Smalltips",{id:1},0,"UITYPE_STIP");
+                    GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:1}]);
                     return;
                 }
                 willCost[typeName]=buyNum*num;
             }
             else if(typeName=="plank"){
                 if(PlayerInfoM.instance.getPlankNum()<buyNum*num){
-                    UiManager.instance.loadView("Smalltips",{id:2},0,"UITYPE_STIP");
+                    GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:2}]);
                     return;
                 }
                 willCost[typeName]=buyNum*num;
@@ -81,7 +81,7 @@ public class ShopbuyC {
 
 
         if(param.hasOwnProperty('buyshow')&& !param['buyshow']){
-            UiManager.instance.loadView("Gainnewpop",param,0,"UITYPE_GAINNEW");
+            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[param]);
         }
         buySucceedCallback.runWith(param);
     }
