@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":11,
-    "selecteID":42,
+    "selectedBox":1,
+    "selecteID":40,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -371,7 +371,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":180,"x":536,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76},
+            "props":{"y":1039,"x":243,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76},
             "nodeParent":1,
             "label":"Image(mapBtn)",
             "isDirectory":false,
@@ -384,13 +384,26 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":261,"x":539,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76},
+            "props":{"y":1039,"x":133,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76},
             "nodeParent":1,
             "label":"Image(remouldBtn)",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":39,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "props":{"y":1037,"x":28,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76},
+            "nodeParent":1,
+            "label":"Image(bookBtn)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":40,
             "child":[
                 ]
         }],

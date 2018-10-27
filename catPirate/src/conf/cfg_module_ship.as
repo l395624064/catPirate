@@ -11,21 +11,25 @@ package conf
             var a:cfg_module_ship = new cfg_module_ship();
 
             
-            a.typeId=sheet[0];
+            a.explain_content=sheet[0];
             
-            a.property_num=sheet[1];
+            a.typeId=sheet[1];
             
-            a.name=sheet[2];
+            a.property_num=sheet[2];
             
-            a.res=sheet[3];
+            a.buyshow=sheet[3];
             
-            a.cost_type=sheet[4];
+            a.name=sheet[4];
             
-            a.cost_num=sheet[5];
+            a.res=sheet[5];
             
-            a.property_type=sheet[6];
+            a.cost_type=sheet[6];
             
-            a.id=sheet[7];
+            a.cost_num=sheet[7];
+            
+            a.property_type=sheet[8];
+            
+            a.id=sheet[9];
             
 
 			return a;
@@ -37,9 +41,13 @@ package conf
 
 
         
+        public var explain_content:String;
+        
         public var typeId:int;
         
         public var property_num:Array;
+        
+        public var buyshow:int;
         
         public var name:String;
         

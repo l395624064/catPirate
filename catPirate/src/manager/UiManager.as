@@ -13,6 +13,8 @@ import view.loadview.Loadview;
 import view.shiprefit.Shiprefit;
 import view.tips.Tips;
 import view.smalltips.Smalltips;
+import view.sailingbook.Sailingbook;
+import view.gainnewpop.Gainnewpop;
 import view.unopend.Unopened;
 import view.wait.Wait;
 
@@ -25,7 +27,7 @@ public class UiManager {
     private var _emptyResUi:Object;
     private var _panel:*;
     private var _pngNum:Number=0;
-    private var _uiType:String="UITYPE_SCENE";//UITYPE_SCENE UITYPE_NORMAL  _UITYPE_SMALL_ZORDERARR  UITYPE_ANI
+    private var _uiType:String="UITYPE_SCENE";//UITYPE_SCENE UITYPE_NORMAL  _UITYPE_SMALL  UITYPE_ANI
     private const _UITYPE_SCENE_ZORDERARR:Array=[0,100];
     private const _UITYPE_NORMAL_ZORDERARR:Array=[100,200];
     private const _UITYPE_SMALL_ZORDERARR:Array=[200,300];
@@ -39,6 +41,7 @@ public class UiManager {
     private const _UITYPE_STIP:int=2002;
     private const _UITYPE_WAIT:int=2003;
     private const _UITYPE_EFFECT:int=2004;
+    private const _UITYPE_GAINNEW:int=2005;
 
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
@@ -74,6 +77,8 @@ public class UiManager {
 //        _emptyResUi['Loadview']=true;
         _emptyResUi['CommonTip']=true;
         _emptyResUi['Shiprefit']=true;
+        _emptyResUi['Sailingbook']=true;
+        _emptyResUi['Gainnewpop']=true;
         _emptyResUi['Tips']=true;
         _emptyResUi['Smalltips']=true;
     }
@@ -218,9 +223,14 @@ public class UiManager {
                 deep=_UITYPE_EFFECT;
                 break;
             }
+            case "UITYPE_GAINNEW":
+            {
+                deep=_UITYPE_GAINNEW;
+                break;
+            }
             default:
             {
-                throw new Error(_name,"UITYPE zorder undefind");
+                throw new Error(_name+"UITYPE zorder undefind");
                 break;
             }
         }

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":9,
-    "selecteID":53,
+    "selectedBox":49,
+    "selecteID":15,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -84,13 +84,14 @@
                                     "props":{"y":-22,"x":80,"scaleY":1,"scaleX":1,"name":"popimg_box"},
                                     "nodeParent":9,
                                     "label":"Box(popimg_box)",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":false,
                                     "hasChild":true,
                                     "compId":49,
                                     "child":[
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"width":230,"skin":"ui/common_ex/ptdk.png","height":230},
                                             "nodeParent":49,
@@ -106,8 +107,9 @@
                                             "$HIDDEN":false
                                         },
                                         {
+                                            "x":75,
                                             "type":"Image",
-                                            "props":{"y":25,"x":26,"width":180,"skin":"ui/common_ex/ico2.png","sizeGrid":"0,0,0,0","name":"pop_img","height":180},
+                                            "props":{"y":25,"x":26,"width":180,"sizeGrid":"0,0,0,0","name":"pop_img","height":180},
                                             "nodeParent":49,
                                             "label":"Image(pop_img)",
                                             "isDirectory":false,
@@ -119,30 +121,34 @@
                                             "$HIDDEN":false
                                         },
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"y":175,"x":21,"width":190,"skin":"ui/common_ex/p5.png","sizeGrid":"11,13,12,14","height":31},
                                             "nodeParent":49,
                                             "label":"Image",
-                                            "isOpen":false,
-                                            "isDirectory":true,
+                                            "isOpen":true,
+                                            "isDirectory":false,
                                             "isAniNode":false,
-                                            "hasChild":true,
+                                            "hasChild":false,
                                             "compId":47,
                                             "child":[
-                                                {
-                                                    "type":"Text",
-                                                    "props":{"y":6,"x":13,"width":166,"text":"基础组件","strokeColor":"#ffffff","stroke":3,"name":"popname_txt","height":23,"fontSize":20,"font":"SimHei","color":"#0099ff","bold":true,"align":"right"},
-                                                    "nodeParent":47,
-                                                    "label":"Text(popname_txt)",
-                                                    "isDirectory":false,
-                                                    "isAniNode":false,
-                                                    "hasChild":false,
-                                                    "compId":48,
-                                                    "child":[
-                                                        ]
-                                                }]
+                                                ]
                                         },
                                         {
+                                            "x":75,
+                                            "type":"Text",
+                                            "props":{"y":181,"x":34,"width":166,"text":"基础组件","strokeColor":"#ffffff","stroke":3,"name":"popname_txt","height":23,"fontSize":20,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"},
+                                            "nodeParent":49,
+                                            "label":"Text(popname_txt)",
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":48,
+                                            "child":[
+                                                ]
+                                        },
+                                        {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"y":18,"x":13,"width":200,"skin":"ui/common_ex/p5.png","sizeGrid":"3,3,3,3","name":"lock_img","height":197},
                                             "nodeParent":49,
@@ -168,7 +174,8 @@
                                                     "$HIDDEN":false
                                                 }],
                                             "$HIDDEN":false
-                                        }]
+                                        }],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "x":60,
@@ -176,15 +183,16 @@
                                     "props":{"y":76,"x":344,"name":"proBar_box"},
                                     "nodeParent":9,
                                     "label":"Box(proBar_box)",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":false,
                                     "hasChild":true,
                                     "compId":72,
                                     "child":[
                                         {
+                                            "x":75,
                                             "type":"ProgressBar",
-                                            "props":{"x":60,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum0","height":30},
+                                            "props":{"y":0,"x":63,"width":151,"value":1,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum0","height":30},
                                             "nodeParent":72,
                                             "label":"ProgressBar(pronum0)",
                                             "isDirectory":false,
@@ -195,8 +203,9 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"ProgressBar",
-                                            "props":{"y":38,"x":60,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum1","height":30},
+                                            "props":{"y":38,"x":63,"width":151,"value":1,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum1","height":30},
                                             "nodeParent":72,
                                             "label":"ProgressBar(pronum1)",
                                             "isDirectory":false,
@@ -207,8 +216,9 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"ProgressBar",
-                                            "props":{"y":76,"x":60,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum2","height":30},
+                                            "props":{"y":76,"x":63,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum2","height":30},
                                             "nodeParent":72,
                                             "label":"ProgressBar(pronum2)",
                                             "isDirectory":false,
@@ -220,8 +230,9 @@
                                             "$HIDDEN":false
                                         },
                                         {
+                                            "x":75,
                                             "type":"ProgressBar",
-                                            "props":{"y":114,"x":60,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum3","height":30},
+                                            "props":{"y":114,"x":63,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum3","height":30},
                                             "nodeParent":72,
                                             "label":"ProgressBar(pronum3)",
                                             "isDirectory":false,
@@ -232,8 +243,9 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"ProgressBar",
-                                            "props":{"y":152,"x":60,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum4","height":30},
+                                            "props":{"y":152,"x":63,"width":151,"skin":"ui/common_ex/p0.png","sizeGrid":"8,10,8,10","name":"pronum4","height":30},
                                             "nodeParent":72,
                                             "label":"ProgressBar(pronum4)",
                                             "isDirectory":false,
@@ -244,6 +256,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":3,"width":48,"text":"耐久","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":24,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":72,
@@ -253,9 +266,11 @@
                                             "hasChild":false,
                                             "compId":26,
                                             "child":[
-                                                ]
+                                                ],
+                                            "$LOCKED":true
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":41,"width":48,"text":"战斗","strokeColor":"#224882","stroke":5,"name":"proname_txt1","height":24,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":72,
@@ -265,9 +280,11 @@
                                             "hasChild":false,
                                             "compId":62,
                                             "child":[
-                                                ]
+                                                ],
+                                            "$LOCKED":true
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":79,"width":48,"text":"学识","strokeColor":"#224882","stroke":5,"name":"proname_txt2","height":24,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":72,
@@ -277,9 +294,11 @@
                                             "hasChild":false,
                                             "compId":66,
                                             "child":[
-                                                ]
+                                                ],
+                                            "$LOCKED":true
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":117,"width":48,"text":"速度","strokeColor":"#224882","stroke":5,"name":"proname_txt3","height":24,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":72,
@@ -289,9 +308,11 @@
                                             "hasChild":false,
                                             "compId":67,
                                             "child":[
-                                                ]
+                                                ],
+                                            "$LOCKED":true
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":155,"width":48,"text":"感知","strokeColor":"#224882","stroke":5,"name":"proname_txt4","height":24,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":72,
@@ -301,8 +322,75 @@
                                             "hasChild":false,
                                             "compId":68,
                                             "child":[
+                                                ],
+                                            "$LOCKED":true
+                                        },
+                                        {
+                                            "x":75,
+                                            "type":"Image",
+                                            "props":{"y":-5,"x":170,"width":39,"skin":"ui/common_ex/arrowsBtn2.png","name":"item0","height":35},
+                                            "nodeParent":72,
+                                            "label":"Image(item0)",
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":79,
+                                            "child":[
                                                 ]
-                                        }]
+                                        },
+                                        {
+                                            "x":75,
+                                            "type":"Image",
+                                            "props":{"y":33,"x":170,"width":39,"skin":"ui/common_ex/arrowsBtn2.png","name":"item1","height":35},
+                                            "nodeParent":72,
+                                            "label":"Image(item1)",
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":90,
+                                            "child":[
+                                                ]
+                                        },
+                                        {
+                                            "x":75,
+                                            "type":"Image",
+                                            "props":{"y":71,"x":170,"width":39,"skin":"ui/common_ex/arrowsBtn2.png","name":"item2","height":35},
+                                            "nodeParent":72,
+                                            "label":"Image(item2)",
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":91,
+                                            "child":[
+                                                ]
+                                        },
+                                        {
+                                            "x":75,
+                                            "type":"Image",
+                                            "props":{"y":109,"x":170,"width":39,"skin":"ui/common_ex/arrowsBtn2.png","name":"item3","height":35},
+                                            "nodeParent":72,
+                                            "label":"Image(item3)",
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":92,
+                                            "child":[
+                                                ]
+                                        },
+                                        {
+                                            "x":75,
+                                            "type":"Image",
+                                            "props":{"y":147,"x":170,"width":39,"skin":"ui/common_ex/arrowsBtn2.png","name":"item4","height":35},
+                                            "nodeParent":72,
+                                            "label":"Image(item4)",
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":93,
+                                            "child":[
+                                                ]
+                                        }],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "x":60,
@@ -353,7 +441,8 @@
                                             "compId":71,
                                             "child":[
                                                 ]
-                                        }]
+                                        }],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "x":60,
@@ -404,7 +493,8 @@
                                             "compId":75,
                                             "child":[
                                                 ]
-                                        }]
+                                        }],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "x":60,

@@ -7,9 +7,13 @@ import laya.display.Text;
 
 import laya.events.Event;
 import laya.ui.Box;
+import laya.ui.Box;
 import laya.ui.Button;
 import laya.ui.Image;
+import laya.ui.ProgressBar;
 import laya.utils.Handler;
+
+import manager.GameAdaptive;
 
 import manager.GameEvent;
 
@@ -55,30 +59,39 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
         scrollleftBtn.on(Event.MOUSE_DOWN,this, setpageNum,['minus']);
         scrollrightBtn.on(Event.MOUSE_DOWN,this,setpageNum,['add']);
         tabBtn.selectHandler=new Handler(this,onSelectTab);
+
+        modelist.mouseEnabled=true;
+        modelist.mouseHandler=new Handler(this,function (e:Event) {
+            if(e.type=="mousedown")e.stopPropagation();
+        })
         modelist.renderHandler=new Handler(this,updatelist);
     }
 
     private function onSelectTab(index:int):void
     {
         tabType=index;
-        modelist.mouseEnabled=true;
+        modelist.hScrollBarSkin="";
         modelist.array=ShiprefitM.instance.getTablistArray(index);
         modelist.refresh();
-        setpageNum();
+        setpageNum("goTo");
         console.log("--tabBtn",pageNumArr,modelist.array.length);
     }
     private function setpageNum(str:String=""):void
     {
-        if (str=="add"){
+        if(str=="goTo"){
+            modelist.tweenTo(pageNumArr[tabType],10);
+        }
+        else if (str=="add"){
             if(pageNumArr[tabType]<modelist.array.length-1){
                 pageNumArr[tabType]++;
             }
+            modelist.tweenTo(pageNumArr[tabType],500);
         }else if(str=="minus"){
             if(pageNumArr[tabType]>0){
                 pageNumArr[tabType]--;
             }
+            modelist.tweenTo(pageNumArr[tabType],500);
         }
-        modelist.tweenTo(pageNumArr[tabType],200);
     }
 
     private function updatelist(cell:Box,index:int):void
@@ -91,9 +104,17 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
         var ele_img_box:Box=cell.getChildByName("popimg_box") as Box;
         var ele_img_pop:Image=ele_img_box.getChildByName("pop_img") as Image;
         var ele_img_lock:Image=ele_img_box.getChildByName("lock_img") as Image;
+        var ele_img_name:Text=ele_img_box.getChildByName("popname_txt") as Text;
 
-        ele_img_pop.skin=config['res'];
-        ele_img_lock.visible=PlayerInfoM.instance.getshipmoduleBuy(tabType,pageNumArr[tabType]);
+        var img:Image=new Image();
+        img.skin=config['res'];
+        GameAdaptive.instance.setMiddleFromPanel(img,ele_img_pop);
+        ele_img_pop.removeChildren();
+        ele_img_pop.addChild(img);
+
+        ele_img_lock.visible=ShiprefitM.instance.getshipmoduleBuy(tabType,pageNumArr[tabType]);
+
+        ele_img_name.text=config['name'];
 
         var ele_box_const:Box;
         var ele_img_const:Image;
@@ -112,45 +133,83 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
             ele_txt_const.text=config['cost_num'][i-1] + "";
         }
 
+
+        var proBox:Box=cell.getChildByName("proBar_box") as Box;
+        var propertyArr:Array=config['property_num'];
+        const maxNum:int=100;
+        var solder:ProgressBar;
+        var arrowsImg:Image;
+        for (var i:int=0;i<propertyArr.length;i++)
+        {
+            solder=proBox.getChildByName("pronum"+i) as ProgressBar;
+            arrowsImg=proBox.getChildByName("item"+i) as Image;
+            solder.value=Math.abs(propertyArr[i])/maxNum;
+            if(propertyArr[i]>0){
+                solder.skin="ui/common_ex/p0.png";
+                arrowsImg.skin="ui/common_ex/arrowsBtn2.png";
+            }
+            else if(propertyArr[i]<0){
+                solder.skin="ui/common_ex/p3.png";
+                arrowsImg.skin="ui/common_ex/arrowsBtn1.png";
+            }
+            else{
+                arrowsImg.skin="ui/common_ex/arrowsBtn3.png";
+            }
+        }
+
         ele_btn_buy.offAll();
-        ele_btn_buy.on(Event.MOUSE_DOWN,this,function () {
-            var info:TipsD=new TipsD();
-            info.conFirmArgs=config;
-            info.buySucceedCallback=Handler.create(this,buySucceed);
-            UiManager.instance.loadView("Tips",info,0,"UITYPE_TIP");
-        })
+        if(ele_img_lock.visible){
+            ele_btn_buy.label="购买";
+            ele_btn_buy.skin="ui/common_ex/btn_s_r.png";
+            ele_btn_buy.on(Event.MOUSE_DOWN,this,function (e:Event) {
+                e.stopPropagation();
+                var info:TipsD=new TipsD();
+                info.conFirmArgs=config;
+                info.buySucceedCallback=Handler.create(this,buySucceed);
+                UiManager.instance.loadView("Tips",info,0,"UITYPE_TIP");
+            })
+        }else{
+            ele_btn_buy.label="装备";
+            ele_btn_buy.skin="ui/common_ex/btn_s_y.png";
+            ele_btn_buy.on(Event.MOUSE_DOWN,this,function (e:Event) {
+                e.stopPropagation();
+                //equip
+            })
+        }
     }
 
     private function buySucceed(param:Object):void
     {
-        console.log("-onbuy succeed",param);
+        //console.log("-onbuy succeed",param);
+        ShiprefitM.instance.setshipmoduleBuy(tabType,pageNumArr[tabType]);
+        var cell:Box=modelist.getCell(pageNumArr[tabType]);
+
+        var ele_img_lock:Image=cell.getChildByName("popimg_box").getChildByName("lock_img") as Image;
+        ele_img_lock.visible=false;
+
+        var ele_btn_buy:Button=cell.getChildByName("buyBtn") as Button;
+        ele_btn_buy.label="装备";
+        ele_btn_buy.skin="ui/common_ex/btn_s_y.png";
+        ele_btn_buy.offAll();
+        ele_btn_buy.on(Event.MOUSE_DOWN,this,function (e:Event) {
+            e.stopPropagation();
+        })
     }
 
 
     private function initNum():void
     {
         onSelectTab(0);
-        return;
-        var cfg:Array=ConfigManager.items("cfg_module_ship");
-        console.log("-cfg",cfg);
-        var cfg2:Array = ConfigManager.filter("cfg_module_ship", function(item){
-            if (item['id'] == 403){
-                return item;
-            }
-        });
-        console.log("-cfg2",cfg2);
-        var con:cfg_module_ship = cfg_module_ship.instance(402  + "");
-        console.log("-con",con);
     }
 
 
     public function register():void
     {
-        GameEventDispatch.instance.on(GameEvent.ShiprefitBuy,this,onBuy);
+
     }
     public function unRegister():void
     {
-        GameEventDispatch.instance.off(GameEvent.ShiprefitBuy,this,onBuy);
+
     }
     public function closePanel():void
     {
@@ -158,7 +217,8 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
     }
     public function clearAllNum():void
     {
-
+        tabBtn.selectedIndex=0;
+        pageNumArr=[0,0,0,0];
     }
 }
 }

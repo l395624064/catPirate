@@ -94,7 +94,7 @@ public class Tips extends TipsUI implements PanelVo{
         }else if(_conFirmEvent){
             if(_buySucceedCallback){
                 _conFirmArgs['buySucceedCallback']=_buySucceedCallback;
-                GameEventDispatch.instance.event(_conFirmEvent,_conFirmArgs);
+                GameEventDispatch.instance.event(GameEvent.ShopBuy,_conFirmArgs);
             }
             else if(_conFirmArgs) GameEventDispatch.instance.event(_conFirmEvent,_conFirmArgs);
             else GameEventDispatch.instance.event(_conFirmEvent);

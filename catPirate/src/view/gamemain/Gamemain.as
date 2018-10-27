@@ -112,6 +112,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
         remouldBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.loadView("Shiprefit", null, 0, "UITYPE_NORMAL");
         })
+
+        bookBtn.on(Event.MOUSE_DOWN,this,function () {
+            UiManager.instance.loadView("Sailingbook",null,0,"UITYPE_NORMAL");
+        })
         
         dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {
             if(!checkDropfish) return;
@@ -232,31 +236,42 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
-    private function minusScoreANI(param:Object):void
+
+
+    private function minusGoldANI(param:Object):void
     {
-        var gold,plank:int;
-        if(param.hasOwnProperty('gold')) gold=param['gold'];
-        if(param.hasOwnProperty('plank')) plank=param['gold'];
+        gold_txt.text=PlayerInfoM.instance.getGoldNum()+"";
+        Laya.timer.clear(this,minusGoldANITime);
+        param['minusNum']=Math.ceil(param['gold']/24);
+        Laya.timer.frameLoop(1,this,minusGoldANITime,[param]);
+    }
+    private function minusPlankANI(param:Object):void
+    {
+        plank_txt.text=PlayerInfoM.instance.getPlankNum()+"";
+        Laya.timer.clear(this,minusPlankANITime);
+        param['minusNum']=Math.ceil(param['plank']/24);
+        Laya.timer.frameLoop(1,this,minusPlankANITime,[param]);
+    }
 
-        var endNum:int=param['endNum'];
-        const aniTime:int=10;
-        var delay:int=Math.floor(Math.cos(endNum)*aniTime);
-
-        if(gold>0){
-            var gold:int=PlayerInfoM.instance.getGoldNum();
-            gold--;
-            PlayerInfoM.instance.setGoldNum(gold);
-            gold_txt.text=PlayerInfoM.instance.getGoldNum() as String;
+    private function minusGoldANITime(param:Object):void
+    {
+        param['gold']-=param['minusNum'];
+        if(param['gold']<=0){
+            Laya.timer.clear(this,minusGoldANITime);
+            gold_txt.text=PlayerInfoM.instance.getGoldNum()+"";
+        }else{
+            gold_txt.text=param['gold']+PlayerInfoM.instance.getGoldNum();
         }
-        if(plank>0){
-            var plank:int=PlayerInfoM.instance.getPlankNum();
-            plank--;
-            PlayerInfoM.instance.setPlankNum(plank);
-            plank_txt.text=PlayerInfoM.instance.getPlankNum() as String;
+    }
+    private function minusPlankANITime(param:Object):void
+    {
+        param['plank']-=param['minusNum'];
+        if(param['plank']<=0){
+            Laya.timer.clear(this,minusPlankANITime);
+            plank_txt.text=PlayerInfoM.instance.getPlankNum()+"";
+        }else{
+            plank_txt.text=param['plank']+PlayerInfoM.instance.getPlankNum();
         }
-
-        param['endNum']--;
-        if(endNum>1) Laya.timer.once(delay,this,minusScoreANI,[param]);//接收事件 endNum多执行了一次
     }
 
     private function addScoreNum(type:String):void
@@ -306,7 +321,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.on(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
         GameEventDispatch.instance.on(GameEvent.PlankScoreANI,this,PlankScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.on(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
-        GameEventDispatch.instance.on(GameEvent.MinusScoreANI,this,minusScoreANI);
+        GameEventDispatch.instance.on(GameEvent.MinusGoldANI,this,minusGoldANI);
+        GameEventDispatch.instance.on(GameEvent.MinusPlankANI,this,minusPlankANI);
     }
 
     public function unRegister():void
@@ -315,7 +331,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.off(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
         GameEventDispatch.instance.off(GameEvent.PlankScoreANI,this,PlankScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.off(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
-        GameEventDispatch.instance.off(GameEvent.MinusScoreANI,this,minusScoreANI);
+        GameEventDispatch.instance.off(GameEvent.MinusGoldANI,this,minusGoldANI);
+        GameEventDispatch.instance.off(GameEvent.MinusPlankANI,this,minusPlankANI);
     }
 
     public function closePanel():void
