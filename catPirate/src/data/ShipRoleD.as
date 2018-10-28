@@ -1,6 +1,8 @@
 package data {
 public class ShipRoleD {
     public var skin:String="";
+    public var name:String="";
+    public var job:String="";
     public var exp:Number=0;
     public var lv:Number=0;
     public var dx:Number=0;

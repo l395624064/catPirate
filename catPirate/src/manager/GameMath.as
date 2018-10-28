@@ -19,6 +19,8 @@ public class GameMath {
         //get yellow img pos
         //get colours img pos
 
+        //min:45 max:400
+        //width:90
         return [100,300,600];
     }
 

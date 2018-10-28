@@ -1,5 +1,11 @@
 package view.gamemain {
 import data.EffectD;
+import data.ShipRoleD;
+
+import laya.ui.Image;
+
+import model.ShiprefitM;
+
 import view.gamemap.Gamemap;
 
 import laya.display.Sprite;
@@ -35,7 +41,6 @@ import view.PanelVo;
 public class Gamemain extends GameMainUI implements PanelVo {
 
     public static var _instance:Gamemain;
-    private var roleDic:Object={};
 
     private var canDrop:Boolean;
     private var fishhookPoint:Point;
@@ -57,10 +62,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public function openPanel(param:Object=null):void
     {
-        creatRole();
         initSeaWave(shipBox);
         initListener();
-
 
         //update view
         changeScoreBoxState("start");
@@ -68,30 +71,32 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
         //update Num
         initNum();
+
+        GameEventDispatch.instance.event(GameEvent.ShipSlotInit);
+
+        //test creatRole
+        var roleDate:ShipRoleD=new ShipRoleD();
+        roleDate.skin="ui/common/captain_1.png";
+        roleDate.job="captain";
+        GameEventDispatch.instance.event(GameEvent.CreatShipRole,[roleDate]);
     }
 
-    //creat role
-    private function creatRole():void
+
+    public function getRoleImg(roleType:String):Image
     {
-        var captain:SimpleRole=new SimpleRole();
-        captain.init("captain",this.captainImg);
-
-        var shipmate:SimpleRole=new SimpleRole();
-        shipmate.init("shipmate",this.shipmateImg);
-
-        var shipchef:SimpleRole=new SimpleRole();
-        shipchef.init("shipchef",this.shipchefImg);
-
-        var shipsoldier:SimpleRole=new SimpleRole();
-        shipsoldier.init("shipsoldier",this.shipsoldierImg);
-
-        roleDic={"captain":captain,"shipmate":shipmate,"shipchef":shipchef,"shipsoldier":shipsoldier};
+        switch (roleType){
+            case "captain":return captainImg;
+            break;
+            case "shipmate":return shipmateImg;
+            break;
+            case "shipchef":return shipchefImg;
+            break;
+            case "shipsoldier":return shipsoldierImg;
+            break;
+        }
     }
 
-    private function getshipRole(name:String):*
-    {
-        return roleDic[name];
-    }
+
 
     private function initNum():void
     {
@@ -236,6 +241,30 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
+    public function updateShipslot():void
+    {
+        //console.log("--updateShipslot",ShiprefitM.instance.getShipslotDic());
+        //body sail tower cabin
+        var bodyImg:Image=shipBox.getChildByName("body") as Image;
+        var bodyConfig:Object=ShiprefitM.instance.getShipslotByName("body");
+        if(bodyConfig)bodyImg.skin=bodyConfig['res'];
+        else bodyImg.skin="";
+
+        var sailImg:Image=shipBox.getChildByName("sail") as Image;
+        var sailConfig:Object=ShiprefitM.instance.getShipslotByName("sail");
+        if(sailConfig)sailImg.skin=sailConfig['res'];
+        else sailImg.skin="";
+
+        var towerImg:Image=shipBox.getChildByName("tower") as Image;
+        var towerConfig:Object=ShiprefitM.instance.getShipslotByName("tower");
+        if(towerConfig) towerImg.skin=towerConfig['res'];
+        else towerImg.skin="";
+
+        var cabinImg:Image=shipBox.getChildByName("cabin") as Image;
+        var cabinConfig:Object=ShiprefitM.instance.getShipslotByName("cabin");
+        if(cabinConfig)cabinImg.skin=cabinConfig['res'];
+        else cabinImg.skin="";
+    }
 
 
     private function minusGoldANI(param:Object):void
@@ -323,6 +352,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.on(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.on(GameEvent.MinusGoldANI,this,minusGoldANI);
         GameEventDispatch.instance.on(GameEvent.MinusPlankANI,this,minusPlankANI);
+        GameEventDispatch.instance.on(GameEvent.UpdateShipslot,this,updateShipslot);
     }
 
     public function unRegister():void
@@ -333,6 +363,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.off(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.off(GameEvent.MinusGoldANI,this,minusGoldANI);
         GameEventDispatch.instance.off(GameEvent.MinusPlankANI,this,minusPlankANI);
+        GameEventDispatch.instance.off(GameEvent.UpdateShipslot,this,updateShipslot);
     }
 
     public function closePanel():void

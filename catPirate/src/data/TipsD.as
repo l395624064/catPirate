@@ -5,12 +5,12 @@ import manager.GameEvent;
 
 public class TipsD {
 
-    public var content:String="是否确认购买";
+    public var content:String=null;
     public var autoCloseTime:int=10;
     public var aotoClose:Boolean=true;
 
     public var confirmCallback:Handler=null;
-    public var conFirmEvent:String=GameEvent.ShopBuy;
+    public var conFirmEvent:String=null;
     public var conFirmArgs:Object=null;
 
     public var buySucceedCallback:Handler=null;

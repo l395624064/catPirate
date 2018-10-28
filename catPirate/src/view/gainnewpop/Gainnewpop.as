@@ -1,5 +1,8 @@
 package view.gainnewpop {
 import laya.events.Event;
+import laya.ui.Image;
+
+import manager.GameAdaptive;
 
 import manager.UiManager;
 
@@ -21,11 +24,15 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
     public function openPanel(param:Object=null):void
     {
         this.ani1.play();
-        popImg.skin=param['res'];
+
+        var img:Image=new Image(param['res']);
+        popImg.addChild(img);
+        GameAdaptive.instance.setMiddleFromPanel(img,popImg);
+
         popname.text=param['name'];
         content.text=param['explain_content'];
 
-        console.log("-Gainnewpop:",param);
+        //console.log("-Gainnewpop:",param);
         this.hitTestPrior=true;
         this.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.closePanel("Gainnewpop");
@@ -39,6 +46,9 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
     }
     public function clearAllNum():void
     {
+        this.ani1.stop();
+        popImg.removeChildren();
+
 
     }
 

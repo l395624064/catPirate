@@ -32,12 +32,24 @@ public class ShiprefitM {
     }
 
 
-    public function getshipSlot(name:String):Object
+
+
+
+    public function setShipslotDic(obj:Object):void
+    {
+        _shipslotDic=obj;
+    }
+    public function getShipslotDic():Object
+    {
+        return _shipslotDic;
+    }
+
+
+    public function getShipslotByName(name:String):Object
     {
         return _shipslotDic[name];
     }
-
-    private function setshipSlot(name:String,slot:Object):void
+    public function setShipslotByName(name:String, slot:*):void
     {
         if(_shipslotDic.hasOwnProperty(name)){
             _shipslotDic[name]=slot;

@@ -1,13 +1,14 @@
 package model {
 import data.ShipRoleD;
 
+import laya.maths.Point;
+
 public class ShipRoleM {
 
     public static var _instance:ShipRoleM;
     private var shipRoleConfigDic:Object={};
 
     public function ShipRoleM() {
-        setshipRoleDataArr();
     }
 
     public static function get instance():ShipRoleM
@@ -16,40 +17,27 @@ public class ShipRoleM {
     }
 
 
-    public function setshipRoleDataArr(data:ShipRoleD=null):void
+    public function getshipRolePos(roleType:String):Point
     {
-        //get local save
-        if(!data){
-            var captainData:ShipRoleD=new ShipRoleD();
-            captainData.dx=356;
-            captainData.dy=97;
-            captainData.skin="ui/common/captain_1.png";
+        //body:captain
+        //sail:shipchef
+        //tower:shipsoldier
+        //cabin:shipmate
 
-            var shipmateData:ShipRoleD=new ShipRoleD();
-            shipmateData.dx=420;
-            shipmateData.dy=297;
-            shipmateData.skin="ui/common/shipmate_1.png";
-
-            var shipchefData:ShipRoleD=new ShipRoleD();
-            shipchefData.dx=229;
-            shipchefData.dy=210;
-            shipchefData.skin="ui/common/shipchef_1.png";
-
-            var shipsoldierData:ShipRoleD=new ShipRoleD();
-            shipsoldierData.dx=92;
-            shipsoldierData.dy=297;
-            shipsoldierData.skin="ui/common/shipsoldier_1.png";
-
-            shipRoleConfigDic={
-                "captain":captainData,
-                "shipmate":shipmateData,
-                "shipchef":shipchefData,
-                "shipsoldier":shipsoldierData
-            };
-            console.log("--shipRole data init over")
-        }else{
-            shipRoleConfigDic=data;
+        var shipslotDic:Object=ShiprefitM.instance.getShipslotDic();
+        var slotObj:Object;
+        switch (roleType){
+            case "captain":slotObj=shipslotDic['body'];
+                break;
+            case "shipchef":slotObj=shipslotDic['sail'];
+                break;
+            case "shipsoldier":slotObj=shipslotDic['tower'];
+                break;
+            case "shipmate":slotObj=shipslotDic['cabin'];
+                break;
         }
+        if(!slotObj) throw new Error("can not found staypos!");
+        return new Point(slotObj['stay_pos'][0],slotObj['stay_pos'][1]);
     }
 
     public function getshipRoleDataArr():Object
@@ -57,7 +45,7 @@ public class ShipRoleM {
         return shipRoleConfigDic;
     }
 
-    public function updateshipRoleData(name:String,data:ShipRoleD):void
+    public function setshipRoleData(name:String,data:ShipRoleD):void
     {
         shipRoleConfigDic[name]=data;
     }

@@ -36,10 +36,24 @@ public class Tips extends TipsUI implements PanelVo{
 
     private function checkMsg(param:Object):void
     {
-        if(param.hasOwnProperty('content')){
+        if(param.hasOwnProperty('content') && param['content']){
             _content=param['content'];
             contenttxt.text=_content;
         }
+
+        if(param.hasOwnProperty('confirmCallback') && param['confirmCallback']){
+            _confirmCallback=param['confirmCallback'];
+        }
+        if(param.hasOwnProperty('conFirmEvent') && param['conFirmEvent']){
+            _conFirmEvent=param['conFirmEvent'];
+            if(_conFirmEvent==GameEvent.ShopBuy){
+                _buySucceedCallback=param['buySucceedCallback'];
+            }
+        }
+        if(param.hasOwnProperty('conFirmArgs') && param['conFirmArgs']){
+            _conFirmArgs=param['conFirmArgs'];
+        }
+
         if(param.hasOwnProperty('aotoClose')){
             _aotoClose=param['aotoClose'];
             if(_aotoClose){
@@ -49,18 +63,11 @@ public class Tips extends TipsUI implements PanelVo{
                 changeAotoTimeState("undisplay");
             }
         }
-        if(param.hasOwnProperty('confirmCallback'))_confirmCallback=param['confirmCallback'];
-        if(param.hasOwnProperty('conFirmEvent')){
-            _conFirmEvent=param['conFirmEvent'];
-            if(_conFirmEvent==GameEvent.ShopBuy){
-                _buySucceedCallback=param['buySucceedCallback'];
-            }
-        }
-        if(param.hasOwnProperty('conFirmArgs'))_conFirmArgs=param['conFirmArgs'];
     }
 
     public function openPanel(param:Object=null):void
     {
+        console.log("-tips param:",param)
         checkMsg(param);
         confirmBtn.on(Event.MOUSE_DOWN,this,onConfirm);
         cancelBtn.on(Event.MOUSE_DOWN,this,onCancel);
@@ -117,7 +124,15 @@ public class Tips extends TipsUI implements PanelVo{
     }
     public function clearAllNum():void
     {
+        _content=null;
+        _aotoCloseTime=0;
+        _aotoClose=false;
 
+        _confirmCallback=null;
+        _conFirmEvent=null;
+        _conFirmArgs=null;
+
+        _buySucceedCallback=null;
     }
     public function closePanel():void
     {

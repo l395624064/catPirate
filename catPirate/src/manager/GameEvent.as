@@ -21,6 +21,8 @@ package manager
         public static const MinusGoldANI:String="MinusGoldANI";
         public static const MinusPlankANI:String="MinusPlankANI";
 
+        public static const UpdateShipslot:String="UpdateShipslot";
+
         //GainnewpopC
         public static const GainNewPOP:String="GainNewPOP";
         //ShowbuyC
@@ -29,6 +31,11 @@ package manager
         public static const ShowTips:String="ShowTips";
         //Stips
         public static const ShowStips:String="ShowStips";
+        //shiprefitC
+        public static const ShipSlotEquip:String="ShipSlotEquip";
+        public static const ShipSlotInit:String="ShipSlotInit";
+        //ShipRoleC
+        public static const CreatShipRole:String="CreatShipRole";
 
     }
 }

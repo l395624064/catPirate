@@ -19,10 +19,7 @@ public class SimpleRole {
     public function init(name:String,img:Image):void
     {
         _name=name;
-        _roleData=ShipRoleM.instance.getshipRoleData(_name);
         _img=img;
-
-        update();
 
         _img.on(Event.MOUSE_DOWN,this,onRoleClick);
     }

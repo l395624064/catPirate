@@ -145,8 +145,8 @@ public class UiManager {
         }
 
         _panel.visible=true;
-        _panel.openPanel(_param);
         _panel.register();
+        _panel.openPanel(_param);
         Laya.stage.addChild(_panel);
         showAni(_panel);
 

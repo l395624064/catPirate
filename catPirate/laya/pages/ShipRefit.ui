@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":49,
-    "selecteID":15,
+    "selectedBox":17,
+    "selecteID":5,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -57,7 +57,7 @@
                 {
                     "x":30,
                     "type":"List",
-                    "props":{"y":63,"x":10,"width":639,"var":"modelist","spaceX":0,"repeatY":1,"repeatX":1,"renderType":"render","mouseEnabled":false,"height":293},
+                    "props":{"y":63,"x":10,"width":640,"var":"modelist","spaceX":0,"repeatY":1,"repeatX":1,"mouseEnabled":false,"height":293},
                     "nodeParent":17,
                     "label":"List(modelist)",
                     "isOpen":true,
@@ -69,7 +69,7 @@
                         {
                             "x":45,
                             "type":"Box",
-                            "props":{"y":19,"x":3,"width":636,"renderType":"render","height":264},
+                            "props":{"y":19,"x":3,"width":630,"renderType":"render","height":264},
                             "nodeParent":5,
                             "label":"Box",
                             "isOpen":true,

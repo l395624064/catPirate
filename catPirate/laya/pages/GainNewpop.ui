@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":2,
+    "selectedBox":3,
+    "selecteID":6,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -54,7 +54,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":286,"x":177,"width":150,"var":"popImg","height":150,"anchorY":0.5,"anchorX":0.5},
+                    "props":{"y":286,"x":177,"width":193,"var":"popImg","height":193,"anchorY":0.5,"anchorX":0.5},
                     "nodeParent":3,
                     "label":"Image(popImg)",
                     "isDirectory":false,

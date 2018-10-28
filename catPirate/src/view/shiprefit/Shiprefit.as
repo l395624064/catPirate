@@ -112,9 +112,15 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
         ele_img_pop.removeChildren();
         ele_img_pop.addChild(img);
 
-        ele_img_lock.visible=ShiprefitM.instance.getshipmoduleBuy(tabType,pageNumArr[tabType]);
-
         ele_img_name.text=config['name'];
+
+        var notHave:Boolean=ShiprefitM.instance.getshipmoduleBuy(tabType,index);
+        if(notHave){
+            ele_img_lock.visible=true;
+        }else{
+            ele_img_lock.visible=false;
+        }
+
 
         var ele_box_const:Box;
         var ele_img_const:Image;
@@ -164,8 +170,10 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
             ele_btn_buy.on(Event.MOUSE_DOWN,this,function (e:Event) {
                 e.stopPropagation();
                 var info:TipsD=new TipsD();
+                info.content="是否购买此物品？";
                 info.conFirmArgs=config;
-                info.buySucceedCallback=Handler.create(this,buySucceed);
+                info.conFirmEvent=GameEvent.ShopBuy;
+                info.buySucceedCallback=new Handler(this,buySucceed);
                 GameEventDispatch.instance.event(GameEvent.ShowTips,[info]);
             })
         }else{
@@ -174,26 +182,20 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
             ele_btn_buy.on(Event.MOUSE_DOWN,this,function (e:Event) {
                 e.stopPropagation();
                 //equip
+                GameEventDispatch.instance.event(GameEvent.ShipSlotEquip,[config]);
             })
         }
     }
 
+
+
+    //will be repair
     private function buySucceed(param:Object):void
     {
         //console.log("-onbuy succeed",param);
         ShiprefitM.instance.setshipmoduleBuy(tabType,pageNumArr[tabType]);
         var cell:Box=modelist.getCell(pageNumArr[tabType]);
-
-        var ele_img_lock:Image=cell.getChildByName("popimg_box").getChildByName("lock_img") as Image;
-        ele_img_lock.visible=false;
-
-        var ele_btn_buy:Button=cell.getChildByName("buyBtn") as Button;
-        ele_btn_buy.label="装备";
-        ele_btn_buy.skin="ui/common_ex/btn_s_y.png";
-        ele_btn_buy.offAll();
-        ele_btn_buy.on(Event.MOUSE_DOWN,this,function (e:Event) {
-            e.stopPropagation();
-        })
+        updatelist(cell,pageNumArr[tabType]);
     }
 
 

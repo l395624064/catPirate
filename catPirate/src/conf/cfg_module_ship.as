@@ -21,15 +21,21 @@ package conf
             
             a.name=sheet[4];
             
-            a.res=sheet[5];
+            a.stay_pos=sheet[5];
             
-            a.cost_type=sheet[6];
+            a.res=sheet[6];
             
-            a.cost_num=sheet[7];
+            a.typeName=sheet[7];
             
-            a.property_type=sheet[8];
+            a.slot_type=sheet[8];
             
-            a.id=sheet[9];
+            a.cost_type=sheet[9];
+            
+            a.cost_num=sheet[10];
+            
+            a.property_type=sheet[11];
+            
+            a.id=sheet[12];
             
 
 			return a;
@@ -51,7 +57,13 @@ package conf
         
         public var name:String;
         
+        public var stay_pos:Array;
+        
         public var res:String;
+        
+        public var typeName:String;
+        
+        public var slot_type:String;
         
         public var cost_type:Array;
         
