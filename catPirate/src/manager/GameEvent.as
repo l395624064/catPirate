@@ -17,6 +17,7 @@ package manager
         public static const ShipRole_CLICK:String="ShipRole_CLICK";
         public static const PlankScoreANI:String="PlankScoreANI";
         public static const GoldScoreANI:String="GoldScoreANI";
+        public static const PearlScoreANI:String="PearlScoreANI";
 
         public static const MinusGoldANI:String="MinusGoldANI";
         public static const MinusPlankANI:String="MinusPlankANI";

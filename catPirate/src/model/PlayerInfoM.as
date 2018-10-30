@@ -5,6 +5,7 @@ public class PlayerInfoM {
 
     private var _goldNum:Number=1000;
     private var _plankNum:Number=1000;
+    private var _pearlNum:Number=1000;
 
     private var _luckNum:Number=0;
 
@@ -27,6 +28,14 @@ public class PlayerInfoM {
     }
 
 
+    public function getPearlNum():Number
+    {
+        return _pearlNum;
+    }
+    public function setPearlNum(value:Number):void
+    {
+        _pearlNum=value;
+    }
 
     public function getGoldNum():Number
     {

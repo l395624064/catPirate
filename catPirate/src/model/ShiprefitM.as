@@ -16,10 +16,27 @@ public class ShiprefitM {
     ];
 
     private var _shipslotDic:Object={body:null,sail:null,tower:null,cabin:null};//body sail tower cabin
+
+    //min:0 max:100
+    /*耐久度(船体):CON
+    提升船的耐久度上限值;船航行期间会损耗耐久,耐久度降为0后,船会停止航行
+    */
     private var _CON:Number=0;
+    /*战斗力(炮台):STR
+     * 提升船的战斗力;当遇到其它海贼团时,数值越高越容易获胜
+    */
     private var _STR:Number=0;
+    /*仓库容量(船尾的小厨房):LER
+    *提升仓库的容量;仓库容量影响食物库存总量
+    * */
     private var _LER:Number=0;
+    /*航行速度(船帆):SPD
+    *提升船的速度;船在航海图上,移动格子所需的时间
+    * */
     private var _SPD:Number=0;
+    /*感知力(桅杆):DEX
+    *提升船的视野范围
+    * */
     private var _DEX:Number=0;
 
 

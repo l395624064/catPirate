@@ -4,6 +4,8 @@ import data.ShipRoleD;
 
 import laya.ui.Image;
 
+import model.GamemainM;
+
 import model.ShiprefitM;
 
 import view.gamemap.Gamemap;
@@ -159,6 +161,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         }else if(action="update"){
             gold_txt.text=PlayerInfoM.instance.getGoldNum() as String;
             plank_txt.text=PlayerInfoM.instance.getPlankNum() as String;
+            pearl_txt.text=PlayerInfoM.instance.getPearlNum() as String;
         }
     }
 
@@ -168,7 +171,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private function changeDropFishBoxState(action:String):void
     {
         if(action=="start"){
-            var dxArr:Array=GameMath.instance.gethookColorImg();
+            var dxArr:Array=GamemainM.instance.gethookColorImg();
             blueImg.x=dxArr[0];
             yellowImg.x=dxArr[1];
             coloursImg.x=dxArr[2];
@@ -202,7 +205,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
             fishhookPoint=fishhookMask.globalToLocal(dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y)));
 
             var colorImgArr:Array=[blueImg,yellowImg,coloursImg];
-            var popObject:Object=GameMath.instance.getdropPopNum(fishhookPoint,colorImgArr);
+            var popObject:Object=GamemainM.instance.getdropPopNum(fishhookPoint,colorImgArr);
 
             //fontClip
             getScoreClip.alpha=1;
@@ -314,6 +317,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
             var goldnum:int=PlayerInfoM.instance.getGoldNum();
             goldnum++;
             PlayerInfoM.instance.setGoldNum(goldnum);
+        }else if(type=="pearl"){
+            var pearlnum:int=PlayerInfoM.instance.getPearlNum();
+            pearlnum++;
+            PlayerInfoM.instance.setPearlNum(pearlnum);
         }
         changeScoreBoxState("update");
     }
@@ -342,7 +349,17 @@ public class Gamemain extends GameMainUI implements PanelVo {
         if(scaleNum==1) return;
         addScoreNum("gold");
     }
+    private function PearlScoreANI(scaleNum:Number):void
+    {
+        Tween.to(pearlScoreImg,{scaleX:scaleNum,scaleY:scaleNum},scoreAniTime,Ease.backOut,Handler.create(this,function () {
+            if(pearlScoreImg.scaleX!=1){
+                PearlScoreANI(1);
+            }
+        }),0,true);
 
+        if(scaleNum==1) return;
+        addScoreNum("pearl");
+    }
 
     public function register():void
     {
@@ -350,6 +367,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.on(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
         GameEventDispatch.instance.on(GameEvent.PlankScoreANI,this,PlankScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.on(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
+        GameEventDispatch.instance.on(GameEvent.PearlScoreANI,this,PearlScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.on(GameEvent.MinusGoldANI,this,minusGoldANI);
         GameEventDispatch.instance.on(GameEvent.MinusPlankANI,this,minusPlankANI);
         GameEventDispatch.instance.on(GameEvent.UpdateShipslot,this,updateShipslot);
@@ -361,6 +379,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.off(GameEvent.PlankRefresh,this,changeScoreBoxState,["update"]);
         GameEventDispatch.instance.off(GameEvent.PlankScoreANI,this,PlankScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.off(GameEvent.GoldScoreANI,this,GoldScoreANI,[scoreAniSize]);
+        GameEventDispatch.instance.off(GameEvent.PearlScoreANI,this,PearlScoreANI,[scoreAniSize]);
         GameEventDispatch.instance.off(GameEvent.MinusGoldANI,this,minusGoldANI);
         GameEventDispatch.instance.off(GameEvent.MinusPlankANI,this,minusPlankANI);
         GameEventDispatch.instance.off(GameEvent.UpdateShipslot,this,updateShipslot);

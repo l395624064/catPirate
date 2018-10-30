@@ -8,6 +8,8 @@ import control.ShopbuyC;
 import control.SmallTipsC;
 import control.TipsC;
 
+import model.GamemainM;
+
 import model.GamemapM;
 
 import model.PlayerInfoM;
@@ -36,6 +38,7 @@ public class GameInit
             ShipRoleM.instance;
             PlayerInfoM.instance;
             GamemapM.instance;
+            GamemainM.instance;
         }
 
         public function ControlInit():void

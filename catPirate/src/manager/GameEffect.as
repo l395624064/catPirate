@@ -192,6 +192,9 @@ public class GameEffect {
         else if(type=="gold"){
             GameEventDispatch.instance.event(GameEvent.GoldScoreANI);
         }
+        else if(type=="pearl"){
+            GameEventDispatch.instance.event(GameEvent.PearlScoreANI);
+        }
     }
 
 
