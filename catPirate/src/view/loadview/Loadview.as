@@ -3,6 +3,8 @@ import laya.net.Loader;
 import laya.utils.Handler;
 
 import manager.ConfigManager;
+import manager.GameEvent;
+import manager.GameEventDispatch;
 
 import manager.UiManager;
 
@@ -58,7 +60,7 @@ public class Loadview extends GameloadUI implements PanelVo{
 
         Laya.timer.once(1000,this,function () {
             UiManager.instance.closePanel("Loadview");
-            UiManager.instance.loadView("Gamemain");
+            GameEventDispatch.instance.event(GameEvent.GameLoadOver);
         })
     }
     private function onProgress(res:Number):void

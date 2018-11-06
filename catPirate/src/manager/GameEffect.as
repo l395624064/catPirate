@@ -23,11 +23,12 @@ public class GameEffect {
     private var _effectImgArr:Array=[];
     private var _moveMode:String="";
     private var _bezierOverHandler:Handler;
+    private var _baseOverHandler:Handler;
 
     public function GameEffect() {
         _effectDic={};
 
-        changeEffectTimer("start");
+        //changeEffectTimer("start");
     }
 
     public static function get instance():GameEffect
@@ -37,11 +38,13 @@ public class GameEffect {
 
     public function changeEffectTimer(action:String):void
     {
+        /*
         if(action=="start"){
             Laya.timer.loop(500,this,checkEffectDie);
         }else if(action=="over"){
             Laya.timer.clear(this,checkEffectDie);
-        }else if(action=="move"){
+        }*/
+        if(action=="move"){
             Laya.timer.frameLoop(1,this,onEffectTime);
         }else if(action=="stop"){
             Laya.timer.clear(this,onEffectTime);
@@ -57,14 +60,24 @@ public class GameEffect {
             }
         }
     }
+
+
     private function onEffectTime():void
     {
-        if(_moveMode="Bezier"){
+        if(_moveMode=="Bezier"){
             if(_effectImgArr.length>0){
                 bezierMove();
             }else{
                 changeEffectTimer("stop");
-                _bezierOverHandler.run();
+                if(_bezierOverHandler) _bezierOverHandler.run();
+            }
+        }
+        else if(_moveMode=="Base"){
+            if(_effectImgArr.length>0){
+                baseMove();
+            }else{
+                changeEffectTimer("stop");
+                if(_baseOverHandler) _baseOverHandler.run();
             }
         }
     }
@@ -90,22 +103,68 @@ public class GameEffect {
         var popImg:Image=getEffectImg(name);
         popImg['type']=name;
         _effectDic[name]=popImg;
-        
+
+        popImg.scale(1,1);
         popImg.pos(effectD.startPoint.x,effectD.startPoint.y);
         popImg.zOrder=effectD.zOrder;
+        popImg.scale(effectD.startScale,effectD.startScale);
         effectD.panelSp.addChild(popImg);
 
-        Tween.to(popImg,{x:effectD.endPoint.x,y:effectD.endPoint.y},effectD.dealtTime,effectD.easeMode,Handler.create(this,function () {
+        Tween.to(popImg,{x:effectD.endPoint.x,y:effectD.endPoint.y,scaleX:effectD.endScale,scaleY:effectD.endScale},effectD.dealtTime,effectD.easeMode,Handler.create(this,function () {
             if(func) func.run();
             if(effectD.stayTime>0){
                 Laya.timer.once(effectD.stayTime,this,function () {
-                    if(effectD.overDie) popImg['die']=true;
+                    if(effectD.overDie) popImg.removeSelf();
                 });
-            }else if(effectD.overDie){
-                popImg['die']=true;
-            }
+            }else if(effectD.overDie) popImg.removeSelf();
         }));
     }
+
+    public function creatBaseMove(name:String,effectD:EffectD,imgNum:int,func:Handler=null):void
+    {
+        if(func) _baseOverHandler=func;
+        var url:String=getEffectURL(name);
+        var img:Image;
+
+        var min:Number=0;
+        var max:Number=0;
+        var maxY:Number=0;
+        for(var i:int=0;i<imgNum;i++){
+            img=new Image(url);
+            img.zOrder=effectD.zOrder;
+            min=effectD.startPoint.x-10;
+            max=effectD.startPoint.x+10;
+            maxY=effectD.startPoint.y+10;
+            img.pos(min+Math.random()*(max-min),maxY);
+            if(imgNum==1) img.pos(effectD.startPoint.x,maxY);
+
+            img.scale(effectD.startScale,effectD.startScale);
+
+            img['type']="fish";
+            img['spd']=3+Math.random()*8;
+            img['endPoint']=effectD.endPoint;
+
+            effectD.panelSp.addChild(img);
+            _effectImgArr.push(img);
+        }
+        _moveMode="Base";
+        changeEffectTimer("move");
+    }
+
+
+    private function baseMove():void
+    {
+        //console.log("-_effectImgArr:",_effectImgArr);
+        var img:Image;
+        for(var i:int=_effectImgArr.length-1;i>=0;i--){
+            img=_effectImgArr[i];
+            img.y+=img['spd'];
+            if(img.y>=img['endPoint'].y){
+                _effectImgArr.splice(i,1);
+            }
+        }
+    }
+
 
     public function creatBezierMove(name:String,effectD:EffectD,imgNum:int,func:Handler=null):void
     {
@@ -127,12 +186,13 @@ public class GameEffect {
             img['t']=0;
 
             effectD.panelSp.addChild(img);
-
             _effectImgArr.push(img);
         }
         _moveMode="Bezier";
         changeEffectTimer("move");
     }
+
+
 
 
     private function getBezierspd(num:int):Number
@@ -161,6 +221,7 @@ public class GameEffect {
         return {x:dx,y:dy};
     }
 
+
     private function bezierMove():void
     {
         var img:Image;
@@ -178,13 +239,13 @@ public class GameEffect {
                 img['t']=t;
             }else{
                 img.removeSelf();
-                removeEvent(img['type']);
+                addEvent(img['type']);
                 _effectImgArr.splice(i,1);
             }
         }
     }
 
-    private function removeEvent(type:String):void
+    private function addEvent(type:String):void
     {
         if(type=="plank"){
             GameEventDispatch.instance.event(GameEvent.PlankScoreANI);

@@ -1,5 +1,6 @@
 package manager
 {
+import control.FontTipsAniC;
 import control.GainnewpopC;
 import control.GamemainC;
 import control.ShipRoleC;
@@ -7,6 +8,8 @@ import control.ShiprefitC;
 import control.ShopbuyC;
 import control.SmallTipsC;
 import control.TipsC;
+
+import model.FishM;
 
 import model.GamemainM;
 
@@ -17,6 +20,8 @@ import model.PlayerInfoM;
 import model.ShipRoleM;
 
 import model.ShiprefitM;
+
+import src.model.ShopM;
 
 public class GameInit
     {
@@ -37,8 +42,9 @@ public class GameInit
             ShiprefitM.instance;
             ShipRoleM.instance;
             PlayerInfoM.instance;
-            GamemapM.instance;
             GamemainM.instance;
+            ShopM.instance;
+            FishM.instance;
         }
 
         public function ControlInit():void

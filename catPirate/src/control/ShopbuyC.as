@@ -14,6 +14,9 @@ public class ShopbuyC {
     public static var _instance:ShopbuyC;
     private var popConfig:Object;
     private var buySucceedCallback:Handler;
+
+    private const minusANI:Boolean=true;
+
     public function ShopbuyC() {
         GameEventDispatch.instance.on(GameEvent.ShopBuy,this,onBuy);
     }
@@ -52,6 +55,13 @@ public class ShopbuyC {
                 }
                 willCost[typeName]=buyNum*num;
             }
+            else if(typeName=="pearl"){
+                if(PlayerInfoM.instance.getPearlNum()<buyNum*num){
+                    GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:3}]);
+                    return;
+                }
+                willCost[typeName]=buyNum*num;
+            }
             else if(typeName=="plank"){
                 if(PlayerInfoM.instance.getPlankNum()<buyNum*num){
                     GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:2}]);
@@ -62,20 +72,29 @@ public class ShopbuyC {
             if(buyNum*num>maxCost) maxCost=buyNum*num;
         }
 
-        console.log("--cost gold And plank");
+        //console.log("--cost gold And plank");
         willCost['endNum']=maxCost;
         for(var str:String in willCost){
             if(str=="gold"){
                 var gold:int=PlayerInfoM.instance.getGoldNum();
                 gold-=willCost[str];
                 PlayerInfoM.instance.setGoldNum(gold);
-                GameEventDispatch.instance.event(GameEvent.MinusGoldANI,[{gold:willCost[str]}]);
+                if(minusANI)GameEventDispatch.instance.event(GameEvent.MinusGoldANI,[{gold:willCost[str]}]);
+                else GameEventDispatch.instance.event(GameEvent.GoldRefresh);
+            }
+            else if(str=="pearl"){
+                var pearl:int=PlayerInfoM.instance.getPearlNum();
+                pearl-=willCost[str];
+                PlayerInfoM.instance.setPearlNum(pearl);
+                if(minusANI)GameEventDispatch.instance.event(GameEvent.MinusPearlANI,[{pearl:willCost[str]}]);
+                else GameEventDispatch.instance.event(GameEvent.PearlRefresh);
             }
             else if(str=="plank"){
                 var plank:int=PlayerInfoM.instance.getPlankNum();
                 plank-=willCost[str];
                 PlayerInfoM.instance.setPlankNum(plank);
-                GameEventDispatch.instance.event(GameEvent.MinusPlankANI,[{plank:willCost[str]}]);
+                if(minusANI)GameEventDispatch.instance.event(GameEvent.MinusPlankANI,[{plank:willCost[str]}]);
+                else GameEventDispatch.instance.event(GameEvent.PlankRefresh);
             }
         }
 

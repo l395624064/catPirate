@@ -10,9 +10,9 @@ package manager
         public static const Unopenedhide:String="Unopenedhide";
 
         //main game
-        public static const GameMainPanelOpen:String="GameMainPanelOpen";
         public static const GoldRefresh:String="GoldRefresh";
         public static const PlankRefresh:String="PlankRefresh";
+        public static const PearlRefresh:String="PearlRefresh";
 
         public static const ShipRole_CLICK:String="ShipRole_CLICK";
         public static const PlankScoreANI:String="PlankScoreANI";
@@ -21,8 +21,18 @@ package manager
 
         public static const MinusGoldANI:String="MinusGoldANI";
         public static const MinusPlankANI:String="MinusPlankANI";
+        public static const MinusPearlANI:String="MinusPearlANI";
 
         public static const UpdateShipslot:String="UpdateShipslot";
+
+        public static const GameLoadOver:String="GameLoadOver";
+        public static const GameReady:String="GameReady";
+        public static const GameStart:String="GameStart";
+        public static const GameEnd:String="GameEnd";//进入结算页
+        public static const GameOver:String="GameOver";//退出结算页
+        public static const GameTimeout:String="GameTimeout";
+        public static const GameMatchStart:String="GameMatchStart";
+
 
         //GainnewpopC
         public static const GainNewPOP:String="GainNewPOP";

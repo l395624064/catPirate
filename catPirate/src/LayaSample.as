@@ -42,52 +42,6 @@ public class LayaSample {
 		{
             GameInit.instance.init();
             UiManager.instance.loadView("Loadview", null, 1);
-
-			/*
-			Laya.timer.once(5000,this,function () {
-                UiManager.instance.closePanel("Gamemain");
-				Laya.timer.once(2000,this,function () {
-                    UiManager.instance.loadView("Gamemain");
-                })
-            })
-			*/
-
-			/*
-            Laya.timer.once(5000, this, function () {
-                GameEventDispatch.instance.event(GameEvent.OpenWait);
-				var sp:Sprite=new Sprite();
-				sp.graphics.drawCircle(0,0,200,"#ffffff","#ff5555",10);
-				sp.pos(500,500);
-                sp.zOrder=200;
-				Laya.stage.addChild(sp);
-				Laya.timer.once(2000, this, function () {
-                    sp.zOrder=20002;
-                    //GameEventDispatch.instance.event(GameEvent.CloseWait);
-                })
-            })
-            */
-			//文档类
-            /*
-            Laya.timer.once(5000,this,function () {
-				console.log("-------");
-                PlayerInfoM.instance.setGoldNum(999);
-                PlayerInfoM.instance.setPlankNum(999);
-                GameEventDispatch.instance.event(GameEvent.GoldRefresh);
-				Laya.timer.once(2000,this,function () {
-                    console.log("----closePanel Gamemain");
-                    UiManager.instance.closePanel("Gamemain");
-                    PlayerInfoM.instance.setGoldNum(888);
-                    PlayerInfoM.instance.setPlankNum(888);
-                    GameEventDispatch.instance.event(GameEvent.GoldRefresh);
-                    //UiManager.instance.loadView("Loadview", null, 1);
-					Laya.timer.once(5000,this,function () {
-                        console.log("----open Gamemain");
-                        UiManager.instance.loadView("Gamemain");
-                        //UiManager.instance.loadView("Loadview",null,1);
-                    })
-                })
-            })
-            */
 		}
 
 	}

@@ -1,7 +1,17 @@
 package model {
 import laya.d3.math.Vector2;
 import laya.maths.Point;
+import laya.ui.FontClip;
 import laya.ui.Image;
+import laya.ui.Image;
+
+import manager.GameEvent;
+
+import manager.GameEventDispatch;
+
+import model.FishM;
+
+import src.model.ShopM;
 
 public class GamemainM {
 
@@ -12,6 +22,15 @@ public class GamemainM {
         yellow:{lifenum:0,dx:600,addluck:0,baseluck:0.5},
         colours:{lifenum:0,dx:600,addluck:0,baseluck:0.01}
     };
+
+    private var _fishImgArr:Array=[];
+    private var _lastDrop:Object={img:null,combo:1};
+    private var _fishBoxDic:Object={};
+
+    private var _fontclip:FontClip;
+    private const _gameAllTime:int=30;
+    private var _gameTime:int;
+
     public function GamemainM() {
     }
 
@@ -19,6 +38,196 @@ public class GamemainM {
     {
         return _instance||=new GamemainM();
     }
+
+
+    public function setTimeClock(action:String,clip:FontClip=null):void
+    {
+        if(action=="start"){
+            if(clip) _fontclip=clip;
+            _gameTime=_gameAllTime;
+            _fontclip.value=_gameTime+"";
+            Laya.timer.loop(1000,this,onTimeClock);
+        }else if(action=="over"){
+            Laya.timer.clear(this,onTimeClock);
+            GameEventDispatch.instance.event(GameEvent.GameTimeout);
+        }else if(action=="stop"){
+
+        }else if(action=="update"){
+
+        }
+    }
+    private function onTimeClock():void
+    {
+        _gameTime--;
+        _fontclip.value=_gameTime+"";
+        if(_gameTime<=0) setTimeClock("over");
+    }
+
+    private function getFishImgNum():int
+    {
+        var num:int;
+        (Math.random()>.5)? num=5:num=8;
+        return num;
+    }
+
+    public function getFishImg():Array
+    {
+        //get have fish
+        var ownfishObj:Array=FishM.instance.getOwnfish();
+        for(var i:int=0;i<ownfishObj.length;i++){
+            var obj:Object=ownfishObj[i];
+            obj['appearNum']=obj['appearMax_num'];
+        }
+        //get fishImgNum
+        var fishNum:int=getFishImgNum();
+
+        //check fish img
+        var fishImgArr:Array=[];
+        var fishImg:Image;
+        var luckNum:Number;
+        var fishName:String;
+        var appearNum:int;
+        var maxImgwidth:Number=0;
+        const imgYnum:int=5;
+
+        while (fishImgArr.length<fishNum){
+            for(var i:int=0;i<ownfishObj.length;i++){
+                fishName=ownfishObj[i]['name'];
+                appearNum=ownfishObj[i]['appearNum'];
+                luckNum=FishM.instance.getFishLuckByName(fishName);
+                if(Math.random()<luckNum && appearNum>0){
+                    ownfishObj[i]['appearNum']--;
+
+                    fishImg=new Image(ownfishObj[i]['res']);
+                    //fishImg.anchorX=ownfishObj[i]['anchor_pos'][0];
+                    fishImg.x=maxImgwidth;
+                    fishImg.y=imgYnum;
+
+                    fishImg.dataSource=ownfishObj[i];
+                    fishImgArr.push(fishImg);
+
+                    maxImgwidth+=fishImg.width;
+                    if(fishImgArr.length==fishNum) break;
+                }
+            }
+        }
+
+
+        //get  pop in fishImgArr And add maxImgwidth
+
+        //repair fish img pos
+        const min:Number=0;
+        const max:Number=420;
+
+        //check maxImgWidth > max
+        while(maxImgwidth>=max){
+            var wid:Number=fishImgArr.pop().width;
+            maxImgwidth-=wid;
+        }
+
+        var useWidth:Number=0;
+        var pixWidth:Number=Math.floor(max-maxImgwidth);
+        var randomChoose:int=1;
+        for(var j:int=0;j<fishImgArr.length;j++){
+            var img:Image=fishImgArr[j];
+            if(img.width<50) randomChoose=3;
+            else if(img.width>=50 && img.width<60) randomChoose=2;
+            else randomChoose=1;
+            img.x=useWidth+Math.floor(Math.random()*pixWidth/randomChoose);
+            useWidth=(img.x+img.width);
+            maxImgwidth-=img.width;
+            pixWidth=Math.floor(max-maxImgwidth-useWidth);
+        }
+
+        _fishImgArr=fishImgArr;
+        return fishImgArr;
+    }
+
+
+
+    public function getdropFish(hookPoint:Point):Object
+    {
+        var dropObj:Object;
+        var typeName:String;
+        const pixNum:Number=10;
+        var mouthX:Number=0;
+        for(var i:int=0;i<_fishImgArr.length;i++){
+            mouthX=_fishImgArr[i].x+_fishImgArr[i].width*_fishImgArr[i]['dataSource']['anchor_pos'][0];
+            if(Math.abs(hookPoint.x-mouthX)<pixNum){
+                typeName=FishM.instance.checkTypeByName(_fishImgArr[i]['dataSource']['typeId']);
+                dropObj={img:_fishImgArr[i],num:1,type:typeName};
+
+                if(typeName=="fish"){
+                    putInFishBox(_fishImgArr[i]['name']);
+                    dropObj['num']=checkCombo();
+                }
+                else if(typeName=="pop"){
+
+                }
+                break;
+            }
+        }
+        setlastDrop(dropObj);
+        return dropObj;
+    }
+
+    public function getFishpileEndY(basewidth:Number):Number
+    {
+        var endY:Number=0;
+        if(getFishBoxNum<=70){
+            endY=0;
+        }else if(getFishBoxNum>70 && getFishBoxNum<100){
+            endY=-1*basewidth/4;
+        }else if(getFishBoxNum>100 && getFishBoxNum<120){
+            endY=-1*basewidth/3;
+        }else if(getFishBoxNum>120 && getFishBoxNum<150){
+            endY=-1*basewidth/2;
+        }else{
+            endY=Math.random()*basewidth/3;
+        }
+        return endY;
+    }
+
+    private function get getFishBoxNum():int
+    {
+        var num:int=0;
+        for(var str:String in _fishBoxDic){
+            num+=_fishBoxDic[str];
+        }
+        return num;
+    }
+
+    public function get getFishBox():Object
+    {
+        return _fishBoxDic;
+    }
+
+    private function putInFishBox(name:String):void
+    {
+        if(_fishBoxDic.hasOwnProperty(name)) _fishBoxDic[name]+=1;
+        else _fishBoxDic[name]=1;
+    }
+
+    private function setlastDrop(value:Object):void
+    {
+        _lastDrop['img']=value;
+        if(!value)_lastDrop['combo']=1;
+    }
+    private function checkCombo():int
+    {
+        var comboNum:int=1;
+        const maxCombo:int=10;
+        if(_lastDrop && _lastDrop['img']){
+            _lastDrop['combo']+=1;
+            if(_lastDrop['combo']>=maxCombo) _lastDrop['combo']=1;
+            console.log("combo:",_lastDrop['combo']);
+            comboNum=_lastDrop['combo'];
+        }
+        return comboNum;
+    }
+
+
+
 
     public function gethookColorImg():Array
     {
@@ -68,7 +277,7 @@ public class GamemainM {
         if(closelist.indexOf("colours")!=-1){
             _colorImgDic['colours']['lifenum']=lifeTime;
         }
-        console.log("-closelist:",closelist);
+        //console.log("-closelist:",closelist);
 
 
         //repair _colorImgDic pos
@@ -92,7 +301,7 @@ public class GamemainM {
                 direction=1;
                 if(Math.abs(targetdx-dx)<=imgWidth){
                     if(dx<targetdx){
-                        console.log("--left dx:",dx,"targetdx:",targetdx);
+                        //console.log("--left dx:",dx,"targetdx:",targetdx);
                         if(dx-(imgWidth+repairX)>=min){
                             direction=-1
                         }else{
@@ -100,7 +309,7 @@ public class GamemainM {
                         }
                     }
                     else if(dx>targetdx){
-                        console.log("--right dx:",dx,"targetdx:",targetdx);
+                        //console.log("--right dx:",dx,"targetdx:",targetdx);
                         if(dx+(imgWidth+repairX)<=max){
                             direction=1
                         }else{
@@ -108,7 +317,7 @@ public class GamemainM {
                         }
                     }
                     dx=targetdx+((imgWidth+repairX)*direction);
-                    console.log("--repair dx:",dx);
+                    //console.log("--repair dx:",dx);
                 }
             }
             posArr.push(dx);
@@ -116,7 +325,7 @@ public class GamemainM {
         }
 
         //checkout _colorImgDic pos
-        console.log("-_colorImgDic",_colorImgDic);
+        //console.log("-_colorImgDic",_colorImgDic);
         return imgPosArr;
     }
 

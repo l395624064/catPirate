@@ -18,6 +18,15 @@ import view.gainnewpop.Gainnewpop;
 import view.unopend.Unopened;
 import view.wait.Wait;
 
+import view.luckwheel.Luckwheel;
+import view.friendrank.Friendrank;
+import view.gameshop.Gameshop;
+import view.boxlibs.Boxlibs;
+import view.timegift.Timegift;
+import view.explainbook.Explainbook;
+import view.gameend.Gameend;
+import view.timestartAni.TimestartAni;
+import view.timeoverAni.TimeoverAni;
 
 public class UiManager {
     public static var _instance:UiManager;
@@ -81,6 +90,16 @@ public class UiManager {
         _emptyResUi['Gainnewpop']=true;
         _emptyResUi['Tips']=true;
         _emptyResUi['Smalltips']=true;
+
+        //new panel
+        _emptyResUi['Gamemenu']=true;
+        _emptyResUi['Friendrank']=true;
+        _emptyResUi['Gameshop']=true;
+        _emptyResUi['Boxlibs']=true;
+        _emptyResUi['Timegift']=true;
+        _emptyResUi['Explainbook']=true;
+        _emptyResUi['TimestartAni']=true;
+        _emptyResUi['TimeoverAni']=true;
     }
     private function getEmptyRes(name:String):Boolean
     {
@@ -88,10 +107,10 @@ public class UiManager {
     }
     private function setZorder():void
     {
-        _UITYPE_SCENE_NUM=_UITYPE_SCENE_ZORDERARR[0];
-        _UITYPE_NORMAL_NUM=_UITYPE_NORMAL_ZORDERARR[0];
-        _UITYPE_SMALL_NUM=_UITYPE_SMALL_ZORDERARR[0];
-        _UITYPE_ANI_NUM=_UITYPE_ANI_ZORDERARR[0];
+        _UITYPE_SCENE_NUM=_UITYPE_SCENE_ZORDERARR[1];
+        _UITYPE_NORMAL_NUM=_UITYPE_NORMAL_ZORDERARR[1];
+        _UITYPE_SMALL_NUM=_UITYPE_SMALL_ZORDERARR[1];
+        _UITYPE_ANI_NUM=_UITYPE_ANI_ZORDERARR[1];
     }
 
 
@@ -99,6 +118,8 @@ public class UiManager {
 	{
 		return _caches[name];
 	}
+
+
     public function loadView(name:String,param:Object=null,pngNum:Number=0,uiType:String="UITYPE_SCENE"):void
     {
         if(_taskState!="Busy"){
@@ -144,7 +165,10 @@ public class UiManager {
             _panel['uiZorder']=_panel.zOrder;
         }
 
+        console.log(_name,"zorder:",_panel.zOrder);
         _panel.visible=true;
+        _panel['uiType']=_uiType;
+        _panel['name']=_name;
         _panel.register();
         _panel.openPanel(_param);
         Laya.stage.addChild(_panel);
@@ -181,25 +205,25 @@ public class UiManager {
         switch (type){
             case "UITYPE_SCENE":
             {
-                deep=_UITYPE_SCENE_NUM++;
+                deep=_UITYPE_SCENE_NUM--;
                 if(_UITYPE_SCENE_NUM>_UITYPE_SCENE_ZORDERARR[1]) throw new Error("UITYPE_SCENE zorder Max");
                 break;
             }
             case "UITYPE_NORMAL":
             {
-                deep=_UITYPE_NORMAL_NUM++;
+                deep=_UITYPE_NORMAL_NUM--;
                 if(_UITYPE_NORMAL_NUM>_UITYPE_NORMAL_ZORDERARR[1]) throw new Error("UITYPE_NORMAL zorder Max");
                 break;
             }
             case "_UITYPE_SMALL_ZORDERARR":
             {
-                deep=_UITYPE_SMALL_NUM++;
+                deep=_UITYPE_SMALL_NUM--;
                 if(_UITYPE_SMALL_NUM>_UITYPE_SMALL_ZORDERARR[1]) throw new Error("UITYPE_SMALL_ZORDERARR zorder Max");
                 break;
             }
             case "UITYPE_ANI":
             {
-                deep=_UITYPE_ANI_NUM++;
+                deep=_UITYPE_ANI_NUM--;
                 if(_UITYPE_ANI_NUM>_UITYPE_ANI_ZORDERARR[1]) throw new Error("UITYPE_ANI zorder Max");
                 break;
             }
@@ -257,24 +281,41 @@ public class UiManager {
         return arr;
     }
 
-    public function closePanel(name:String):void
+    public function closePanel(name:String,disAppearMode:String=""):void
     {
         var panel:*=_caches[name];
         if(panel!=null){
             removeEvent(panel);
-
             panel.unRegister();
             panel.clearAllNum();
+
+            if(disAppearMode!=""){
+                panelOutMode(panel,disAppearMode);
+                return;
+            }
             panel.closePanel();
         }
         Laya.loader.clearTextureRes("res/atlas/ui/" + StringTool.toLowHead(name) + ".png");
     }
+
+    private function panelOutMode(panel:*,disAppearMode:String=""):void
+    {
+        if(disAppearMode=="blackOut"){
+            Tween.to(panel,{alpha:0},400,null,Handler.create(this,function () {
+                panel.closePanel();
+                panel.alpha=1;
+            }))
+        }
+        Laya.loader.clearTextureRes("res/atlas/ui/" + StringTool.toLowHead(panel.name) + ".png");
+    }
+
 
     private function removeEvent(panel:*):void
     {
         for(var i:int=0;i<panel.numChildren;i++){
             var panelNode=panel.getChildAt(i);
             panelNode.offAll();
+            if(panelNode.numChildren>0) removeEvent(panelNode);
         }
     }
 

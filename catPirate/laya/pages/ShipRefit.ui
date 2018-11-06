@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":17,
-    "selecteID":5,
+    "selectedBox":72,
+    "selecteID":10,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -267,7 +267,7 @@
                                             "compId":26,
                                             "child":[
                                                 ],
-                                            "$LOCKED":true
+                                            "$LOCKED":false
                                         },
                                         {
                                             "x":75,
@@ -281,7 +281,7 @@
                                             "compId":62,
                                             "child":[
                                                 ],
-                                            "$LOCKED":true
+                                            "$LOCKED":false
                                         },
                                         {
                                             "x":75,
@@ -295,7 +295,7 @@
                                             "compId":66,
                                             "child":[
                                                 ],
-                                            "$LOCKED":true
+                                            "$LOCKED":false
                                         },
                                         {
                                             "x":75,
@@ -309,7 +309,7 @@
                                             "compId":67,
                                             "child":[
                                                 ],
-                                            "$LOCKED":true
+                                            "$LOCKED":false
                                         },
                                         {
                                             "x":75,
@@ -323,7 +323,7 @@
                                             "compId":68,
                                             "child":[
                                                 ],
-                                            "$LOCKED":true
+                                            "$LOCKED":false
                                         },
                                         {
                                             "x":75,

@@ -7,7 +7,6 @@ public class PlayerInfoM {
     private var _plankNum:Number=1000;
     private var _pearlNum:Number=1000;
 
-    private var _luckNum:Number=0;
 
 
     public function PlayerInfoM() {
@@ -18,14 +17,7 @@ public class PlayerInfoM {
         return _instance || (_instance=new PlayerInfoM());
     }
 
-    public function getluckNum():Number
-    {
-        return _luckNum;
-    }
-    public function setluckNum(value:Number):void
-    {
-        _luckNum=value;
-    }
+
 
 
     public function getPearlNum():Number

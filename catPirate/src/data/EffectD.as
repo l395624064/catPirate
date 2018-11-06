@@ -7,6 +7,8 @@ import manager.UiManager;
 public class EffectD {
     public var startPoint:Point;
     public var endPoint:Point;
+    public var startScale:Number=1;
+    public var endScale:Number=1;
     public var dealtTime:Number=500;
     public var stayTime:Number=0;
     public var panelSp:*=Laya.stage;
