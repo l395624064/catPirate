@@ -23,15 +23,17 @@ package conf
             
             a.res=sheet[5];
             
-            a.getAward=sheet[6];
+            a.sortId=sheet[6];
             
-            a.award_type=sheet[7];
+            a.getAward=sheet[7];
             
-            a.anchor_pos=sheet[8];
+            a.award_type=sheet[8];
             
-            a.id=sheet[9];
+            a.anchor_pos=sheet[9];
             
-            a.award_num=sheet[10];
+            a.id=sheet[10];
+            
+            a.award_num=sheet[11];
             
 
 			return a;
@@ -54,6 +56,8 @@ package conf
         public var lucky_num:Array;
         
         public var res:String;
+        
+        public var sortId:int;
         
         public var getAward:int;
         

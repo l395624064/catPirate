@@ -334,6 +334,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
             //creat effect
             var effectName:String=getdropObj.img.name;
+            effectName=FishM.instance.chineseNameTransform(effectName);
             GameEffect.instance.creatSignPopMove(effectName,efData,Handler.create(this,function () {
                 efData.panelSp=fishboxsp;
                 efData.startPoint=fishboxsp.globalToLocal(efData.endPoint);

@@ -90,13 +90,21 @@ public class GameEffect {
 
     private function getEffectImg(name:String):*
     {
-        return _effectDic[name] || new Image("ui/common_ef/"+name+".png");
+        return _effectDic[name] || new Image(checkFullURL(name));
     }
     private function getEffectURL(name:String):String
     {
-        return "ui/common_ef/"+name+".png";
+        return checkFullURL(name);
     }
 
+    private function checkFullURL(url:String):String
+    {
+        var arr:Array=url.split("/");
+        if(arr.length>1){
+            return url;
+        }
+        return "ui/common_ef/"+url+".png";
+    }
 
     public function creatSignPopMove(name:String,effectD:EffectD,func:Handler=null):void
     {

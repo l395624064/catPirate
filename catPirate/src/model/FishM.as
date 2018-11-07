@@ -61,6 +61,13 @@ public class FishM {
         var fishObj:Object=getFishObjByName(name);
         return fishObj['weight_num'][fishlv];
     }
+    public function getSortIdByName(name:String):int
+    {
+        var arr:Array=ConfigManager.filter("cfg_fish",function (item) {
+            if(item['name']==name) return true;
+        })
+        return arr[0]['sortId'];
+    }
 
     public function getFishLuckByName(name:String):Number
     {
@@ -87,6 +94,44 @@ public class FishM {
             }
         });
         return arr;
+    }
+
+    public function chineseNameTransform(name:String):String
+    {
+        var logogram:String;
+        switch (name){
+            case "草莓鱼":logogram="cmy";
+                break;
+            case "紫薯鱼":logogram="zsy";
+                break;
+            case "金线鱼":logogram="jxy";
+                break;
+            case "小丑鱼":logogram="xcy";
+                break;
+            case "蓝雀鱼":logogram="lqy";
+                break;
+            case "亲嘴鱼":logogram="qzy";
+                break;
+            case "苹果鱼":logogram="pgy";
+                break;
+            case "河豚":logogram="ht";
+                break;
+            case "白鹦鱼":logogram="byy";
+                break;
+            case "蜜蜂鱼":logogram="mfy";
+                break;
+            case "孔雀鱼":logogram="kqy";
+                break;
+            case "彩虹鱼":logogram="chy";
+                break;
+            case "红龙鱼":logogram="hly";
+                break;
+            case "金龙鱼":logogram="jly";
+                break;
+            case "翻车鱼":logogram="fcy";
+                break;
+        }
+        return logogram;
     }
 
     public function checkTypeByName(typeId:int):String

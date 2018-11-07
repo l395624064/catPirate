@@ -4,6 +4,8 @@ import manager.GameEvent;
 import manager.GameEventDispatch;
 import manager.UiManager;
 
+import model.GamemainM;
+
 
 public class GamemainC {
     public static var _instance:GamemainC;
@@ -13,7 +15,8 @@ public class GamemainC {
         GameEventDispatch.instance.on(GameEvent.GameReady,this,GameReady);
         GameEventDispatch.instance.on(GameEvent.GameStart,this,GameStart);
         GameEventDispatch.instance.on(GameEvent.GameEnd,this,GameEnd);//时间到
-        GameEventDispatch.instance.on(GameEvent.GameOver,this,GameOver);//进入结算
+        GameEventDispatch.instance.on(GameEvent.GameOver,this,GameOver);//进入结束页
+        GameEventDispatch.instance.on(GameEvent.GameEndAward,this,GameEndAward);//结算
         GameEventDispatch.instance.on(GameEvent.GameTimeout,this,GameTimeout);
     }
 
@@ -38,6 +41,7 @@ public class GamemainC {
     private function GameStart():void
     {
         console.log("--GameStart");
+        GamemainM.instance.clearFishBox();
         UiManager.instance.closePanel("TimestartAni");
         GameEventDispatch.instance.event(GameEvent.GameMatchStart);
     }
@@ -55,9 +59,15 @@ public class GamemainC {
         UiManager.instance.loadView("Gameend");
     }
 
+    private function GameEndAward():void
+    {
+        UiManager.instance.loadView("Endaward",null,0,"UITYPE_ANI");
+    }
+
     private function GameOver():void
     {
         console.log("--GameOver");
+        UiManager.instance.closePanel("Endaward");
         UiManager.instance.closePanel("Gameend");
         openGame();
     }

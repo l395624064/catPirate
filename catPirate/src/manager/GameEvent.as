@@ -28,10 +28,11 @@ package manager
         public static const GameLoadOver:String="GameLoadOver";
         public static const GameReady:String="GameReady";
         public static const GameStart:String="GameStart";
-        public static const GameEnd:String="GameEnd";//进入结算页
-        public static const GameOver:String="GameOver";//退出结算页
+        public static const GameEnd:String="GameEnd";
+        public static const GameOver:String="GameOver";
         public static const GameTimeout:String="GameTimeout";
         public static const GameMatchStart:String="GameMatchStart";
+        public static const GameEndAward:String="GameEndAward";
 
 
         //GainnewpopC

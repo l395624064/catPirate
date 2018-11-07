@@ -27,6 +27,7 @@ import view.explainbook.Explainbook;
 import view.gameend.Gameend;
 import view.timestartAni.TimestartAni;
 import view.timeoverAni.TimeoverAni;
+import view.endaward.Endaward;
 
 public class UiManager {
     public static var _instance:UiManager;
@@ -100,6 +101,7 @@ public class UiManager {
         _emptyResUi['Explainbook']=true;
         _emptyResUi['TimestartAni']=true;
         _emptyResUi['TimeoverAni']=true;
+        _emptyResUi['Endaward']=true;
     }
     private function getEmptyRes(name:String):Boolean
     {
@@ -165,7 +167,7 @@ public class UiManager {
             _panel['uiZorder']=_panel.zOrder;
         }
 
-        console.log(_name,"zorder:",_panel.zOrder);
+        //console.log(_name,"zorder:",_panel.zOrder);
         _panel.visible=true;
         _panel['uiType']=_uiType;
         _panel['name']=_name;

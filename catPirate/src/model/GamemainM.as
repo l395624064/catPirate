@@ -197,6 +197,10 @@ public class GamemainM {
         return num;
     }
 
+    public function clearFishBox():void
+    {
+        _fishBoxDic={};
+    }
     public function get getFishBox():Object
     {
         return _fishBoxDic;
