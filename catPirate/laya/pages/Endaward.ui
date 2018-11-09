@@ -1,7 +1,6 @@
 {
     "type":"View",
     "selectedBox":1,
-    "selecteID":31,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -144,7 +143,8 @@
                             "child":[
                                 ]
                         }],
-                    "$LOCKED":true
+                    "$LOCKED":false,
+                    "$HIDDEN":false
                 },
                 {
                     "type":"Button",
@@ -462,7 +462,7 @@
                             }],
                         "var":[
                             {
-                                "value":null,
+                                "value":"weightTxt",
                                 "tweenMethod":"linearNone",
                                 "tween":false,
                                 "target":26,
@@ -501,7 +501,7 @@
                     "keyframes":{
                         "var":[
                             {
-                                "value":null,
+                                "value":"playerImg",
                                 "tweenMethod":"linearNone",
                                 "tween":false,
                                 "target":27,
@@ -523,7 +523,7 @@
                     "keyframes":{
                         "var":[
                             {
-                                "value":null,
+                                "value":"playertitle",
                                 "tweenMethod":"linearNone",
                                 "tween":false,
                                 "target":24,

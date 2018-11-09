@@ -24,12 +24,13 @@ public class GamemainM {
     };
 
     private var _fishImgArr:Array=[];
-    private var _lastDrop:Object={img:null,combo:1};
+    private var _lastDrop:Object={cfg:null,combo:1,type:null};
     private var _fishBoxDic:Object={};
 
     private var _fontclip:FontClip;
     private const _gameAllTime:int=30;
     private var _gameTime:int;
+
 
     public function GamemainM() {
     }
@@ -116,7 +117,7 @@ public class GamemainM {
         //get  pop in fishImgArr And add maxImgwidth
 
         //repair fish img pos
-        const min:Number=0;
+        const min:Number=20;
         const max:Number=420;
 
         //check maxImgWidth > max
@@ -151,17 +152,25 @@ public class GamemainM {
         var typeName:String;
         const pixNum:Number=10;
         var mouthX:Number=0;
+        var dropName:String;
         for(var i:int=0;i<_fishImgArr.length;i++){
             mouthX=_fishImgArr[i].x+_fishImgArr[i].width*_fishImgArr[i]['dataSource']['anchor_pos'][0];
             if(Math.abs(hookPoint.x-mouthX)<pixNum){
-                typeName=FishM.instance.checkTypeByName(_fishImgArr[i]['dataSource']['typeId']);
-                dropObj={img:_fishImgArr[i],num:1,type:typeName};
+                typeName=FishM.instance.checkTypeByTypeId(_fishImgArr[i]['dataSource']['typeId']);
+                dropObj={cfg:_fishImgArr[i]['dataSource'],num:1,type:typeName};
+                dropName=_fishImgArr[i]['dataSource']['name'];
 
                 if(typeName=="fish"){
-                    putInFishBox(_fishImgArr[i]['name']);
-                    dropObj['num']=checkCombo();
+                    //putInFishBox(_fishImgArr[i]['name']);
+                    var num:int=checkCombo(dropName);
+                    dropObj['num']=num;
+                    dropObj['comboNum']=_lastDrop['combo'];
+                    putInFishBox(dropName,num);
                 }
                 else if(typeName=="pop"){
+
+                }
+                else if(typeName=="bigfish"){
 
                 }
                 break;
@@ -206,29 +215,51 @@ public class GamemainM {
         return _fishBoxDic;
     }
 
-    private function putInFishBox(name:String):void
+    private function putInFishBox(name:String,num:int):void
     {
-        if(_fishBoxDic.hasOwnProperty(name)) _fishBoxDic[name]+=1;
-        else _fishBoxDic[name]=1;
+        if(_fishBoxDic.hasOwnProperty(name)){
+            _fishBoxDic[name]+=num;
+        }
+        else{
+            _fishBoxDic[name]=num;
+        }
     }
 
+
+
+    public function clearLastDrop():void
+    {
+        _lastDrop={cfg:null,combo:1,type:null};
+    }
     private function setlastDrop(value:Object):void
     {
-        _lastDrop['img']=value;
-        if(!value)_lastDrop['combo']=1;
-    }
-    private function checkCombo():int
-    {
-        var comboNum:int=1;
-        const maxCombo:int=10;
-        if(_lastDrop && _lastDrop['img']){
-            _lastDrop['combo']+=1;
-            if(_lastDrop['combo']>=maxCombo) _lastDrop['combo']=1;
-            console.log("combo:",_lastDrop['combo']);
-            comboNum=_lastDrop['combo'];
+        if(!value){
+            clearLastDrop();
+        }else{
+            var cfg:Object=value['cfg'];
+            if(value.type!="fish"){
+                clearLastDrop();
+                return;
+            }
+            else if(FishM.instance.checkComboByName(cfg['name'])){
+                _lastDrop['combo']+=1;
+                //combo增加能量
+                const maxCombo:int=10;
+                if(_lastDrop['combo']>=maxCombo) _lastDrop['combo']=1;
+            }
         }
-        return comboNum;
     }
+    private function checkCombo(name:String):int
+    {
+        if(FishM.instance.checkComboByName(name)){
+            console.log("--checkCombo:",_lastDrop['combo']);
+            return _lastDrop['combo'];
+        }
+        else{
+            return 1;
+        }
+    }
+
 
 
 

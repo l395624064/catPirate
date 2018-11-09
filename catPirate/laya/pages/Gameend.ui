@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":71,
+    "selectedBox":1,
+    "selecteID":2,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -54,22 +54,8 @@
                 },
                 {
                     "x":30,
-                    "type":"Image",
-                    "props":{"y":-9,"x":-1,"skin":"ui/gameend/ccs.png"},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":63,
-                    "child":[
-                        ],
-                    "$LOCKED":true
-                },
-                {
-                    "x":30,
                     "type":"Box",
-                    "props":{"y":207,"x":27,"width":300,"var":"waterbox","height":530},
+                    "props":{"y":220,"x":87,"width":300,"var":"waterbox","height":530},
                     "nodeParent":3,
                     "label":"Box(waterbox)",
                     "isOpen":true,
@@ -81,7 +67,7 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":450,"x":0,"width":300,"var":"water_floor","skin":"ui/common_ex/water2.png","sizeGrid":"10,10,10,10","height":80},
+                            "props":{"y":450,"x":0,"width":300,"var":"water_floor","skin":"ui/gameend/xc.png","sizeGrid":"10,2,10,2","height":80},
                             "nodeParent":78,
                             "label":"Image(water_floor)",
                             "isDirectory":false,
@@ -94,7 +80,7 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":440,"x":0,"width":300,"var":"water_ceil","skin":"ui/common_ex/water1.png","sizeGrid":"10,10,10,10","height":10},
+                            "props":{"y":440,"x":0,"width":300,"var":"water_ceil","skin":"ui/gameend/sc.png","sizeGrid":"2,2,2,2","height":10},
                             "nodeParent":78,
                             "label":"Image(water_ceil)",
                             "isDirectory":false,
@@ -110,6 +96,7 @@
                             "props":{"y":0,"x":0,"width":300,"var":"waterbox_sp","height":530},
                             "nodeParent":78,
                             "label":"Sprite(waterbox_sp)",
+                            "isOpen":true,
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
@@ -122,19 +109,18 @@
                 {
                     "x":30,
                     "type":"Box",
-                    "props":{"y":207,"x":432,"width":50,"var":"waterpipe","height":530},
+                    "props":{"y":221,"x":486,"width":50,"var":"waterpipe","height":530},
                     "nodeParent":3,
                     "label":"Box(waterpipe)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":88,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
-                            "props":{"y":450,"x":0,"width":50,"var":"waterpipe_floor","skin":"ui/common_ex/water2.png","sizeGrid":"10,10,10,10","height":80},
+                            "props":{"y":450,"x":0,"width":50,"var":"waterpipe_floor","skin":"ui/gameend/xc.png","sizeGrid":"10,2,10,2","height":80},
                             "nodeParent":88,
                             "label":"Image(waterpipe_floor)",
                             "isDirectory":false,
@@ -145,9 +131,8 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
-                            "props":{"y":440,"x":0,"width":50,"var":"waterpipe_ceil","skin":"ui/common_ex/water1.png","sizeGrid":"10,10,10,10","height":10},
+                            "props":{"y":440,"x":0,"width":50,"var":"waterpipe_ceil","skin":"ui/gameend/sc.png","sizeGrid":"2,2,2,2","height":10},
                             "nodeParent":88,
                             "label":"Image(waterpipe_ceil)",
                             "isDirectory":false,
@@ -158,7 +143,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":387,"x":14,"width":25,"skin":"ui/common_ef/star.png","name":"star5","height":25},
                             "nodeParent":88,
@@ -171,7 +155,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":292,"x":6,"width":40,"skin":"ui/common_ef/star.png","name":"star4","height":39},
                             "nodeParent":88,
@@ -184,7 +167,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":186,"x":1,"width":51,"skin":"ui/common_ef/star.png","name":"star3","height":50},
                             "nodeParent":88,
@@ -197,7 +179,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":62,"x":-8,"width":69,"skin":"ui/common_ef/star.png","name":"star2","height":68},
                             "nodeParent":88,
@@ -210,7 +191,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":14,"x":24,"width":119,"skin":"ui/common_ef/star.png","pivotY":118,"pivotX":60,"name":"star1","height":116},
                             "nodeParent":88,
@@ -226,7 +206,35 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":961,"x":462,"width":175,"var":"roleImg","skin":"ui/common/shipsoldier_1.png","pivotY":34,"pivotX":89,"height":197},
+                    "props":{"y":34,"x":428,"skin":"ui/gameend/t.png"},
+                    "nodeParent":3,
+                    "label":"Image",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":93,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"y":-96,"x":-1,"skin":"ui/gameend/ccs.png"},
+                    "nodeParent":3,
+                    "label":"Image",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":63,
+                    "child":[
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":false
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"y":961,"x":511,"width":175,"var":"roleImg","skin":"ui/common/shipsoldier_1.png","pivotY":34,"pivotX":89,"height":197},
                     "nodeParent":3,
                     "label":"Image(roleImg)",
                     "isDirectory":false,

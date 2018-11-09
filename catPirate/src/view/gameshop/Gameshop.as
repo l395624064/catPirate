@@ -35,6 +35,7 @@ public class Gameshop extends GameShopUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
+        console.log("--shop openPanel");
         initListener();
         initNum();
     }

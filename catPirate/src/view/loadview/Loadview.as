@@ -26,8 +26,6 @@ public class Loadview extends GameloadUI implements PanelVo{
 
         {url:"res/atlas/font.atlas",                 type:Loader.ATLAS},
 
-        {url:"scene/gameScene_0.jpg",                type:Loader.IMAGE},
-
         {url:"sound/destroy.wav",                    type:Loader.SOUND},
         {url:"sound/hit.wav",                        type:Loader.SOUND},
 

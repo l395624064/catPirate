@@ -18,8 +18,7 @@ public class FishM {
         孔雀鱼:0,
         彩虹鱼:0,
         红龙鱼:0,
-        黄龙鱼:0,
-        翻车鱼:0
+        黄龙鱼:0
     };
 
     public function FishM() {
@@ -134,13 +133,27 @@ public class FishM {
         return logogram;
     }
 
-    public function checkTypeByName(typeId:int):String
+    public function checkTypeByTypeId(typeId:int):String
     {
         if(typeId==1001){
             return "fish";
         }
+        else if(typeId==1000){
+            return "bigfish";
+        }
+        else if(typeId==1002){
+            return "pop";
+        }
 
         return "";
+    }
+
+    public function checkComboByName(name:String):Boolean
+    {
+        var arr:Array=ConfigManager.filter("cfg_fish",function (item) {
+            if(item['name']==name) return true;
+        })
+        return arr[0]['comboAdd'];
     }
 
 

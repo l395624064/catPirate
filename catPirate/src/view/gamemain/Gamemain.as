@@ -1,6 +1,10 @@
 package view.gamemain {
+import data.AniD;
 import data.EffectD;
+import data.FontClipD;
 import data.ShipRoleD;
+
+import laya.display.Animation;
 
 import laya.maths.Point;
 
@@ -53,7 +57,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private var fishhookPoint:Point;
 
     private const minFishhook:int=75;
-    private const maxFishhook:int=530;
+    private const maxFishhook:int=500;
     private var fishhookIndex:int=0;
 
     private var _gamemode:String="normal";
@@ -248,10 +252,11 @@ public class Gamemain extends GameMainUI implements PanelVo {
             var aniTime:int=1000;
             if(_gamemode=="normal")aniTime=1200;
             else if(_gamemode=="match")aniTime=2000;
+            Tween.clearTween(fishhookImg);
             Tween.to(fishhookImg,{x:(fishhookIndex%2)? minFishhook:maxFishhook},aniTime,null,Handler.create(this,function () {
                 fishhookIndex++;
                 changeDropFishBoxState(action);
-            }))
+            }));
         }else if(action=="over"){
             if(_gamemode=="normal") overNormalDrap();
             else if(_gamemode=="match") overMatchDrap();
@@ -333,7 +338,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
             efData.dealtTime=800;
 
             //creat effect
-            var effectName:String=getdropObj.img.name;
+            var effectName:String=getdropObj.cfg.name;
             effectName=FishM.instance.chineseNameTransform(effectName);
             GameEffect.instance.creatSignPopMove(effectName,efData,Handler.create(this,function () {
                 efData.panelSp=fishboxsp;
@@ -343,10 +348,26 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 //getdropObj.num
                 GameEffect.instance.creatBaseMove(effectName,efData,getdropObj.num);
 
-                //combo effect
-
                 //add num effect
             }))
+
+
+            if(getdropObj.comboNum>1){
+                var aniData:AniD=new AniD();
+                aniData.startPoint=dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y));
+                aniData.aniUrl="EffectAni.ani";
+                GameEffect.instance.creatSignAni("combo",aniData,Handler.create(this,function () {
+                    //comboBall
+                    aniData.startPoint=dropFishBox.localToGlobal(new Point(energyBall.x,energyBall.y));
+                    GameEffect.instance.creatSignAni("comboBall",aniData);
+                }));
+
+                var fontD:FontClipD=new FontClipD();
+                fontD.setFontSkin(3);
+                fontD.startPoint=new Point(aniData.startPoint.x+70,aniData.startPoint.y-20);
+                fontD.value="+"+getdropObj.comboNum;
+                GameEffect.instance.creatSignFontClip("comboNum",fontD);
+            }
         }
 
         canDropMatch=true;
@@ -653,8 +674,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public function clearAllNum():void
     {
-
+        fishboxsp.removeChildren();
     }
+
 
 }
 }

@@ -25,15 +25,17 @@ package conf
             
             a.sortId=sheet[6];
             
-            a.getAward=sheet[7];
+            a.comboAdd=sheet[7];
             
             a.award_type=sheet[8];
             
             a.anchor_pos=sheet[9];
             
-            a.id=sheet[10];
+            a.getAward=sheet[10];
             
-            a.award_num=sheet[11];
+            a.id=sheet[11];
+            
+            a.award_num=sheet[12];
             
 
 			return a;
@@ -59,11 +61,13 @@ package conf
         
         public var sortId:int;
         
-        public var getAward:int;
+        public var comboAdd:int;
         
         public var award_type:Array;
         
         public var anchor_pos:Array;
+        
+        public var getAward:int;
         
         public var id:int;
         

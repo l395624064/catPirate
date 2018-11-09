@@ -27,46 +27,47 @@ public class GamemainC {
 
     private function openGame():void
     {
-        UiManager.instance.loadView("Gamemain");
+        UiManager.instance.loadView("Gamemain",null,1);
         //console.log("--GameMainPanelOpen");
     }
 
 
     private function GameReady():void
     {
-        console.log("--GameReady");
         //新手引导
         UiManager.instance.loadView("TimestartAni",null,0,"UITYPE_ANI");
     }
     private function GameStart():void
     {
-        console.log("--GameStart");
-        GamemainM.instance.clearFishBox();
+        GamemainM.instance.clearLastDrop();
+        GamemainM.instance.clearFishBox();//gameEnd页会使用
         UiManager.instance.closePanel("TimestartAni");
         GameEventDispatch.instance.event(GameEvent.GameMatchStart);
     }
     private function GameTimeout():void
     {
-        console.log("--GameTimeout");
         UiManager.instance.loadView("TimeoverAni",null,0,"UITYPE_ANI");
     }
 
     private function GameEnd():void
     {
-        console.log("--GameEnd");
         UiManager.instance.closePanel("TimeoverAni","blackOut");
         UiManager.instance.closePanel("Gamemain","blackOut");
         UiManager.instance.loadView("Gameend");
     }
 
-    private function GameEndAward():void
+    private function GameEndAward(_param:Object):void
     {
-        UiManager.instance.loadView("Endaward",null,0,"UITYPE_ANI");
+        var param:Object={
+            img:"ui/common_ex/ico1.png",
+            maxweight:_param['maxweight'],
+            weight:_param['weight']
+        };
+        UiManager.instance.loadView("Endaward",param,0,"UITYPE_NORMAL");
     }
 
     private function GameOver():void
     {
-        console.log("--GameOver");
         UiManager.instance.closePanel("Endaward");
         UiManager.instance.closePanel("Gameend");
         openGame();

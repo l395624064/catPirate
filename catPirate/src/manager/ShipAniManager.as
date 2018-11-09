@@ -34,10 +34,9 @@ public class ShipAniManager {
     {
         if(lv==1){
             _aniDic=[
-                {x:311,y:755,rotation:0,time:1000},
-                {x:300,y:745,rotation:2,time:1000},
-                {x:310,y:740,rotation:-2,time:2000},
-                {x:321,y:765,rotation:1,time:2000}
+                {x:325,y:795,rotation:0.5,time:1000},
+                {x:323,y:785,rotation:0,time:2000},
+                {x:327,y:790,rotation:-0.5,time:2000},
             ];
         }else if(lv==2){
 

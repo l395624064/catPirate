@@ -27,7 +27,7 @@ public class Gameend extends GameendUI implements PanelVo{
     private var _updateWaterNum:Number=0;//单位重量增加水位
 
     private var _fishMsgArr:Array=[];
-    private var _allWeight:Number=0;//总重量
+    private var _totalWeight:Number=0;//总重量
     private var _fishgroupIndex:int=0;
 
     private var _starArr:Array=[];
@@ -38,6 +38,10 @@ public class Gameend extends GameendUI implements PanelVo{
         {x:6,y:292},
         {x:14,y:387}
     ];
+    private  const waterBox:Object={
+        x:0,y:450,width:300,height:80,
+        maxWeight:100,maxWater:450
+    };
 
     public function Gameend() {
         super();
@@ -90,18 +94,20 @@ public class Gameend extends GameendUI implements PanelVo{
             _fishgroupIndex++;
             if(_fishgroupIndex<_fishMsgArr.length){
                 var _fishObj:Object=_fishMsgArr[_fishgroupIndex];
-                if(_fishgroupIndex==_fishMsgArr.length-1){
+                if(_fishgroupIndex==_fishMsgArr.length-1 && _fishMsgArr.length>1){
                     Laya.timer.once(2000,this,creatFishGroup,[_fishObj]);
                 }else{
                     Laya.timer.once(500,this,creatFishGroup,[_fishObj]);
                 }
-            }else{
+            }
+            else if(_fishgroupIndex==_fishMsgArr.length){
                 putFishInBox("over");
             }
         }
         else if(action=="over"){
-            Laya.timer.once(2000,this,function () {
-                GameEventDispatch.instance.event(GameEvent.GameEndAward);
+            Laya.timer.once(3000,this,function () {
+                var param:Object={weight:_totalWeight,maxweight:waterBox.maxWeight};
+                GameEventDispatch.instance.event(GameEvent.GameEndAward,param);
             })
         }
     }
@@ -112,11 +118,11 @@ public class Gameend extends GameendUI implements PanelVo{
         var url:String=FishM.instance.getFishObjByName(fishName).res;
         var fishNum:int=fishObj['num'];
 
-        var startPot:Point=new Point(waterbox.x,waterbox.y);
-        const minX:Number=startPot.x+waterbox.width/3;
-        const maxX:Number=startPot.x+waterbox.width/3*2;
-        const minY:Number=startPot.y-300;
-        const maxY:Number=startPot.y-400;
+        //var startPot:Point=new Point(waterbox.x,waterbox.y);
+        const minX:Number=50;
+        const maxX:Number=200;
+        const minY:Number=-100;
+        const maxY:Number=-150;
         const minSpd:int=6;
         const maxSpd:int=2;
         var fish:Image;
@@ -178,11 +184,9 @@ public class Gameend extends GameendUI implements PanelVo{
 
 
 
+
     private function initWater():void
     {
-        const waterBox:Object={
-            x:0,y:450,width:300,height:80,
-            maxWeight:100,maxWater:waterbox.height-80};
         water_floor.x=waterBox.x;
         water_floor.y=waterBox.y;
         water_floor.width=waterBox.width;
@@ -226,8 +230,9 @@ public class Gameend extends GameendUI implements PanelVo{
     {
         if(water_floor.height>waterbox.height) return;
 
-        _allWeight+=weight;
-        console.log("-_allWeight:",_allWeight);
+        _totalWeight+=weight;
+        //console.log("-_totalWeight:",_totalWeight);
+
         water_floor.height+=weight*_updateWaterNum;
         water_floor.y=waterbox.height-water_floor.height;
         water_ceil.y=water_floor.y-water_ceil.height;
@@ -292,7 +297,7 @@ public class Gameend extends GameendUI implements PanelVo{
         clearFish();
 
         _fishMsgArr=[];
-        _allWeight=0;
+        _totalWeight=0;
         _fishgroupIndex=0;
     }
 

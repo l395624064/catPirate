@@ -1,5 +1,11 @@
 package manager {
+import data.AniD;
 import data.EffectD;
+import data.FontClipD;
+
+import laya.display.Animation;
+
+import laya.display.Animation;
 
 import laya.display.Sprite;
 
@@ -8,6 +14,7 @@ import laya.events.EventDispatcher;
 
 import laya.maths.Point;
 import laya.maths.Point;
+import laya.ui.FontClip;
 import laya.ui.Image;
 import laya.utils.Ease;
 import laya.utils.Handler;
@@ -25,9 +32,13 @@ public class GameEffect {
     private var _bezierOverHandler:Handler;
     private var _baseOverHandler:Handler;
 
+    private var _aniDic:Object={};
+    private var _fontClipDic:Object={};
+
     public function GameEffect() {
         _effectDic={};
-
+        _aniDic={};
+        _fontClipDic={};
         //changeEffectTimer("start");
     }
 
@@ -88,6 +99,7 @@ public class GameEffect {
 
 
 
+
     private function getEffectImg(name:String):*
     {
         return _effectDic[name] || new Image(checkFullURL(name));
@@ -104,6 +116,103 @@ public class GameEffect {
             return url;
         }
         return "ui/common_ef/"+url+".png";
+    }
+
+
+
+    private function getAni(aniD:AniD):*
+    {
+        if(_aniDic[aniD.aniUrl]){
+            return _aniDic[aniD.aniUrl];
+        }
+        else {
+            var _animation:Animation=new Animation();
+            _aniDic[aniD.aniUrl]=_animation;
+            _animation.loadAnimation(aniD.aniUrl);
+        }
+    }
+    private function clearAni(aniUrl:String):void
+    {
+        if(_aniDic[aniUrl]){
+            _aniDic[aniUrl].clear();
+            delete _aniDic[aniUrl];
+        }
+    }
+
+    public function creatSignAni(aniName:String,aniD:AniD,func:Handler=null):void
+    {
+        var _animation:Animation;
+        if(_aniDic[aniD.aniUrl]){
+            _animation= _aniDic[aniD.aniUrl];
+            playAni(_animation,aniD,func);
+        }
+        else {
+            _animation=new Animation();
+            _aniDic[aniD.aniUrl]=_animation;
+            _animation.loadAnimation(aniD.aniUrl,Handler.create(this,function () {
+                playAni(_animation,aniD,func);
+            }))
+        }
+    }
+    private function playAni(ani:Animation,aniD:AniD,func:Handler=null):void
+    {
+        ani.visible=true;
+        ani.play(0,false,aniD.playAniName);
+        aniD.panelSp.addChild(ani);
+        ani.visible=true;
+        ani.zOrder=aniD.zOrder;
+        ani.pos(aniD.startPoint.x,aniD.startPoint.y);
+
+        if(aniD.loop){
+            Laya.timer.once(aniD.stayTime,this,function () {
+                if(func) func.run();
+                ani.visible=false;
+            })
+        }
+        else{
+            ani.on(Event.COMPLETE,this,function () {
+                if(func) func.run();
+                ani.visible=false;
+            })
+        }
+    }
+
+
+    private function getFontClip(name:String):FontClip
+    {
+        return _fontClipDic[name]||new FontClip();
+    }
+
+    public function creatSignFontClip(name:String,fontD:FontClipD,func:Handler=null):void
+    {
+        var fontClip:FontClip=getFontClip(name);
+        _fontClipDic[name]=fontClip;
+
+        fontClip.visible=true;
+        fontClip.skin=fontD.Fontskin;
+        fontClip.sheet=fontD.Fontsheet;
+        fontClip.value=fontD.value;
+        fontClip.pos(fontD.startPoint.x,fontD.startPoint.y);
+
+        fontD.panelSp.addChild(fontClip);
+        fontClip.zOrder=fontD.zOrder;
+
+        if(fontD.endPoint){
+            Tween.to(fontClip,{x:fontD.endPoint.x,y:fontD.endPoint.y},fontD.dealtTime,fontD.easeMode,Handler.create(this,function () {
+                if(func) func.run();
+                if(fontD.stayTime>0){
+                    Laya.timer.once(fontD.stayTime,this,function () {
+                        fontClip.visible=false;
+                    });
+                }else{
+                    fontClip.visible=false;
+                }
+            }))
+        }else{
+            Laya.timer.once(fontD.dealtTime,this,function () {
+                fontClip.visible=false;
+            });
+        }
     }
 
     public function creatSignPopMove(name:String,effectD:EffectD,func:Handler=null):void

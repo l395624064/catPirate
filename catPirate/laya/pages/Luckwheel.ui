@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":21,
+    "selectedBox":48,
+    "selecteID":106,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -42,85 +42,33 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":253,"width":639,"skin":"ui/common_ex/d.png","sizeGrid":"25,23,28,26","height":765,"centerX":-4},
+                    "props":{"y":402,"x":119,"width":392,"skin":"ui/luckwheel/z.png","sizeGrid":"10,10,10,10","height":334},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":4,
+                    "compId":52,
                     "child":[
                         ],
-                    "$LOCKED":false,
                     "$HIDDEN":false
                 },
                 {
                     "x":30,
-                    "type":"Image",
-                    "props":{"y":297,"x":50,"skin":"ui/luckwheel/m1.png"},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":22,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":385,"x":118,"width":131,"skin":"ui/luckwheel/di2.png","sizeGrid":"13,19,16,11","name":"item0","height":364},
-                    "nodeParent":3,
-                    "label":"Image(item0)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":24,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":385,"x":259,"width":131,"skin":"ui/luckwheel/di2.png","sizeGrid":"13,19,16,11","name":"item1","height":364},
-                    "nodeParent":3,
-                    "label":"Image(item1)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":40,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":385,"x":400,"width":131,"skin":"ui/luckwheel/di2.png","sizeGrid":"13,19,16,11","name":"item2","height":364},
-                    "nodeParent":3,
-                    "label":"Image(item2)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":41,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
                     "type":"Box",
-                    "props":{"y":324,"x":100,"width":447,"height":480},
+                    "props":{"y":333,"x":106,"width":447,"var":"maskBox","height":480},
                     "nodeParent":3,
-                    "label":"Box",
-                    "isOpen":false,
+                    "label":"Box(maskBox)",
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":48,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":61,"x":0,"width":462,"skin":"ui/luckwheel/mask1.png","sizeGrid":"10,10,10,10","renderType":"mask","height":364},
+                            "props":{"y":87,"x":26,"width":368,"skin":"ui/luckwheel/mask1.png","sizeGrid":"10,10,10,10","height":300},
                             "nodeParent":48,
                             "label":"Image",
                             "isDirectory":false,
@@ -128,111 +76,317 @@
                             "hasChild":false,
                             "compId":23,
                             "child":[
-                                ]
+                                ],
+                            "$LOCKED":true,
+                            "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":140,"x":55,"skin":"ui/common_ef/luck5.png"},
+                            "props":{"y":8,"x":56,"width":80,"skin":"ui/luckwheel/b.png","sizeGrid":"5,5,5,5","height":400},
                             "nodeParent":48,
                             "label":"Image",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":42,
+                            "compId":104,
                             "child":[
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":60,"x":55,"skin":"ui/common_ef/luck4.png"},
+                            "props":{"y":8,"x":171,"width":80,"skin":"ui/luckwheel/b.png","sizeGrid":"5,5,5,5","height":400},
                             "nodeParent":48,
                             "label":"Image",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":43,
+                            "compId":105,
                             "child":[
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":300,"x":55,"skin":"ui/common_ef/luck3.png"},
+                            "props":{"y":8,"x":285,"width":80,"skin":"ui/luckwheel/b.png","sizeGrid":"5,5,5,5","height":400},
                             "nodeParent":48,
                             "label":"Image",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":44,
+                            "compId":106,
                             "child":[
                                 ]
                         },
                         {
+                            "x":45,
+                            "type":"Box",
+                            "props":{"y":8,"x":56,"width":80,"name":"box0","height":400},
+                            "nodeParent":48,
+                            "label":"Box(box0)",
+                            "isOpen":false,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":69,
+                            "child":[
+                                {
+                                    "type":"Image",
+                                    "props":{"y":0,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item4","height":80},
+                                    "nodeParent":69,
+                                    "label":"Image(item4)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":68,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":80,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item3","height":80},
+                                    "nodeParent":69,
+                                    "label":"Image(item3)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":85,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":160,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item2","height":80},
+                                    "nodeParent":69,
+                                    "label":"Image(item2)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":86,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":240,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item1","height":80},
+                                    "nodeParent":69,
+                                    "label":"Image(item1)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":87,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":320,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item0","height":80},
+                                    "nodeParent":69,
+                                    "label":"Image(item0)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":88,
+                                    "child":[
+                                        ]
+                                }]
+                        },
+                        {
+                            "x":45,
+                            "type":"Box",
+                            "props":{"y":8,"x":171,"name":"box1"},
+                            "nodeParent":48,
+                            "label":"Box(box1)",
+                            "isOpen":false,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":90,
+                            "child":[
+                                {
+                                    "type":"Image",
+                                    "props":{"width":80,"skin":"ui/common_ef/luck4.png","name":"item4","height":80},
+                                    "nodeParent":90,
+                                    "label":"Image(item4)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":91,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":80,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item3","height":80},
+                                    "nodeParent":90,
+                                    "label":"Image(item3)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":92,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":160,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item2","height":80},
+                                    "nodeParent":90,
+                                    "label":"Image(item2)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":93,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":240,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item1","height":80},
+                                    "nodeParent":90,
+                                    "label":"Image(item1)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":94,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":320,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item0","height":80},
+                                    "nodeParent":90,
+                                    "label":"Image(item0)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":95,
+                                    "child":[
+                                        ]
+                                }]
+                        },
+                        {
+                            "x":45,
+                            "type":"Box",
+                            "props":{"y":8,"x":285,"name":"box2"},
+                            "nodeParent":48,
+                            "label":"Box(box2)",
+                            "isOpen":false,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":97,
+                            "child":[
+                                {
+                                    "type":"Image",
+                                    "props":{"width":80,"skin":"ui/common_ef/luck4.png","name":"item4","height":80},
+                                    "nodeParent":97,
+                                    "label":"Image(item4)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":98,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":80,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item3","height":80},
+                                    "nodeParent":97,
+                                    "label":"Image(item3)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":99,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":160,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item2","height":80},
+                                    "nodeParent":97,
+                                    "label":"Image(item2)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":100,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":240,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item1","height":80},
+                                    "nodeParent":97,
+                                    "label":"Image(item1)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":101,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":320,"x":0,"width":80,"skin":"ui/common_ef/luck4.png","name":"item0","height":80},
+                                    "nodeParent":97,
+                                    "label":"Image(item0)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":102,
+                                    "child":[
+                                        ]
+                                }]
+                        },
+                        {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":380,"x":55,"skin":"ui/common_ef/luck2.png"},
+                            "props":{"y":168,"x":15,"width":388,"skin":"ui/common_ex/blank.png","height":80},
                             "nodeParent":48,
                             "label":"Image",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":45,
+                            "compId":49,
                             "child":[
-                                ]
-                        },
-                        {
-                            "type":"Image",
-                            "props":{"y":460,"x":55,"skin":"ui/common_ef/luck1.png"},
-                            "nodeParent":48,
-                            "label":"Image",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":46,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "type":"Image",
-                            "props":{"y":220,"x":55,"skin":"ui/common_ef/luck6.png"},
-                            "nodeParent":48,
-                            "label":"Image",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":47,
-                            "child":[
-                                ]
-                        }]
+                                ],
+                            "$LOCKED":true,
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":508,"x":118,"width":414,"skin":"ui/common_ex/blank.png","height":80},
+                    "props":{"y":297,"x":50,"width":520,"skin":"ui/luckwheel/m1.png","height":596},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":49,
+                    "compId":22,
                     "child":[
-                        ]
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
-                    "type":"Button",
-                    "props":{"y":801,"x":245,"width":149,"stateNum":"1","skin":"ui/common_ex/btn_s_y.png","label":"label","height":100},
+                    "type":"Image",
+                    "props":{"y":334,"x":174,"width":336,"skin":"ui/luckwheel/gun dong.png","height":24},
                     "nodeParent":3,
-                    "label":"Button",
+                    "label":"Image",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":50,
+                    "compId":55,
                     "child":[
                         ]
                 },
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":255,"x":549,"width":87,"stateNum":"2","skin":"ui/common_ex/btn_wenhao.png","label":"label","height":87},
+                    "props":{"y":317,"x":496,"width":56,"stateNum":"2","skin":"ui/common_ex/btn_wenhao.png","height":56},
                     "nodeParent":3,
                     "label":"Button",
                     "isDirectory":false,
@@ -244,8 +398,34 @@
                 },
                 {
                     "x":30,
+                    "type":"Button",
+                    "props":{"y":745,"x":354,"width":149,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":28,"labelFont":"SimHei","labelColors":"#ffffff","label":"获得次数","height":100},
+                    "nodeParent":3,
+                    "label":"Button(shareBtn)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":50,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Button",
+                    "props":{"y":745,"x":137,"width":149,"var":"startBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":30,"labelFont":"SimHei","labelColors":"#ffffff","label":"开始","height":100},
+                    "nodeParent":3,
+                    "label":"Button(startBtn)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":54,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
                     "type":"Image",
-                    "props":{"width":107,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":3,"height":107,"bottom":881},
+                    "props":{"width":107,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":4,"height":107,"bottom":818},
                     "nodeParent":3,
                     "label":"Image(closeBtn)",
                     "isDirectory":false,
