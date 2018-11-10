@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":3,
-    "selecteID":62,
+    "selecteID":4,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -37,22 +37,6 @@
             "hasChild":true,
             "compId":3,
             "child":[
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":0,"x":0,"width":640,"skin":"scene/gameScene_0.jpg","height":1136},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isOpen":true,
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":4,
-                    "child":[
-                        ],
-                    "$LOCKED":true,
-                    "$HIDDEN":false
-                },
                 {
                     "x":30,
                     "type":"Image",

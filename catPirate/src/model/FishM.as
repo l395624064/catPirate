@@ -4,22 +4,7 @@ import manager.ConfigManager;
 public class FishM {
     public static var _instance:FishM;
 
-    private var _fishLvObj:Object={
-        草莓鱼:1,
-        紫薯鱼:1,
-        金线鱼:0,
-        小丑鱼:0,
-        蓝雀鱼:0,
-        亲嘴鱼:0,
-        苹果鱼:0,
-        河豚:0,
-        白鹦鱼:0,
-        蜜蜂鱼:0,
-        孔雀鱼:0,
-        彩虹鱼:0,
-        红龙鱼:0,
-        黄龙鱼:0
-    };
+
 
     public function FishM() {
     }
@@ -28,22 +13,19 @@ public class FishM {
         return _instance||=new FishM();
     }
 
-    public function set shopFishLvobj(value:Object):void
+
+    public function get fishobj():Object
     {
-        _fishLvObj=value;
-    }
-    public function get shopFishLvobj():Object
-    {
-        return _fishLvObj;
+        return PlayerInfoM.instance.getFishLvObj();
     }
 
     public function getFishlvByName(name:String):int
     {
-        return _fishLvObj[name];
+        return fishobj[name];
     }
     public function setFishlvByName(name:String,value:int):void
     {
-        _fishLvObj[name]=value;
+        fishobj[name]=value;
     }
 
 
@@ -86,8 +68,8 @@ public class FishM {
     public function getOwnfish():Array
     {
         var arr:Array=ConfigManager.filter("cfg_fish",function (item) {
-            for(var str:String in _fishLvObj){
-                if(_fishLvObj[str]>0 && str==item['name']){
+            for(var str:String in fishobj){
+                if(fishobj[str]>0 && str==item['name']){
                     return true;
                 }
             }

@@ -29,6 +29,11 @@ public class GamemainC {
     {
         UiManager.instance.loadView("Gamemain",null,1);
         //console.log("--GameMainPanelOpen");
+
+        //init local obj
+
+        //init local time
+        GameEventDispatch.instance.event(GameEvent.LoginTime);
     }
 
 

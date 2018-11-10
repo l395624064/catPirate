@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":48,
-    "selecteID":106,
+    "selectedBox":3,
+    "selecteID":107,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -59,14 +59,13 @@
                     "props":{"y":333,"x":106,"width":447,"var":"maskBox","height":480},
                     "nodeParent":3,
                     "label":"Box(maskBox)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":48,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":87,"x":26,"width":368,"skin":"ui/luckwheel/mask1.png","sizeGrid":"10,10,10,10","height":300},
                             "nodeParent":48,
@@ -81,7 +80,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":8,"x":56,"width":80,"skin":"ui/luckwheel/b.png","sizeGrid":"5,5,5,5","height":400},
                             "nodeParent":48,
@@ -94,7 +92,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":8,"x":171,"width":80,"skin":"ui/luckwheel/b.png","sizeGrid":"5,5,5,5","height":400},
                             "nodeParent":48,
@@ -107,7 +104,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":8,"x":285,"width":80,"skin":"ui/luckwheel/b.png","sizeGrid":"5,5,5,5","height":400},
                             "nodeParent":48,
@@ -120,12 +116,11 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Box",
                             "props":{"y":8,"x":56,"width":80,"name":"box0","height":400},
                             "nodeParent":48,
                             "label":"Box(box0)",
-                            "isOpen":false,
+                            "isOpen":true,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
@@ -193,7 +188,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Box",
                             "props":{"y":8,"x":171,"name":"box1"},
                             "nodeParent":48,
@@ -266,7 +260,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Box",
                             "props":{"y":8,"x":285,"name":"box2"},
                             "nodeParent":48,
@@ -339,7 +332,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":168,"x":15,"width":388,"skin":"ui/common_ex/blank.png","height":80},
                             "nodeParent":48,
@@ -353,6 +345,7 @@
                             "$LOCKED":true,
                             "$HIDDEN":false
                         }],
+                    "$LOCKED":true,
                     "$HIDDEN":false
                 },
                 {
@@ -432,6 +425,32 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":21,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":338,"x":365,"width":40,"var":"rollnum_txt","text":"1","strokeColor":"#f110f1","stroke":5,"height":19,"fontSize":15,"font":"SimHei","color":"#ffffff","align":"center"},
+                    "nodeParent":3,
+                    "label":"Text(rollnum_txt)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":107,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":338,"x":257,"width":109,"text":"今日剩余次数:","strokeColor":"#f110f1","stroke":4,"height":19,"fontSize":15,"font":"SimHei","color":"#ffffff","align":"center"},
+                    "nodeParent":3,
+                    "label":"Text",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":108,
                     "child":[
                         ]
                 }]

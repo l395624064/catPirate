@@ -34,6 +34,21 @@ package manager
         public static const GameMatchStart:String="GameMatchStart";
         public static const GameEndAward:String="GameEndAward";
 
+        //playerInfoC
+        public static const ADDwheelNum:String="ADDwheelNum";
+        public static const MinuswheelNum:String="MinuswheelNum";
+        public static const ADDwheelNumFromShare:String="ADDwheelNumFromShare";
+        public static const ResetwheelNumFromShare:String="ResetwheelNumFromShare";
+
+        public static const CheckGiftBoxLVUP:String="CheckGiftBoxLVUP";
+        public static const CheckGiftBoxTime:String="CheckGiftBoxTime";
+        public static const ResetGiftBoxTime:String="ResetGiftBoxTime";
+
+        //GameTimeC
+        public static const LoginTime:String="LoginTime";
+        public static const UPdateGiftBoxTime:String="UPdateGiftBoxTime";
+        public static const UPdateGiftBoxLV:String="UPdateGiftBoxLV";
+        public static const GainGiftBox:String="GainGiftBox";
 
         //GainnewpopC
         public static const GainNewPOP:String="GainNewPOP";

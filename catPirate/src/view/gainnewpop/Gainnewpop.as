@@ -1,6 +1,7 @@
 package view.gainnewpop {
 import laya.events.Event;
 import laya.ui.Image;
+import laya.utils.Handler;
 
 import manager.GameAdaptive;
 
@@ -13,6 +14,7 @@ import view.PanelVo;
 public class Gainnewpop extends GainNewpopUI implements PanelVo{
 
     public static var _instance:Gainnewpop;
+    private var _callback:Handler;
     public function Gainnewpop() {
         super();
     }
@@ -32,9 +34,13 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
         popname.text=param['name'];
         content.text=param['explain_content'];
 
+        if(param.hasOwnProperty("callback")){
+            _callback=param['callback'];
+        }
         //console.log("-Gainnewpop:",param);
         this.hitTestPrior=true;
         this.on(Event.MOUSE_DOWN,this,function () {
+            _callback.run();
             UiManager.instance.closePanel("Gainnewpop");
         })
 

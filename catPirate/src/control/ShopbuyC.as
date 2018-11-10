@@ -1,6 +1,8 @@
 package control {
 import conf.cfg_currency;
 
+import data.GainnewD;
+
 import laya.utils.Handler;
 
 import manager.GameEvent;
@@ -100,7 +102,11 @@ public class ShopbuyC {
 
 
         if(param.hasOwnProperty('buyshow')&& !param['buyshow']){
-            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[param]);
+            var gainD:GainnewD=new GainnewD();
+            gainD.res=param.res;
+            gainD.name=param.name;
+            gainD.explain_content=param.explain_content;
+            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
         }
         buySucceedCallback.runWith(param);
     }

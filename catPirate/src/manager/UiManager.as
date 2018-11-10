@@ -97,7 +97,6 @@ public class UiManager {
         _emptyResUi['Friendrank']=true;
         _emptyResUi['Gameshop']=true;
         _emptyResUi['Boxlibs']=true;
-        _emptyResUi['Timegift']=true;
         _emptyResUi['Explainbook']=true;
         _emptyResUi['TimestartAni']=true;
         _emptyResUi['TimeoverAni']=true;
