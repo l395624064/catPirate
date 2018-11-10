@@ -42,7 +42,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":339,"x":94,"skin":"ui/timeGift/bg1.png"},
+                    "props":{"y":339,"x":94,"skin":"ui/timegift/bg1.png"},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -68,7 +68,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":262,"x":100,"width":72,"skin":"ui/common_ex/giftBtn.png","height":80},
+                    "props":{"y":262,"x":100,"width":80,"skin":"ui/common_ex/giftBtn.png","height":80},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -151,7 +151,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":452,"x":387,"var":"lvupBtn","skin":"ui/timeGift/btn0.png"},
+                    "props":{"y":452,"x":387,"var":"lvupBtn","skin":"ui/timegift/btn0.png"},
                     "nodeParent":3,
                     "label":"Image(lvupBtn)",
                     "isDirectory":false,
@@ -164,7 +164,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":518,"x":388,"var":"getBtn","skin":"ui/timeGift/btn2.png"},
+                    "props":{"y":518,"x":388,"var":"getBtn","skin":"ui/timegift/btn2.png"},
                     "nodeParent":3,
                     "label":"Image(getBtn)",
                     "isDirectory":false,

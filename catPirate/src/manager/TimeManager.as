@@ -58,7 +58,7 @@ public class TimeManager {
         timeObj.hour=hour;
         timeObj.min=min;
         timeObj.second=second;
-        console.log(delay,"间隔时间："+day+"天"+hour+"时"+min+"分"+second+"秒");
+        //console.log(delay,"间隔时间："+day+"天"+hour+"时"+min+"分"+second+"秒");
         return timeObj;
     }
 }

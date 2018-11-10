@@ -1,4 +1,6 @@
 package view.timegift {
+import conf.cfg_giftbox;
+
 import control.GameTimeC;
 
 import data.GainnewD;
@@ -42,24 +44,78 @@ public class Timegift extends TimeGiftUI implements PanelVo{
         lvupBtn.on(Event.MOUSE_DOWN,this,giftLVUP);
         getBtn.on(Event.MOUSE_DOWN,this,giftGet);
 
-        updateTime();
+        updateTime();//初始化
         updateGiftLV();
-
-        Laya.timer.once(500,this,function () {
-            GameEventDispatch.instance.event(GameEvent.CheckGiftBoxTime);
+        Laya.timer.once(200,this,function () {
+            //GameEventDispatch.instance.event(GameEvent.CheckGiftBoxTime);
+            GameEventDispatch.instance.event(GameEvent.StartLoopTime);
         });
     }
 
     private function giftLVUP():void
     {
-        //调取微信分享接口
-        GameEventDispatch.instance.event(GameEvent.CheckGiftBoxLVUP);
+        //调取微信分享接口-完成后
+        checkGiftBoxLVUP();
     }
 
     private function giftGet():void
     {
-        //观看视频
-        GameEventDispatch.instance.event(GameEvent.ResetGiftBoxTime);
+        //观看视频-完成后
+        checkGiftResetTime();
+    }
+
+    private function checkGiftResetTime():void
+    {
+        GameEventDispatch.instance.event(GameEvent.StopGiftBoxTime);
+        gainGiftBox(Handler.create(this,resetGiftBoxTime));
+    }
+
+
+
+    private function checkGiftBoxLVUP():void
+    {
+        var giftMsgArr:Array=ConfigManager.items("cfg_giftbox");
+        var lv:int=PlayerInfoM.instance.getGiftLv();
+
+        if(lv>=giftMsgArr.length){
+            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:8}]);
+        }else{
+            GameEventDispatch.instance.event(GameEvent.StopGiftBoxTime);
+            PlayerInfoM.instance.setGiftDelay(0);
+            gainGiftBox(Handler.create(this,giftBoxLVUP));
+        }
+    }
+    private function giftBoxLVUP():void
+    {
+        var lv:int=PlayerInfoM.instance.getGiftLv();
+        lv++;
+        PlayerInfoM.instance.setGiftlv(lv);//升级礼包等级
+        updateGiftLV();
+        resetGiftBoxTime();//重置礼包时间
+    }
+    private function resetGiftBoxTime():void
+    {
+        var lv:int=PlayerInfoM.instance.getGiftLv();
+        var newTime:int=cfg_giftbox.instance(lv+"").delay_time;
+        PlayerInfoM.instance.setGiftDelay(newTime);
+
+        GameEventDispatch.instance.event(GameEvent.StartLoopTime,"start");
+    }
+
+
+
+
+    private function gainGiftBox(handler:Handler):void
+    {
+        var giftMsgArr:Array=ConfigManager.items("cfg_giftbox");
+        var lv:int=PlayerInfoM.instance.getGiftLv();
+
+        var gainD:GainnewD=new GainnewD();
+        gainD.name=giftMsgArr[lv-1]['name'];
+        gainD.res=giftMsgArr[lv-1]['res'];
+        gainD.callback=handler;
+
+        GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
     }
 
 
@@ -73,33 +129,15 @@ public class Timegift extends TimeGiftUI implements PanelVo{
         boxlv.text="LV."+PlayerInfoM.instance.getGiftLv();
     }
 
-    private function gainGiftBox(handler:Handler):void
-    {
-        //清理计时器
-        var giftMsgArr:Array=ConfigManager.items("cfg_giftbox");
-        var lv:int=PlayerInfoM.instance.getGiftLv();
-
-        var gainD:GainnewD=new GainnewD();
-        gainD.name=giftMsgArr[lv-1]['name'];
-        gainD.res=giftMsgArr[lv-1]['res'];
-        gainD.explain_content=giftMsgArr[lv-1]['explain_content'];
-        gainD.callback=handler;
-
-        GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
-    }
-
-
     public function register():void
     {
         GameEventDispatch.instance.on(GameEvent.UPdateGiftBoxTime,this,updateTime);
-        GameEventDispatch.instance.on(GameEvent.UPdateGiftBoxLV,this,updateGiftLV);
-        GameEventDispatch.instance.on(GameEvent.GainGiftBox,this,gainGiftBox);
+        GameEventDispatch.instance.on(GameEvent.CheckGiftResetTime,this,checkGiftResetTime);
     }
     public function unRegister():void
     {
         GameEventDispatch.instance.off(GameEvent.UPdateGiftBoxTime,this,updateTime);
-        GameEventDispatch.instance.off(GameEvent.UPdateGiftBoxLV,this,updateGiftLV);
-        GameEventDispatch.instance.off(GameEvent.GainGiftBox,this,gainGiftBox);
+        GameEventDispatch.instance.off(GameEvent.CheckGiftResetTime,this,checkGiftResetTime);
     }
     public function closePanel():void
     {

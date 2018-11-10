@@ -25,10 +25,9 @@ public class PlayerInfoC {
         GameEventDispatch.instance.on(GameEvent.ResetwheelNumFromShare,this,resetwheelNumFromShare);
 
         //计时器
-        GameEventDispatch.instance.on(GameEvent.CheckGiftBoxLVUP,this,checkGiftBoxLVUP);
-        GameEventDispatch.instance.on(GameEvent.ResetGiftBoxTime,this,checkResetGiftTime);
-        GameEventDispatch.instance.on(GameEvent.LoginTime,this,changeGiftBoxTimeState,["start"]);
+        GameEventDispatch.instance.on(GameEvent.StartLoopTime,this,changeGiftBoxTimeState,["start"]);
         GameEventDispatch.instance.on(GameEvent.CheckGiftBoxTime,this,changeGiftBoxTimeState,["update"]);
+        GameEventDispatch.instance.on(GameEvent.StopGiftBoxTime,this,changeGiftBoxTimeState,["stop"]);
     }
 
     public static function get instance():PlayerInfoC
@@ -40,18 +39,24 @@ public class PlayerInfoC {
     private function changeGiftBoxTimeState(action:String):void
     {
         if(action=="start"){
+            Laya.timer.clear(this,changeGiftBoxTimeState);
             Laya.timer.loop(1000,this,changeGiftBoxTimeState,["update"]);
         }
         else if(action=="update"){
             var _boxDelay:int=PlayerInfoM.instance.getGiftDelay();
             _boxDelay-=1;
-            console.log("-_boxDelay:",_boxDelay);
             if(_boxDelay<=0){
-                checkResetGiftTime();
+                PlayerInfoM.instance.setGiftDelay(0);
+                Laya.timer.clear(this,changeGiftBoxTimeState);
+                //发送事件
+                GameEventDispatch.instance.event(GameEvent.CheckGiftResetTime);
             }else{
                 PlayerInfoM.instance.setGiftDelay(_boxDelay);
                 GameEventDispatch.instance.event(GameEvent.UPdateGiftBoxTime);
             }
+        }
+        else if(action=="stop"){
+            Laya.timer.clear(this,changeGiftBoxTimeState);
         }
         else if(action=="over"){
             var endD:Date=new Date();
@@ -63,46 +68,8 @@ public class PlayerInfoC {
 
 
 
-    private function checkGiftBoxLVUP():void
-    {
-        var giftMsgArr:Array=ConfigManager.items("cfg_giftbox");
-        var lv:int=PlayerInfoM.instance.getGiftLv();
-
-        if(lv>giftMsgArr.length){
-            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:8}]);
-        }else{
-            PlayerInfoM.instance.setGiftDelay(0);
-            Laya.timer.clear(this,changeGiftBoxTimeState);
-            GameEventDispatch.instance.event(GameEvent.GainGiftBox,new Handler(this,giftBoxLVUP));
-        }
-    }
-    private function checkResetGiftTime():void
-    {
-        PlayerInfoM.instance.setGiftDelay(0);
-        Laya.timer.clear(this,changeGiftBoxTimeState);
-        GameEventDispatch.instance.event(GameEvent.GainGiftBox,new Handler(this,resetGiftBoxTime));
-    }
 
 
-    private function giftBoxLVUP():void
-    {
-        var lv:int=PlayerInfoM.instance.getGiftLv();
-        lv++;
-        PlayerInfoM.instance.setGiftlv(lv);//升级礼包等级
-        resetGiftBoxTime();//重置礼包时间
-        GameEventDispatch.instance.event(GameEvent.UPdateGiftBoxLV);
-
-        changeGiftBoxTimeState("start");
-    }
-
-    private function resetGiftBoxTime():void
-    {
-        var lv:int=PlayerInfoM.instance.getGiftLv();
-        var newTime:int=cfg_giftbox.instance(lv+"").delay_time;
-        PlayerInfoM.instance.setGiftDelay(newTime);
-
-        changeGiftBoxTimeState("start");
-    }
 
 
 

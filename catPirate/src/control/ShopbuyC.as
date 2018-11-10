@@ -101,6 +101,7 @@ public class ShopbuyC {
         }
 
 
+        console.log("param-------",param);
         if(param.hasOwnProperty('buyshow')&& !param['buyshow']){
             var gainD:GainnewD=new GainnewD();
             gainD.res=param.res;

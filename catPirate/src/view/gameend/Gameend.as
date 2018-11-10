@@ -40,7 +40,7 @@ public class Gameend extends GameendUI implements PanelVo{
     ];
     private  const waterBox:Object={
         x:0,y:450,width:300,height:80,
-        maxWeight:100,maxWater:450
+        maxWeight:1000,maxWater:450
     };
 
     public function Gameend() {

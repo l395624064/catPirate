@@ -28,6 +28,7 @@ import view.gameend.Gameend;
 import view.timestartAni.TimestartAni;
 import view.timeoverAni.TimeoverAni;
 import view.endaward.Endaward;
+import view.setting.Setting;
 
 public class UiManager {
     public static var _instance:UiManager;
@@ -56,6 +57,7 @@ public class UiManager {
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
     private var _task:Object;
+
 
     public function UiManager() {
         _caches={};
@@ -94,9 +96,6 @@ public class UiManager {
 
         //new panel
         _emptyResUi['Gamemenu']=true;
-        _emptyResUi['Friendrank']=true;
-        _emptyResUi['Gameshop']=true;
-        _emptyResUi['Boxlibs']=true;
         _emptyResUi['Explainbook']=true;
         _emptyResUi['TimestartAni']=true;
         _emptyResUi['TimeoverAni']=true;

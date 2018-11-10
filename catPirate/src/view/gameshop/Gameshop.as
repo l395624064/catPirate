@@ -35,7 +35,6 @@ public class Gameshop extends GameShopUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
-        console.log("--shop openPanel");
         initListener();
         initNum();
     }
@@ -45,11 +44,38 @@ public class Gameshop extends GameShopUI implements PanelVo{
         this.closeBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.closePanel("Gameshop");
         });
-        tabBtn.selectHandler=new Handler(this,onSelectTab);
+
+        tab0.on(Event.MOUSE_DOWN,this,function () {
+            changeTabBtnState(0);
+            onSelectTab(0);
+        });
+        tab1.on(Event.MOUSE_DOWN,this,function () {
+            changeTabBtnState(1);
+            onSelectTab(1);
+        });
+        tab2.on(Event.MOUSE_DOWN,this,function () {
+            changeTabBtnState(2);
+            onSelectTab(2);
+        });
     }
     private function initNum():void
     {
+        changeTabBtnState(0);
         onSelectTab(0);
+    }
+    private function changeTabBtnState(index:int):void
+    {
+        tab0.selected=false;
+        tab1.selected=false;
+        tab2.selected=false;
+        switch (index){
+            case 0:tab0.selected=true;
+                break;
+            case 1:tab1.selected=true;
+                break;
+            case 2:tab2.selected=true;
+                break;
+        }
     }
 
     private function onSelectTab(index:int):void

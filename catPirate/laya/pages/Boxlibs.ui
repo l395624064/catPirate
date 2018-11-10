@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":3,
-    "selecteID":41,
+    "selecteID":60,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -41,38 +41,10 @@
             "child":[
                 {
                     "x":30,
-                    "type":"Image",
-                    "props":{"y":357,"width":491,"skin":"ui/common_ex/d.png","sizeGrid":"25,23,28,26","height":519,"centerX":-4},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":28,
-                    "child":[
-                        ],
-                    "$LOCKED":false,
-                    "$HIDDEN":false
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":160,"x":3,"width":641,"skin":"ui/common_ex/jbbg.png","sizeGrid":"28,20,29,20","height":193},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":40,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
                     "type":"List",
-                    "props":{"y":181,"x":84,"width":489,"spaceX":10,"repeatY":1,"repeatX":2,"height":153},
+                    "props":{"y":181,"x":84,"width":480,"var":"boxlist","spaceX":10,"repeatY":1,"repeatX":2,"height":153},
                     "nodeParent":3,
-                    "label":"List",
+                    "label":"List(boxlist)",
                     "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -81,7 +53,7 @@
                     "child":[
                         {
                             "type":"Box",
-                            "props":{"y":0,"x":0,"renderType":"render"},
+                            "props":{"y":0,"x":0,"width":235,"renderType":"render","height":152},
                             "nodeParent":35,
                             "label":"Box",
                             "isOpen":true,
@@ -92,35 +64,21 @@
                             "child":[
                                 {
                                     "type":"Image",
-                                    "props":{"width":236,"skin":"ui/common_ex/d.png","sizeGrid":"25,23,28,26","height":151},
+                                    "props":{"y":0,"x":-2,"width":237,"skin":"ui/boxlibs/di4.png","sizeGrid":"29,46,38,37","height":152},
                                     "nodeParent":34,
                                     "label":"Image",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
-                                    "compId":4,
-                                    "child":[
-                                        ],
-                                    "$LOCKED":false,
-                                    "$HIDDEN":false
-                                },
-                                {
-                                    "type":"Image",
-                                    "props":{"y":95,"x":133,"width":87,"skin":"ui/common_ex/p0.png","sizeGrid":"9,12,10,11","height":44},
-                                    "nodeParent":34,
-                                    "label":"Image",
-                                    "isDirectory":false,
-                                    "isAniNode":false,
-                                    "hasChild":false,
-                                    "compId":5,
+                                    "compId":54,
                                     "child":[
                                         ]
                                 },
                                 {
                                     "type":"Image",
-                                    "props":{"y":19,"x":12,"width":106,"skin":"ui/common_ex/giftBtn.png","height":117},
+                                    "props":{"y":37,"x":20,"width":80,"skin":"ui/common_ex/giftBtn.png","name":"giftImg","height":80},
                                     "nodeParent":34,
-                                    "label":"Image",
+                                    "label":"Image(giftImg)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -129,10 +87,34 @@
                                         ]
                                 },
                                 {
-                                    "type":"Text",
-                                    "props":{"y":60,"x":137,"width":74,"text":"数量:","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true},
+                                    "type":"Image",
+                                    "props":{"y":104,"x":119,"width":73,"skin":"ui/boxlibs/di1.png","sizeGrid":"11,14,12,13","height":30},
                                     "nodeParent":34,
-                                    "label":"Text(proname_txt0)",
+                                    "label":"Image",
+                                    "isDirectory":false,
+                                    "isAniNode":false,
+                                    "hasChild":false,
+                                    "compId":56,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":14,"x":118,"width":95,"skin":"ui/boxlibs/ceil1.png","sizeGrid":"19,24,25,19","height":61},
+                                    "nodeParent":34,
+                                    "label":"Image",
+                                    "isDirectory":false,
+                                    "isAniNode":false,
+                                    "hasChild":false,
+                                    "compId":55,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "type":"Text",
+                                    "props":{"y":106,"x":196,"width":27,"text":"个","strokeColor":"#224882","stroke":5,"height":26,"fontSize":23,"font":"SimHei","color":"#ffffff","bold":true},
+                                    "nodeParent":34,
+                                    "label":"Text",
                                     "isOpen":true,
                                     "isDirectory":false,
                                     "isAniNode":false,
@@ -140,13 +122,14 @@
                                     "compId":19,
                                     "child":[
                                         ],
-                                    "$LOCKED":false
+                                    "$LOCKED":false,
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Text",
-                                    "props":{"y":101,"x":142,"width":66,"text":"0000","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true},
+                                    "props":{"y":107,"x":126,"width":60,"text":"0000","strokeColor":"#224882","stroke":5,"name":"giftnum","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                                     "nodeParent":34,
-                                    "label":"Text(proname_txt0)",
+                                    "label":"Text(giftnum)",
                                     "isOpen":true,
                                     "isDirectory":false,
                                     "isAniNode":false,
@@ -154,13 +137,14 @@
                                     "compId":20,
                                     "child":[
                                         ],
-                                    "$LOCKED":false
+                                    "$LOCKED":false,
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Text",
-                                    "props":{"y":18,"x":137,"width":74,"text":"LV.1","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true},
+                                    "props":{"y":26,"x":131,"width":73,"text":"LV.1","strokeColor":"#224882","stroke":5,"name":"giftlv","height":36,"fontSize":35,"font":"SimHei","color":"#ffffff","bold":true},
                                     "nodeParent":34,
-                                    "label":"Text(proname_txt0)",
+                                    "label":"Text(giftlv)",
                                     "isOpen":true,
                                     "isDirectory":false,
                                     "isAniNode":false,
@@ -168,16 +152,18 @@
                                     "compId":29,
                                     "child":[
                                         ],
-                                    "$LOCKED":false
+                                    "$LOCKED":false,
+                                    "$HIDDEN":false
                                 }]
-                        }]
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":212,"x":11,"width":68,"skin":"ui/common_ex/friendRank_close.png","height":102},
+                    "props":{"y":218,"x":23,"width":50,"var":"leftBtn","skin":"ui/common_ex/friendRank_close.png","height":80},
                     "nodeParent":3,
-                    "label":"Image",
+                    "label":"Image(leftBtn)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
@@ -188,57 +174,17 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":214,"x":571,"width":66,"skin":"ui/common_ex/friendRank_open.png","height":100},
+                    "props":{"y":218,"x":574,"width":50,"var":"rightBtn","skin":"ui/common_ex/friendRank_open.png","height":80},
                     "nodeParent":3,
-                    "label":"Image",
+                    "label":"Image(rightBtn)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":33,
                     "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":492,"width":242,"skin":"ui/common_ex/d.png","sizeGrid":"25,23,28,26","height":219,"centerX":-2},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":36,
-                    "child":[
                         ],
-                    "$LOCKED":false,
+                    "$LOCKED":true,
                     "$HIDDEN":false
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "props":{"y":509,"x":215,"width":215,"skin":"ui/common_ex/p0.png","sizeGrid":"9,12,10,11","height":187},
-                    "nodeParent":3,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":37,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Text",
-                    "props":{"y":755,"x":183,"width":290,"text":"拖拽至此处打开宝箱","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
-                    "nodeParent":3,
-                    "label":"Text(proname_txt0)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":38,
-                    "child":[
-                        ],
-                    "$LOCKED":false
                 },
                 {
                     "x":30,
@@ -251,18 +197,49 @@
                     "hasChild":false,
                     "compId":41,
                     "child":[
-                        ]
+                        ],
+                    "$LOCKED":true
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":901,"width":463,"skin":"ui/common_ex/d.png","sizeGrid":"25,23,28,26","height":123,"centerX":1},
+                    "props":{"y":350,"x":93,"width":463,"skin":"ui/boxlibs/di3.png","height":631},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":42,
+                    "compId":46,
+                    "child":[
+                        ],
+                    "$LOCKED":true
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"y":486,"x":236,"width":184,"var":"stoveImg","skin":"ui/boxlibs/di2.png","height":185},
+                    "nodeParent":3,
+                    "label":"Image(stoveImg)",
+                    "isOpen":false,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":51,
+                    "child":[
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":false
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"width":225,"skin":"ui/boxlibs/kuang1.png","height":225,"centerY":10,"centerX":5},
+                    "nodeParent":3,
+                    "label":"Image",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":47,
                     "child":[
                         ],
                     "$LOCKED":false,
@@ -270,31 +247,89 @@
                 },
                 {
                     "x":30,
-                    "type":"Button",
-                    "props":{"y":924,"x":372,"width":162,"stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"buyBtn","labelStrokeColor":"#5d1514","labelStroke":2,"labelSize":30,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#ffffff","label":"更多礼包","hitTestPrior":true,"height":79},
+                    "type":"Image",
+                    "props":{"y":896,"x":346,"width":150,"var":"moreGiftBtn","skin":"ui/boxlibs/btn1.png","height":63},
                     "nodeParent":3,
-                    "label":"Button(buyBtn)",
-                    "isOpen":false,
+                    "label":"Image(moreGiftBtn)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":43,
+                    "compId":49,
                     "child":[
-                        ]
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
-                    "type":"Button",
-                    "props":{"y":923,"x":113,"width":162,"stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","name":"buyBtn","labelStrokeColor":"#5d1514","labelStroke":2,"labelSize":30,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#ffffff","label":"游戏盒子","hitTestPrior":true,"height":79},
+                    "type":"Image",
+                    "props":{"y":896,"x":157,"width":149,"var":"gameBoxBtn","skin":"ui/boxlibs/btn2.png","height":64},
                     "nodeParent":3,
-                    "label":"Button(buyBtn)",
-                    "isOpen":false,
+                    "label":"Image(gameBoxBtn)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":45,
+                    "compId":48,
                     "child":[
-                        ]
+                        ],
+                    "$HIDDEN":false
+                },
+                {
+                    "x":30,
+                    "type":"Animation",
+                    "props":{"y":417,"x":160,"width":228,"visible":false,"var":"openAni","source":"Boxlibs_openbox.ani","scaleY":1.5,"scaleX":1.5,"index":1,"height":215,"autoPlay":false},
+                    "nodeParent":3,
+                    "label":"Animation(openAni)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":57,
+                    "child":[
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":false
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"y":581,"x":331,"width":120,"visible":false,"var":"shakeBoxImg","skin":"ui/common_ex/giftBtn.png","height":120,"anchorY":0.5,"anchorX":0.5},
+                    "nodeParent":3,
+                    "label":"Image(shakeBoxImg)",
+                    "isOpen":false,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":60,
+                    "child":[
+                        {
+                            "type":"EffectAnimation",
+                            "props":{"y":46,"x":45,"var":"shakeAni","skin":"../laya/icons/components/Animation.png","effect":"Boxlibs_shakebox.efc"},
+                            "nodeParent":60,
+                            "label":"EffectAnimation(shakeAni)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":61,
+                            "child":[
+                                ],
+                            "$HIDDEN":false
+                        }],
+                    "$LOCKED":false,
+                    "$HIDDEN":false
+                },
+                {
+                    "x":30,
+                    "type":"Animation",
+                    "props":{"y":486,"x":239,"width":62,"visible":false,"var":"shakelightAni","source":"Boxlibs_shakelight.ani","scaleY":1.5,"scaleX":3,"interval":100,"height":125,"autoPlay":false},
+                    "nodeParent":3,
+                    "label":"Animation(shakelightAni)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":64,
+                    "child":[
+                        ],
+                    "$LOCKED":true
                 }]
         }],
     "animations":[

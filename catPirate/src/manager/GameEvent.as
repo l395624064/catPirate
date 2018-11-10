@@ -40,15 +40,13 @@ package manager
         public static const ADDwheelNumFromShare:String="ADDwheelNumFromShare";
         public static const ResetwheelNumFromShare:String="ResetwheelNumFromShare";
 
-        public static const CheckGiftBoxLVUP:String="CheckGiftBoxLVUP";
+        public static const StopGiftBoxTime:String="CheckGiftBoxLVUP";
         public static const CheckGiftBoxTime:String="CheckGiftBoxTime";
-        public static const ResetGiftBoxTime:String="ResetGiftBoxTime";
 
         //GameTimeC
-        public static const LoginTime:String="LoginTime";
+        public static const StartLoopTime:String="StartLoopTime";
         public static const UPdateGiftBoxTime:String="UPdateGiftBoxTime";
-        public static const UPdateGiftBoxLV:String="UPdateGiftBoxLV";
-        public static const GainGiftBox:String="GainGiftBox";
+        public static const CheckGiftResetTime:String="GainGiftBox";
 
         //GainnewpopC
         public static const GainNewPOP:String="GainNewPOP";
@@ -63,6 +61,7 @@ package manager
         public static const ShipSlotInit:String="ShipSlotInit";
         //ShipRoleC
         public static const CreatShipRole:String="CreatShipRole";
-
+        //friendRank
+        public static const GetFriendRank:String="GetFriendRank";
     }
 }

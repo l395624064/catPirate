@@ -33,7 +33,7 @@ public class GamemainC {
         //init local obj
 
         //init local time
-        GameEventDispatch.instance.event(GameEvent.LoginTime);
+        GameEventDispatch.instance.event(GameEvent.StartLoopTime);
     }
 
 

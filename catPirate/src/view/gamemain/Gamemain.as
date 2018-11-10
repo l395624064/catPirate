@@ -119,7 +119,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
         this.shopBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.loadView("Gameshop",null,0,"UITYPE_NORMAL");
         });
-
+        settingBtn.on(Event.MOUSE_DOWN,this,function () {
+            UiManager.instance.loadView("Setting",null,0,"UITYPE_NORMAL");
+        });
 
         this.boxlibsBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.loadView("Boxlibs",null,0,"UITYPE_NORMAL");
@@ -133,6 +135,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
             GameEventDispatch.instance.event(GameEvent.GameReady);
             //changeGameMode("match");
         })
+        
+
 
 
 

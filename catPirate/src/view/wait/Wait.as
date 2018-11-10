@@ -39,7 +39,7 @@ public class Wait extends WaitUI implements PanelVo{
 
         this.hitTestPrior=false;
         this.bmask.on(Event.CLICK,this,onClickMask);
-        console.log("-- openWait");
+        //console.log("-- openWait");
     }
     private function onClickMask(e:Event):void
     {

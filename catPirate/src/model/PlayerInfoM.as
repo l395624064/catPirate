@@ -13,6 +13,13 @@ public class PlayerInfoM {
     private var _giftDelay:int=10;
     private var _quitUnix:int=1541845143000;
     private var _giftLv:int=1;
+    private var _giftArr:Array=[
+        {id:1,num:1},
+        {id:2,num:1},
+        {id:3,num:1},
+        {id:4,num:1},
+        {id:5,num:1}
+    ];
 
     private var _fishLvObj:Object={
         草莓鱼:1,
@@ -37,6 +44,19 @@ public class PlayerInfoM {
     public static function get instance():PlayerInfoM
     {
         return _instance || (_instance=new PlayerInfoM());
+    }
+
+    public function getGiftArr():Array
+    {
+        return _giftArr;
+    }
+    public function getGiftNumById(id:int):int
+    {
+        return _giftArr[id-1].num;
+    }
+    public function setGiftNumById(id:int,num:int):void
+    {
+        _giftArr[id-1].num=num;
     }
 
     public function getGiftLv():int
