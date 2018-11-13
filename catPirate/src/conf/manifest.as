@@ -15,6 +15,8 @@ package conf
     
     import conf.cfg_tip;
     
+    import conf.cfg_wheel;
+    
 
     public class manifest
     {
@@ -31,6 +33,8 @@ package conf
                 "cfg_shop":cfg_shop,
                 
                 "cfg_tip":cfg_tip,
+                
+                "cfg_wheel":cfg_wheel,
                 
         }
 

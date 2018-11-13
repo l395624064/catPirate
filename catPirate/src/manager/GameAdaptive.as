@@ -28,5 +28,14 @@ public class GameAdaptive {
         pixY=Math.abs(img.height-panel.height);
         img.pos(pixX/2,pixY/2);
     }
+
+    public function setRightFromPanel(img:Sprite,panel:Sprite):void
+    {
+        var pixX:Number=panel.width-img.width;
+        img.y=0;
+        if(pixX>0) img.x=pixX;
+        else img.x=pixX+panel.width;
+    }
+
 }
 }

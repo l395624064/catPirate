@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":30,
-    "selecteID":76,
+    "selectedBox":27,
+    "selecteID":78,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -54,7 +54,7 @@
                 {
                     "x":30,
                     "type":"List",
-                    "props":{"y":303,"x":124,"width":420,"var":"friendlist","spaceY":0,"repeatY":7,"repeatX":1,"height":713},
+                    "props":{"y":303,"x":124,"width":420,"var":"friendlist","spaceY":0,"repeatY":7,"repeatX":1,"height":665},
                     "nodeParent":3,
                     "label":"List(friendlist)",
                     "isOpen":true,
@@ -103,33 +103,6 @@
                                         ],
                                     "$LOCKED":false,
                                     "$HIDDEN":true
-                                },
-                                {
-                                    "x":60,
-                                    "type":"Image",
-                                    "props":{"y":15,"x":87,"width":74,"sizeGrid":"0,0,0,0","name":"headimg","height":74},
-                                    "nodeParent":27,
-                                    "label":"Image(headimg)",
-                                    "isOpen":true,
-                                    "isDirectory":true,
-                                    "isAniNode":false,
-                                    "hasChild":true,
-                                    "compId":30,
-                                    "child":[
-                                        {
-                                            "x":75,
-                                            "type":"Circle",
-                                            "props":{"y":37,"x":37,"radius":36,"name":"mask","lineWidth":1,"fillColor":"#ff0000"},
-                                            "nodeParent":30,
-                                            "label":"Circle(mask)",
-                                            "isDirectory":false,
-                                            "isAniNode":false,
-                                            "hasChild":false,
-                                            "compId":76,
-                                            "child":[
-                                                ]
-                                        }],
-                                    "$HIDDEN":false
                                 },
                                 {
                                     "x":60,
@@ -209,6 +182,59 @@
                                     "compId":72,
                                     "child":[
                                         ]
+                                },
+                                {
+                                    "x":60,
+                                    "type":"Box",
+                                    "props":{"y":15,"x":87,"name":"headBox"},
+                                    "nodeParent":27,
+                                    "label":"Box(headBox)",
+                                    "isOpen":true,
+                                    "isDirectory":true,
+                                    "isAniNode":false,
+                                    "hasChild":true,
+                                    "compId":78,
+                                    "child":[
+                                        {
+                                            "x":75,
+                                            "type":"Image",
+                                            "props":{"width":74,"sizeGrid":"0,0,0,0","name":"headimg","height":74},
+                                            "nodeParent":78,
+                                            "label":"Image(headimg)",
+                                            "isOpen":true,
+                                            "isDirectory":false,
+                                            "isAniNode":false,
+                                            "hasChild":false,
+                                            "compId":30,
+                                            "child":[
+                                                ],
+                                            "$HIDDEN":false
+                                        },
+                                        {
+                                            "x":75,
+                                            "type":"Sprite",
+                                            "props":{"y":1,"x":1,"renderType":"mask"},
+                                            "nodeParent":78,
+                                            "label":"Sprite",
+                                            "isOpen":false,
+                                            "isDirectory":true,
+                                            "isAniNode":false,
+                                            "hasChild":true,
+                                            "compId":77,
+                                            "child":[
+                                                {
+                                                    "type":"Circle",
+                                                    "props":{"y":36,"x":36,"radius":36,"lineWidth":1,"fillColor":"#ff0000"},
+                                                    "nodeParent":77,
+                                                    "label":"Circle",
+                                                    "isDirectory":false,
+                                                    "isAniNode":false,
+                                                    "hasChild":false,
+                                                    "compId":76,
+                                                    "child":[
+                                                        ]
+                                                }]
+                                        }]
                                 }]
                         }]
                 },

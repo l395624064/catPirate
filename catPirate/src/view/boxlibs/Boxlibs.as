@@ -246,6 +246,7 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
     {
         this.visible=false;
         changeOpenAniState("clear");
+        GameEventDispatch.instance.event(GameEvent.RemoveRedPoint,"Boxlibs");
     }
 
 

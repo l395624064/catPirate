@@ -1,7 +1,17 @@
 package view.luckwheel {
+import conf.cfg_currency;
+import conf.cfg_wheel;
+
+import data.GainnewD;
+
+import laya.display.Text;
+
 import laya.events.Event;
 import laya.ui.Box;
 import laya.ui.Image;
+import laya.utils.Handler;
+
+import manager.ConfigManager;
 
 import manager.GameEvent;
 
@@ -27,6 +37,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
             "ui/common_ef/luck5.png"
     ];
     private var _rollTime:Boolean=false;
+    private var _awardObj:Object={};
 
     public function Luckwheel() {
         super();
@@ -59,8 +70,64 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
         shareBtn.on(Event.MOUSE_DOWN,this,function () {
             GameEventDispatch.instance.event(GameEvent.ADDwheelNumFromShare);
             changewheelNum("update");
+        });
+
+        explainBtn.offAll();
+        explainBtn.on(Event.MOUSE_DOWN,this,function () {
+            changeExplainState("open");
+        });
+
+        explainCloseBtn.on(Event.MOUSE_DOWN,this,function () {
+            changeExplainState("close");
         })
     }
+
+    private function changeExplainState(action:String):void
+    {
+        if(action=="open"){
+            explainBox.visible=true;
+            explainlist.array=ConfigManager.items("cfg_wheel");
+            explainlist.renderHandler=new Handler(this,updatelist);
+        }
+        else if(action=="close"){
+            explainBox.visible=false;
+        }
+
+    }
+
+    private function updatelist(cell:Box,index:int):void
+    {
+        var cfg:Object=cell.dataSource;
+        var ele_pop_img:Image=cell.getChildByName("popImg") as Image;
+
+        var ele_award1_img:Image=cell.getChildByName("award1_box").getChildByName("award1_img") as Image;
+        var ele_award2_img:Image=cell.getChildByName("award2_box").getChildByName("award2_img") as Image;
+        var ele_award1_txt:Text=cell.getChildByName("award1_box").getChildByName("award1_txt") as Text;
+        var ele_award2_txt:Text=cell.getChildByName("award2_box").getChildByName("award2_txt") as Text;
+
+        var ele_award1_box:Box=cell.getChildByName("award1_box") as Box;
+        var ele_award2_box:Box=cell.getChildByName("award2_box") as Box;
+
+        ele_pop_img.skin=cfg.res;
+
+        var awardTypeArr:Array=cfg.award_type;
+        var awardNumArr:Array=cfg.award_num;
+        if(awardTypeArr.length>0){
+            ele_award1_box.visible=true;
+            ele_award2_box.visible=false;
+
+            ele_award1_img.skin=cfg_currency.instance(awardTypeArr[0]+"").res;
+            ele_award1_txt.text=awardNumArr[0]+"";
+        }
+        if(awardTypeArr.length>1){
+            ele_award2_box.visible=true;
+            ele_award2_img.skin=cfg_currency.instance(awardTypeArr[1]+"").res;
+            ele_award2_txt.text=awardNumArr[1]+"";
+        }
+    }
+
+
+
 
     private function initNum():void
     {
@@ -108,13 +175,13 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
             case 4:popName="山竹"
                 break;
         }
-        console.log("--道具:",popName);
+        //console.log("--道具:",popName);
     }
 
 
     private function setPopArr():void
     {
-        popArr=[0,4,2];
+        popArr=[1,1,1];
         if(popArr[1]<popArr[0]){
             popArr[1]+=_skinArr.length;
         }
@@ -124,6 +191,33 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
         getPoPName(popArr[0]);
         getPoPName(popArr[1]);
         getPoPName(popArr[2]);
+
+        getAward(popArr);
+    }
+
+    private function getAward(arr:Array):void
+    {
+        if(arr.length!=3) throw new Error("wheel index id error!");
+        _awardObj=checkAwardNeed(arr);
+    }
+    private function checkAwardNeed(arr:Array):Object
+    {
+        var cfg:Object={};
+        var cfgAwarrd:Array=[];
+        var cfgArr:Array=ConfigManager.items("cfg_wheel");
+        for (var i:int=0;i<cfgArr.length;i++){
+            cfg=cfgArr[i];
+            cfgAwarrd=cfgArr[i].wheel_Id;
+            for(var j:int=0;j<cfgAwarrd.length;j++){
+                if(cfgAwarrd[j]!=arr[j]){
+                    break;
+                }
+                if(j==2){
+                    return cfg;
+                }
+            }
+        }
+        return null;
     }
 
     private function getPopBox():void
@@ -212,7 +306,17 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
             _popboxArr[0]['state']="";
             _popboxArr[1]['state']="";
             _popboxArr[2]['state']="";
+            showAward();
         }
+    }
+
+    private function showAward():void
+    {
+        if(!_awardObj) return;
+        var gainD:GainnewD=new GainnewD();
+        gainD.award_type=_awardObj.award_type;
+        gainD.award_num=_awardObj.award_num;
+        GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
     }
 
     private function onTimer():void
@@ -275,11 +379,12 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
     public function closePanel():void
     {
         this.visible=false;
+        GameEventDispatch.instance.event(GameEvent.RemoveRedPoint,"Luckwheel");
     }
     public function clearAllNum():void
     {
+        _awardObj=null;
         changewheelState("stop");
-
     }
 
 }

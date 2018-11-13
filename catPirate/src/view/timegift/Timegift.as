@@ -111,8 +111,8 @@ public class Timegift extends TimeGiftUI implements PanelVo{
         var lv:int=PlayerInfoM.instance.getGiftLv();
 
         var gainD:GainnewD=new GainnewD();
-        gainD.name=giftMsgArr[lv-1]['name'];
-        gainD.res=giftMsgArr[lv-1]['res'];
+        gainD.award_type=[(10+lv)];
+        gainD.award_num=[1];
         gainD.callback=handler;
 
         GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
@@ -142,6 +142,7 @@ public class Timegift extends TimeGiftUI implements PanelVo{
     public function closePanel():void
     {
         this.visible=false;
+        GameEventDispatch.instance.event(GameEvent.RemoveRedPoint,"Timegift");
     }
     public function clearAllNum():void
     {

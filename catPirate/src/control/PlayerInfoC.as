@@ -50,6 +50,8 @@ public class PlayerInfoC {
                 Laya.timer.clear(this,changeGiftBoxTimeState);
                 //发送事件
                 GameEventDispatch.instance.event(GameEvent.CheckGiftResetTime);
+                //红点
+                GameEventDispatch.instance.event(GameEvent.ShowRedPoint,"Timegift");
             }else{
                 PlayerInfoM.instance.setGiftDelay(_boxDelay);
                 GameEventDispatch.instance.event(GameEvent.UPdateGiftBoxTime);

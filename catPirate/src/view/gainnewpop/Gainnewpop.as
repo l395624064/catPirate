@@ -9,8 +9,12 @@ import laya.ui.Image;
 import laya.utils.Handler;
 
 import manager.GameAdaptive;
+import manager.GameEvent;
+import manager.GameEventDispatch;
 
 import manager.UiManager;
+
+import model.PlayerInfoM;
 
 import ui.GainNewpopUI;
 
@@ -73,8 +77,67 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
         this.on(Event.MOUSE_DOWN,this,function () {
             if(_callback)_callback.run();
             UiManager.instance.closePanel("Gainnewpop");
-        })
+        });
+
+        getAwardNum();
     }
+
+    private function getAwardNum():void
+    {
+        var id:int;
+        for (var i:int=0;i<_awardType.length;i++){
+            id=_awardType[i];
+            if(id==1){
+                var gold:int=PlayerInfoM.instance.getGoldNum();
+                gold+=_awardNum[i];
+                PlayerInfoM.instance.setGoldNum(gold);
+                GameEventDispatch.instance.event(GameEvent.GoldRefresh);
+            }
+            else if(id==2){
+                var star:int=PlayerInfoM.instance.getPlankNum();
+                star+=_awardNum[i];
+                PlayerInfoM.instance.setPlankNum(star);
+                GameEventDispatch.instance.event(GameEvent.PlankRefresh);
+            }
+            else if(id==3){
+                var pear:int=PlayerInfoM.instance.getPearlNum();
+                pear+=_awardNum[i];
+                PlayerInfoM.instance.setPearlNum(pear);
+                GameEventDispatch.instance.event(GameEvent.PearlRefresh);
+            }
+            else if(id==11){
+                var giftlv1_num:int=PlayerInfoM.instance.getGiftNumById(1);
+                giftlv1_num+=_awardNum[i];
+                PlayerInfoM.instance.setGiftNumById(1,giftlv1_num);
+                GameEventDispatch.instance.event(GameEvent.ShowRedPoint,"Boxlibs");
+            }
+            else if(id==12){
+                var giftlv2_num:int=PlayerInfoM.instance.getGiftNumById(2);
+                giftlv2_num+=_awardNum[i];
+                PlayerInfoM.instance.setGiftNumById(2,giftlv2_num);
+                GameEventDispatch.instance.event(GameEvent.ShowRedPoint,"Boxlibs");
+            }
+            else if(id==13){
+                var giftlv3_num:int=PlayerInfoM.instance.getGiftNumById(3);
+                giftlv3_num+=_awardNum[i];
+                PlayerInfoM.instance.setGiftNumById(3,giftlv3_num);
+                GameEventDispatch.instance.event(GameEvent.ShowRedPoint,"Boxlibs");
+            }
+            else if(id==14){
+                var giftlv4_num:int=PlayerInfoM.instance.getGiftNumById(4);
+                giftlv4_num+=_awardNum[i];
+                PlayerInfoM.instance.setGiftNumById(4,giftlv4_num);
+                GameEventDispatch.instance.event(GameEvent.ShowRedPoint,"Boxlibs");
+            }
+            else if(id==15){
+                var giftlv5_num:int=PlayerInfoM.instance.getGiftNumById(5);
+                giftlv5_num+=_awardNum[i];
+                PlayerInfoM.instance.setGiftNumById(5,giftlv5_num);
+                GameEventDispatch.instance.event(GameEvent.ShowRedPoint,"Boxlibs");
+            }
+        }
+    }
+
 
     private function changeShowState(action:String):void
     {

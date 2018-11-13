@@ -37,14 +37,14 @@ public class Friendrank extends FriendRankUI implements PanelVo{
         friendlist.renderHandler=new Handler(this,updatelist);
 
         var rankObj:Array=[
-            {name:"的潜伏期",score:852,url:"https://www.easyicon.net/api/resizeApi.php?id=1203098&size=72"},
-            {name:"人3",score:785,url:"https://www.easyicon.net/api/resizeApi.php?id=1203058&size=72"},
-            {name:"大旗网",score:711,url:"https://www.easyicon.net/api/resizeApi.php?id=1203048&size=72"},
-            {name:"豆腐干",score:625,url:"https://www.easyicon.net/api/resizeApi.php?id=1203057&size=72"},
-            {name:"妇女干部发挥",score:521,url:"https://www.easyicon.net/api/resizeApi.php?id=1203052&size=72"},
-            {name:"纳入法庭火热",score:412,url:"https://www.easyicon.net/api/resizeApi.php?id=1203087&size=72"},
-            {name:"跟3",score:218,url:"https://www.easyicon.net/api/resizeApi.php?id=1203122&size=72"},
-            {name:"规范岁的法国",score:211,url:"https://www.easyicon.net/api/resizeApi.php?id=1203084&size=72"}
+            {name:"的潜伏期",score:852,url:"http://images.liqucn.com/img/h1/h988/img201711250928440_info400X400.jpg"},
+            {name:"人3",score:785,url:"http://images.liqucn.com/img/h1/h991/img201712091118050_info400X400.jpg"},
+            {name:"大旗网",score:711,url:"https://img.52z.com/upload/news/image/20180912/20180912124602_94176.jpg"},
+            {name:"豆腐干",score:625,url:"http://img.52z.com/upload/news/image/20180801/20180801112619_37471.jpg"},
+            {name:"妇女干部发挥",score:521,url:"https://img.52z.com/upload/news/image/20180222/20180222054805_74858.jpg"},
+            {name:"纳入法庭火热",score:412,url:"http://img.besoo.com/file/201705/07/0829006945908.png"},
+            {name:"跟3",score:218,url:"http://image.biaobaiju.com/uploads/20180802/00/1533142762-DMfxhnYpmZ.jpg"},
+            {name:"规范岁的法国",score:211,url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3419746188,1692388766&fm=26&gp=0.jpg"}
         ];
         GameEventDispatch.instance.event(GameEvent.GetFriendRank,[rankObj]);
     }
@@ -63,7 +63,7 @@ public class Friendrank extends FriendRankUI implements PanelVo{
         var headUrl:String=cfg.url;
 
         var ele_floor_img:Image=cell.getChildByName("floorImg") as Image;
-        var ele_head_img:Image=cell.getChildByName("headimg") as Image;
+        var ele_head_img:Image=cell.getChildByName("headBox").getChildByName("headimg") as Image;
         var ele_rank_img:Image=cell.getChildByName("rankimg") as Image;
 
         var ele_title_txt:Text=cell.getChildByName("titletxt") as Text;
@@ -108,6 +108,7 @@ public class Friendrank extends FriendRankUI implements PanelVo{
     public function closePanel():void
     {
         this.visible=false;
+        GameEventDispatch.instance.event(GameEvent.RemoveRedPoint,"Friendrank");
     }
     public function clearAllNum():void
     {

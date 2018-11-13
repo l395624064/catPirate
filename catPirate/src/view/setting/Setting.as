@@ -3,6 +3,8 @@ import laya.events.Event;
 
 import manager.UiManager;
 
+import model.PlayerInfoM;
+
 import ui.SettingUI;
 
 import view.PanelVo;
@@ -10,6 +12,7 @@ import view.PanelVo;
 public class Setting extends SettingUI implements PanelVo{
 
     public static var _instance:Setting;
+    private var _settingObj:Object={};
     public function Setting() {
         super();
     }
@@ -22,9 +25,38 @@ public class Setting extends SettingUI implements PanelVo{
     {
         closeBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.closePanel("Setting");
-        })
-
+        });
+        musicBtn.on(Event.MOUSE_DOWN,this,changeBtnState,["setMusic"]);
+        soundBtn.on(Event.MOUSE_DOWN,this,changeBtnState,["setSound"]);
+        shakeBtn.on(Event.MOUSE_DOWN,this,changeBtnState,["setShake"]);
+        changeBtnState("init");
     }
+
+    private function changeBtnState(action:String):void
+    {
+        if(action=="init"){
+            _settingObj=PlayerInfoM.instance.getGameSetting();
+            musicBtn.selected=!_settingObj.music;
+            soundBtn.selected=!_settingObj.sound;
+            shakeBtn.selected=!_settingObj.shake;
+        }
+        else if(action=="save"){
+            PlayerInfoM.instance.setGameSetting(_settingObj);
+        }
+        else if(action=="setMusic"){
+            _settingObj.music=!_settingObj.music;
+            musicBtn.selected=!_settingObj.music;
+        }
+        else if(action=="setSound"){
+            _settingObj.sound=!_settingObj.sound;
+            soundBtn.selected=!_settingObj.sound;
+        }
+        else if(action=="setShake"){
+            _settingObj.shake=!_settingObj.shake;
+            shakeBtn.selected=!_settingObj.shake;
+        }
+    }
+
 
     public function closePanel():void
     {

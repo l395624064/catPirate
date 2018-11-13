@@ -7,8 +7,11 @@ import data.ShipRoleD;
 import laya.display.Animation;
 
 import laya.maths.Point;
+import laya.ui.Button;
 
 import laya.ui.Image;
+
+import manager.GameAdaptive;
 
 import model.FishM;
 
@@ -75,6 +78,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public function openPanel(param:Object=null):void
     {
+        checkRedPoint();
         initSeaWave(shipBox);
         initListener();
 
@@ -637,6 +641,79 @@ public class Gamemain extends GameMainUI implements PanelVo {
         addScoreNum("pearl");
     }
 
+
+
+    private function checkRedPoint():void
+    {
+        var nameArr:Array=["Timegift","Boxlibs","Luckwheel","Friendrank"];
+        var showPoint:Boolean;
+        for(var i:int=0;i<nameArr;i++){
+            showPoint=PlayerInfoM.instance.getRedPointByName(nameArr[i]);
+            if(showPoint){
+                showRedPoint(nameArr[i]);
+            }
+        }
+    }
+
+    private function showRedPoint(btnname:String):void
+    {
+        var redImg:Image;
+        var url:String="ui/common_ex/redpot.png";
+        if(btnname=="Timegift"){
+            if(timegiftBtn.numChildren>0)return;
+            redImg=new Image(url);
+            timegiftBtn.addChild(redImg);
+            GameAdaptive.instance.setRightFromPanel(redImg,timegiftBtn);
+        }
+        else if(btnname=="Boxlibs"){
+            console.log("--boxlibs redpoint",boxlibsBtn.numChildren)
+            if(boxlibsBtn.numChildren>0)return;
+            redImg=new Image(url);
+            boxlibsBtn.addChild(redImg);
+            GameAdaptive.instance.setRightFromPanel(redImg,boxlibsBtn);
+        }
+        else if(btnname=="Luckwheel"){
+            if(luckwheelBtn.numChildren>0)return;
+            redImg=new Image(url);
+            luckwheelBtn.addChild(redImg);
+            GameAdaptive.instance.setRightFromPanel(redImg,luckwheelBtn);
+        }
+        else if(btnname=="Friendrank"){
+            if(friendRankBtn.numChildren>0)return;
+            redImg=new Image(url);
+            friendRankBtn.addChild(redImg);
+            GameAdaptive.instance.setRightFromPanel(redImg,friendRankBtn);
+        }
+        else{
+            throw new Error("redPoint Button not fond!");
+        }
+        PlayerInfoM.instance.setRedPointByName(btnname,true);
+    }
+
+    private function removeRedPoint(btnname:String):void
+    {
+        if(btnname=="Timegift"){
+            if(timegiftBtn.numChildren<0)return;
+            timegiftBtn.removeChildren();
+        }
+        else if(btnname=="Boxlibs"){
+            if(boxlibsBtn.numChildren<0)return;
+            boxlibsBtn.removeChildren();
+        }
+        else if(btnname=="Luckwheel"){
+            if(luckwheelBtn.numChildren<0)return;
+            luckwheelBtn.removeChildren();
+        }
+        else if(btnname=="Friendrank"){
+            if(friendRankBtn.numChildren<0)return;
+            friendRankBtn.removeChildren();
+        }
+        else{
+            throw new Error("redPoint Button not fond!");
+        }
+    }
+
+
     public function register():void
     {
         GameEventDispatch.instance.on(GameEvent.GoldRefresh,this,changeScoreBoxState,["update"]);
@@ -652,6 +729,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.on(GameEvent.UpdateShipslot,this,updateShipslot);
 
         GameEventDispatch.instance.on(GameEvent.GameMatchStart,this,gameMatch);
+
+        GameEventDispatch.instance.on(GameEvent.ShowRedPoint,this,showRedPoint);
+        GameEventDispatch.instance.on(GameEvent.RemoveRedPoint,this,removeRedPoint);
     }
 
     public function unRegister():void
@@ -669,6 +749,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.off(GameEvent.UpdateShipslot,this,updateShipslot);
 
         GameEventDispatch.instance.off(GameEvent.GameMatchStart,this,gameMatch);
+
+        GameEventDispatch.instance.off(GameEvent.ShowRedPoint,this,showRedPoint);
+        GameEventDispatch.instance.off(GameEvent.RemoveRedPoint,this,removeRedPoint);
     }
 
     public function closePanel():void

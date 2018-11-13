@@ -38,12 +38,42 @@ public class PlayerInfoM {
         黄龙鱼:0
     };
 
+    private var _gameSetting:Object={
+        music:true,
+        sound:true,
+        shake:true
+    };
+
+    private var _redPointObj:Object={
+        Timegift:false,
+        Boxlibs:false,
+        Luckwheel:false,
+        Friendrank:false
+    }
+
     public function PlayerInfoM() {
     }
 
     public static function get instance():PlayerInfoM
     {
         return _instance || (_instance=new PlayerInfoM());
+    }
+
+    public function getRedPointByName(name:String):Boolean
+    {
+        return _redPointObj[name];
+    }
+    public function setRedPointByName(name:String,value:Boolean):void
+    {
+        _redPointObj[name]=value;
+    }
+    public function getGameSetting():Object
+    {
+        return _gameSetting;
+    }
+    public function setGameSetting(value:Object):Object
+    {
+        _gameSetting=value;
     }
 
     public function getGiftArr():Array

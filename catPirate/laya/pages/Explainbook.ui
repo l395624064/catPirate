@@ -1,8 +1,7 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":25,
+    "selectedBox":1,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",

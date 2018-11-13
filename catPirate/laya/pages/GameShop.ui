@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":66,
+    "selectedBox":6,
+    "selecteID":59,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -58,13 +58,14 @@
                     "props":{"y":270,"x":45,"width":582,"var":"shoplist","spaceY":40,"spaceX":0,"repeatY":5,"repeatX":1,"mouseEnabled":false,"height":792},
                     "nodeParent":3,
                     "label":"List(shoplist)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":5,
                     "child":[
                         {
+                            "x":45,
                             "type":"Box",
                             "props":{"y":26,"x":16,"width":567,"renderType":"render","height":114},
                             "nodeParent":5,
@@ -76,6 +77,7 @@
                             "compId":6,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "props":{"y":-4,"x":-2,"width":433,"skin":"ui/gameshop/tiao1.png","sizeGrid":"9,12,10,11","height":118},
                                     "nodeParent":6,
@@ -89,6 +91,7 @@
                                     "$HIDDEN":false
                                 },
                                 {
+                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":6,"x":13,"width":100,"scaleY":1,"scaleX":1,"name":"headimg_box","height":100},
                                     "nodeParent":6,
@@ -142,17 +145,19 @@
                                     "$HIDDEN":false
                                 },
                                 {
+                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":55,"x":288,"name":"cost2_box"},
                                     "nodeParent":6,
                                     "label":"Box(cost2_box)",
-                                    "isOpen":true,
+                                    "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":false,
                                     "hasChild":true,
                                     "compId":49,
                                     "child":[
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"y":17,"x":18,"width":116,"skin":"ui/gameshop/tiaodi.png","sizeGrid":"11,18,10,14","height":36},
                                             "nodeParent":49,
@@ -166,6 +171,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"width":47,"skin":"ui/common_ef/plank.png","name":"cost2_img","height":54},
                                             "nodeParent":49,
@@ -179,6 +185,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":27,"x":48,"width":78,"text":"100000","strokeColor":"#224882","stroke":5,"name":"cost2_txt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":49,
@@ -193,6 +200,7 @@
                                     "$LOCKED":false
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "props":{"y":14,"x":123,"width":90,"text":"XXXX鱼","strokeColor":"#ffffff","stroke":3,"name":"name_txt","height":32,"fontSize":30,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"},
                                     "nodeParent":6,
@@ -205,6 +213,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "props":{"y":77,"x":123,"width":93,"text":"最大重量:","strokeColor":"#224882","stroke":5,"height":22,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                                     "nodeParent":6,
@@ -218,6 +227,7 @@
                                     "$LOCKED":false
                                 },
                                 {
+                                    "x":60,
                                     "type":"Button",
                                     "props":{"y":53,"x":432,"width":92,"stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","name":"lvupBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"升级","hitTestPrior":true,"height":63},
                                     "nodeParent":6,
@@ -231,6 +241,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Button",
                                     "props":{"y":-7,"x":431,"width":93,"stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"freeBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"免费升级","hitTestPrior":true,"height":63},
                                     "nodeParent":6,
@@ -244,6 +255,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "props":{"y":71,"x":219,"width":60,"text":"20kg","strokeColor":"#224882","stroke":5,"name":"weight_txt","height":29,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"left"},
                                     "nodeParent":6,
@@ -257,17 +269,19 @@
                                     "$LOCKED":false
                                 },
                                 {
+                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":-2,"x":288,"name":"cost1_box"},
                                     "nodeParent":6,
                                     "label":"Box(cost1_box)",
-                                    "isOpen":true,
+                                    "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":false,
                                     "hasChild":true,
                                     "compId":59,
                                     "child":[
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"y":17,"x":18,"width":116,"skin":"ui/gameshop/tiaodi.png","sizeGrid":"11,18,10,14","height":36},
                                             "nodeParent":59,
@@ -281,6 +295,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"width":47,"skin":"ui/common_ef/gold.png","name":"cost1_img","height":54},
                                             "nodeParent":59,
@@ -294,6 +309,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":27,"x":48,"width":78,"text":"100000","strokeColor":"#224882","stroke":5,"name":"cost1_txt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":59,
@@ -308,7 +324,7 @@
                                     "$LOCKED":false
                                 }]
                         }],
-                    "$LOCKED":true,
+                    "$LOCKED":false,
                     "$HIDDEN":false
                 },
                 {

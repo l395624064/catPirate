@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":72,
-    "selecteID":71,
+    "selectedBox":63,
+    "selecteID":67,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -382,15 +382,16 @@
                     "props":{"y":181,"x":504,"var":"rightbtnBox"},
                     "nodeParent":72,
                     "label":"Box(rightbtnBox)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":75,
                     "child":[
                         {
+                            "x":45,
                             "type":"Button",
-                            "props":{"width":133,"var":"friendRankBtn","stateNum":"2","skin":"ui/common_ex/btn_blue.png","labelSize":35,"label":"排行","height":77},
+                            "props":{"y":2,"x":34,"width":90,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":85},
                             "nodeParent":75,
                             "label":"Button(friendRankBtn)",
                             "isDirectory":false,
@@ -401,8 +402,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Button",
-                            "props":{"y":72,"x":1,"width":127,"var":"shopBtn","stateNum":"2","skin":"ui/common_ex/btn_blue.png","labelSize":35,"label":"商城","height":70},
+                            "props":{"y":104,"x":37,"width":87,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":95},
                             "nodeParent":75,
                             "label":"Button(shopBtn)",
                             "isDirectory":false,
@@ -413,8 +415,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Button",
-                            "props":{"y":134,"x":3,"width":131,"var":"luckwheelBtn","stateNum":"2","skin":"ui/common_ex/btn_blue.png","labelSize":35,"label":"转转乐","height":67},
+                            "props":{"y":7,"x":-65,"width":85,"var":"luckwheelBtn","stateNum":"1","skin":"ui/gamemain/btn3b.png","labelSize":35,"height":88},
                             "nodeParent":75,
                             "label":"Button(luckwheelBtn)",
                             "isDirectory":false,
@@ -424,7 +427,7 @@
                             "child":[
                                 ]
                         }],
-                    "$HIDDEN":true
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
@@ -432,85 +435,55 @@
                     "props":{"y":4,"x":2,"var":"leftbtnBox"},
                     "nodeParent":72,
                     "label":"Box(leftbtnBox)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":76,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/common_ex/giftBtn.png","height":93},
+                            "props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":93},
                             "nodeParent":76,
                             "label":"Image(timegiftBtn)",
-                            "isOpen":false,
-                            "isDirectory":true,
+                            "isOpen":true,
+                            "isDirectory":false,
                             "isAniNode":true,
-                            "hasChild":true,
+                            "hasChild":false,
                             "compId":61,
                             "child":[
-                                {
-                                    "type":"Text",
-                                    "props":{"y":94,"x":-15,"wordWrap":true,"width":125,"text":"限时礼包","mouseEnabled":false,"height":27,"fontSize":30,"font":"SimHei","color":"#ff0400"},
-                                    "nodeParent":61,
-                                    "label":"Text",
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":65,
-                                    "child":[
-                                        ]
-                                }]
+                                ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":-4,"x":102,"var":"gameboxBtn","skin":"ui/common_ex/d.png"},
+                            "props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63},
                             "nodeParent":76,
                             "label":"Image(gameboxBtn)",
-                            "isOpen":false,
-                            "isDirectory":true,
+                            "isOpen":true,
+                            "isDirectory":false,
                             "isAniNode":true,
-                            "hasChild":true,
+                            "hasChild":false,
                             "compId":62,
                             "child":[
-                                {
-                                    "type":"Text",
-                                    "props":{"y":13,"x":11,"wordWrap":true,"width":66,"text":"游戏盒子","mouseEnabled":false,"height":63,"fontSize":30,"font":"SimHei","color":"#ff0400"},
-                                    "nodeParent":62,
-                                    "label":"Text",
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":66,
-                                    "child":[
-                                        ]
-                                }]
+                                ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":258,"x":1,"var":"boxlibsBtn","skin":"ui/common_ex/d.png"},
+                            "props":{"y":258,"x":1,"width":91,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":76},
                             "nodeParent":76,
                             "label":"Image(boxlibsBtn)",
-                            "isOpen":false,
-                            "isDirectory":true,
+                            "isOpen":true,
+                            "isDirectory":false,
                             "isAniNode":true,
-                            "hasChild":true,
+                            "hasChild":false,
                             "compId":63,
                             "child":[
-                                {
-                                    "type":"Text",
-                                    "props":{"y":11,"x":10,"wordWrap":true,"width":66,"text":"宝箱库","mouseEnabled":false,"height":63,"fontSize":30,"font":"SimHei","color":"#ff0400"},
-                                    "nodeParent":63,
-                                    "label":"Text",
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":67,
-                                    "child":[
-                                        ]
-                                }]
+                                ]
                         }],
-                    "$HIDDEN":true
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
@@ -550,7 +523,7 @@
                                 ]
                         }],
                     "$LOCKED":true,
-                    "$HIDDEN":true
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,

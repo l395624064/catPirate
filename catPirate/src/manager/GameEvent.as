@@ -34,6 +34,8 @@ package manager
         public static const GameMatchStart:String="GameMatchStart";
         public static const GameEndAward:String="GameEndAward";
 
+        public static const ShowRedPoint:String="ShowRedPoint";
+        public static const RemoveRedPoint:String="RemoveRedPoint";
         //playerInfoC
         public static const ADDwheelNum:String="ADDwheelNum";
         public static const MinuswheelNum:String="MinuswheelNum";
