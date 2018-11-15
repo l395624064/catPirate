@@ -36,6 +36,10 @@ package manager
 
         public static const ShowRedPoint:String="ShowRedPoint";
         public static const RemoveRedPoint:String="RemoveRedPoint";
+
+        //boss coming
+        public static const BossComIngMode:String="BossComIngAni";
+
         //playerInfoC
         public static const ADDwheelNum:String="ADDwheelNum";
         public static const MinuswheelNum:String="MinuswheelNum";
@@ -44,6 +48,7 @@ package manager
 
         public static const StopGiftBoxTime:String="CheckGiftBoxLVUP";
         public static const CheckGiftBoxTime:String="CheckGiftBoxTime";
+
 
         //GameTimeC
         public static const StartLoopTime:String="StartLoopTime";

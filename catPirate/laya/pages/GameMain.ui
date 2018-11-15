@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":63,
-    "selecteID":67,
+    "selectedBox":72,
+    "selecteID":19,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -15,9 +15,9 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":0,"x":0,"width":640,"skin":"ui/gamemain/gamemain_0.png","height":1136},
+            "props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136},
             "nodeParent":1,
-            "label":"Image",
+            "label":"Image(bgImg)",
             "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,
@@ -382,14 +382,13 @@
                     "props":{"y":181,"x":504,"var":"rightbtnBox"},
                     "nodeParent":72,
                     "label":"Box(rightbtnBox)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":75,
                     "child":[
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":2,"x":34,"width":90,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":85},
                             "nodeParent":75,
@@ -402,7 +401,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":104,"x":37,"width":87,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":95},
                             "nodeParent":75,
@@ -415,7 +413,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":7,"x":-65,"width":85,"var":"luckwheelBtn","stateNum":"1","skin":"ui/gamemain/btn3b.png","labelSize":35,"height":88},
                             "nodeParent":75,
@@ -435,14 +432,13 @@
                     "props":{"y":4,"x":2,"var":"leftbtnBox"},
                     "nodeParent":72,
                     "label":"Box(leftbtnBox)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":76,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":93},
                             "nodeParent":76,
@@ -456,7 +452,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63},
                             "nodeParent":76,
@@ -470,7 +465,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":258,"x":1,"width":91,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":76},
                             "nodeParent":76,
@@ -498,6 +492,7 @@
                     "compId":84,
                     "child":[
                         {
+                            "x":45,
                             "type":"Text",
                             "props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},
                             "nodeParent":84,
@@ -511,6 +506,7 @@
                             "$LOCKED":false
                         },
                         {
+                            "x":45,
                             "type":"FontClip",
                             "props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"},
                             "nodeParent":84,
@@ -531,15 +527,139 @@
                     "props":{"y":857,"x":58,"var":"dropFishBox"},
                     "nodeParent":72,
                     "label":"Box(dropFishBox)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":19,
                     "child":[
                         {
+                            "x":45,
+                            "type":"Animation",
+                            "props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57},
+                            "nodeParent":19,
+                            "label":"Animation(floorbarAni)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":101,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Animation",
+                            "props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false},
+                            "nodeParent":19,
+                            "label":"Animation(fireAni)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":98,
+                            "child":[
+                                ],
+                            "$LOCKED":true
+                        },
+                        {
+                            "x":45,
+                            "type":"Box",
+                            "props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},
+                            "nodeParent":19,
+                            "label":"Box(powerBox)",
+                            "isOpen":false,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":95,
+                            "child":[
+                                {
+                                    "type":"Image",
+                                    "props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100},
+                                    "nodeParent":95,
+                                    "label":"Image",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":90,
+                                    "child":[
+                                        ],
+                                    "$LOCKED":true,
+                                    "$HIDDEN":true
+                                },
+                                {
+                                    "type":"Box",
+                                    "props":{"y":2,"x":2},
+                                    "nodeParent":95,
+                                    "label":"Box",
+                                    "isOpen":true,
+                                    "isDirectory":true,
+                                    "isAniNode":true,
+                                    "hasChild":true,
+                                    "compId":91,
+                                    "child":[
+                                        {
+                                            "type":"Sprite",
+                                            "props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},
+                                            "nodeParent":91,
+                                            "label":"Sprite(powerMaskSp)",
+                                            "isOpen":true,
+                                            "isDirectory":true,
+                                            "isAniNode":true,
+                                            "hasChild":true,
+                                            "compId":92,
+                                            "child":[
+                                                {
+                                                    "type":"Pie",
+                                                    "props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335},
+                                                    "nodeParent":92,
+                                                    "label":"Pie(piemask)",
+                                                    "isDirectory":false,
+                                                    "isAniNode":true,
+                                                    "hasChild":false,
+                                                    "compId":93,
+                                                    "child":[
+                                                        ]
+                                                }],
+                                            "$HIDDEN":false
+                                        },
+                                        {
+                                            "type":"Image",
+                                            "props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97},
+                                            "nodeParent":91,
+                                            "label":"Image",
+                                            "isOpen":true,
+                                            "isDirectory":false,
+                                            "isAniNode":true,
+                                            "hasChild":false,
+                                            "compId":89,
+                                            "child":[
+                                                ],
+                                            "$LOCKED":true,
+                                            "$HIDDEN":false
+                                        }],
+                                    "$HIDDEN":false
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100},
+                                    "nodeParent":95,
+                                    "label":"Image",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":94,
+                                    "child":[
+                                        ],
+                                    "$LOCKED":true,
+                                    "$HIDDEN":false
+                                }],
+                            "$LOCKED":true,
+                            "$HIDDEN":false
+                        },
+                        {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":32,"skin":"ui/gamemain/fishscroll.png"},
+                            "props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"},
                             "nodeParent":19,
                             "label":"Image",
                             "isDirectory":false,
@@ -547,9 +667,12 @@
                             "hasChild":false,
                             "compId":12,
                             "child":[
-                                ]
+                                ],
+                            "$LOCKED":false,
+                            "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"FontClip",
                             "props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0},
                             "nodeParent":19,
@@ -562,6 +685,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"y":54,"x":500,"width":54,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53},
                             "nodeParent":19,
@@ -574,11 +698,12 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Box",
                             "props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},
                             "nodeParent":19,
                             "label":"Box(fishhookMask)",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
@@ -637,7 +762,7 @@
                                     "compId":30,
                                     "child":[
                                         ],
-                                    "$LOCKED":false,
+                                    "$LOCKED":true,
                                     "$HIDDEN":false
                                 },
                                 {
@@ -652,74 +777,35 @@
                                     "compId":13,
                                     "child":[
                                         ],
-                                    "$LOCKED":false
+                                    "$LOCKED":true
+                                },
+                                {
+                                    "type":"Animation",
+                                    "props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false},
+                                    "nodeParent":18,
+                                    "label":"Animation(refreshAni)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":97,
+                                    "child":[
+                                        ]
                                 }],
                             "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
-                            "type":"Box",
-                            "props":{"y":72,"x":51,"visible":false,"var":"energyBall","anchorY":0.5,"anchorX":0.5},
+                            "x":45,
+                            "type":"Animation",
+                            "props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false},
                             "nodeParent":19,
-                            "label":"Box(energyBall)",
-                            "isOpen":false,
-                            "isDirectory":true,
+                            "label":"Animation(getpowerAni)",
+                            "isDirectory":false,
                             "isAniNode":true,
-                            "hasChild":true,
-                            "compId":52,
+                            "hasChild":false,
+                            "compId":96,
                             "child":[
-                                {
-                                    "type":"Sprite",
-                                    "props":{"y":4,"x":4,"width":70,"renderType":"mask","height":70},
-                                    "nodeParent":52,
-                                    "label":"Sprite",
-                                    "isOpen":true,
-                                    "isDirectory":true,
-                                    "isAniNode":true,
-                                    "hasChild":true,
-                                    "compId":54,
-                                    "child":[
-                                        {
-                                            "type":"Pie",
-                                            "props":{"y":35,"x":35,"startAngle":-180,"radius":35,"lineWidth":1,"fillColor":"#00ffea","endAngle":-90.93485610931266},
-                                            "nodeParent":54,
-                                            "label":"Pie",
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":53,
-                                            "child":[
-                                                ],
-                                            "$HIDDEN":false
-                                        }],
-                                    "$HIDDEN":false
-                                },
-                                {
-                                    "type":"Sprite",
-                                    "props":{"y":4,"x":4,"width":70,"height":70},
-                                    "nodeParent":52,
-                                    "label":"Sprite",
-                                    "isOpen":true,
-                                    "isDirectory":true,
-                                    "isAniNode":true,
-                                    "hasChild":true,
-                                    "compId":55,
-                                    "child":[
-                                        {
-                                            "type":"Circle",
-                                            "props":{"y":35,"x":35,"radius":35,"lineWidth":1,"fillColor":"#ff1400"},
-                                            "nodeParent":55,
-                                            "label":"Circle",
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":51,
-                                            "child":[
-                                                ],
-                                            "$HIDDEN":false
-                                        }]
-                                }],
-                            "$HIDDEN":true
+                                ]
                         }],
                     "$LOCKED":true,
                     "$HIDDEN":false

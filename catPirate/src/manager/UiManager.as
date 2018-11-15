@@ -29,6 +29,7 @@ import view.timestartAni.TimestartAni;
 import view.timeoverAni.TimeoverAni;
 import view.endaward.Endaward;
 import view.setting.Setting;
+import view.timebossAni.TimebossAni;
 
 public class UiManager {
     public static var _instance:UiManager;
@@ -99,6 +100,7 @@ public class UiManager {
         _emptyResUi['Explainbook']=true;
         _emptyResUi['TimestartAni']=true;
         _emptyResUi['TimeoverAni']=true;
+        _emptyResUi['TimebossAni']=true;
         _emptyResUi['Endaward']=true;
     }
     private function getEmptyRes(name:String):Boolean

@@ -18,6 +18,7 @@ public class GamemainC {
         GameEventDispatch.instance.on(GameEvent.GameOver,this,GameOver);//进入结束页
         GameEventDispatch.instance.on(GameEvent.GameEndAward,this,GameEndAward);//结算
         GameEventDispatch.instance.on(GameEvent.GameTimeout,this,GameTimeout);
+
     }
 
     public static function get instance():GamemainC
@@ -27,7 +28,7 @@ public class GamemainC {
 
     private function openGame():void
     {
-        UiManager.instance.loadView("Gamemain",null,1);
+        UiManager.instance.loadView("Gamemain",null,2);
         //console.log("--GameMainPanelOpen");
 
         //init local obj
@@ -59,6 +60,11 @@ public class GamemainC {
         UiManager.instance.closePanel("TimeoverAni","blackOut");
         UiManager.instance.closePanel("Gamemain","blackOut");
         UiManager.instance.loadView("Gameend");
+    }
+
+    private function BossComingMode():void
+    {
+
     }
 
     private function GameEndAward(_param:Object):void

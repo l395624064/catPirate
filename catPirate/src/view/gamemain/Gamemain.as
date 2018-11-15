@@ -5,11 +5,13 @@ import data.FontClipD;
 import data.ShipRoleD;
 
 import laya.display.Animation;
+import laya.display.Graphics;
 
 import laya.maths.Point;
 import laya.ui.Button;
 
 import laya.ui.Image;
+import laya.utils.Handler;
 
 import manager.GameAdaptive;
 
@@ -61,7 +63,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     private const minFishhook:int=75;
     private const maxFishhook:int=500;
-    private var fishhookIndex:int=0;
 
     private var _gamemode:String="normal";
 
@@ -196,17 +197,25 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private function changeGameMode(action:String):void
     {
         _gamemode=action;
-        if(action=="normal"){
-            changeScoreBoxState("start");
-            changeDropFishBoxState("over");
-
-            canDrop=true;
-            changeScoreBoxState("update");
-
+        if(_gamemode=="normal"){
+            //init view
             this.timeBox.visible=false;
             this.rightbtnBox.visible=true;
             this.leftbtnBox.visible=true;
             this.gameStartBtn.visible=true;
+            bgImg.skin="ui/gamemain/gamemain_0.png";
+
+            //remove ani
+            this.powerBox.visible=false;
+            this.fireAni.visible=false;
+            this.floorbarAni.visible=false;
+            this.refreshAni.visible=false;
+
+            //init control
+            canDrop=true;//初始化
+            changeScoreBoxState("start");
+            changeDropFishBoxState("over");
+            changeScoreBoxState("update");
 
             dropSp.offAll();
             dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {
@@ -218,16 +227,20 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 })
             });
         }
-        else if(action=="match"){
-
-            canDropMatch=true;
-            changeScoreBoxState("update");
-
+        else if(_gamemode=="match"){
+            //init view
             this.timeBox.visible=true;
             this.rightbtnBox.visible=false;
             this.leftbtnBox.visible=false;
             this.gameStartBtn.visible=false;
+            this.powerBox.visible=true;
+            this.dropFishBox.visible=true;
+            bgImg.skin="ui/gamemain/gamemain_0.png";
 
+            //init control
+            canDropMatch=true;//初始化
+            changeScoreBoxState("update");
+            changePowerBox("init");
 
             dropSp.offAll();
             dropSp.on(Event.MOUSE_DOWN,this,function (e:Event) {
@@ -240,6 +253,19 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 })
             });
         }
+        else if(_gamemode=="boss"){
+            //页面effect 侦听
+            bgImg.skin="ui/gamemain/gamemain_1.png";
+
+            dropSp.offAll();
+            dropSp.once(Event.MOUSE_DOWN,this,function (e:Event) {
+                e.stopPropagation();
+                changeDropFishBoxState("start");
+                Laya.stage.once(Event.MOUSE_DOWN,this,function () {
+                    changeDropFishBoxState("stop");
+                });
+            });
+        }
     }
 
 
@@ -248,39 +274,214 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private function changeDropFishBoxState(action:String):void
     {
         if(action=="start"){
-            if(_gamemode=="normal")getColorImg();
-            else if(_gamemode=="match")getFishImg();
+            if(_gamemode=="normal"){
+                fishhookImg.x=minFishhook;
+                fishhookImg.visible=true;//normal mode
 
-            //common
-            dropFishBox.visible=true;
-            fishhookIndex=0;
-            drawFishline("start");
-            changeDropFishBoxState("move");
-        }else if(action=="move"){
-            var aniTime:int=1000;
-            if(_gamemode=="normal")aniTime=1200;
-            else if(_gamemode=="match")aniTime=2000;
-            Tween.clearTween(fishhookImg);
-            Tween.to(fishhookImg,{x:(fishhookIndex%2)? minFishhook:maxFishhook},aniTime,null,Handler.create(this,function () {
-                fishhookIndex++;
-                changeDropFishBoxState(action);
-            }));
+                dropFishBox.visible=true;
+                canDrop=false;//关闭点击事件
+
+                getColorImg();
+                drawFishline("start");//鱼线动画开启
+            }
+            else if(_gamemode=="match"){
+                refreshAni.visible=true;
+                refreshAni.play();
+                refreshAni.on(Event.COMPLETE,this,function () {
+                    fishhookImg.x=minFishhook;
+                    fishhookImg.visible=true;
+
+                    refreshAni.visible=false;
+                    refreshAni.stop();
+                    canDropMatch=false;//关闭
+
+                    drawFishline("start");//刷新动画后 开启鱼线动画
+                    getFishImg();//刷新动画后更新 fishhookImg
+                });
+            }
+            else if(_gamemode=="boss"){
+                //fishhook 降速
+                refreshAni.visible=true;
+                refreshAni.play();
+                refreshAni.on(Event.COMPLETE,this,function () {
+                    fishhookImg.x=minFishhook;
+                    fishhookImg.visible=true;
+
+                    refreshAni.visible=false;
+                    refreshAni.stop();
+                    canDropMatch=false;//关闭
+
+                    drawFishline("start");//刷新动画后 开启鱼线动画
+                    getFishImg();//刷新动画后更新 fishhookImg
+                });
+            }
+
+            changeFishhookTime("start");
         }else if(action=="over"){
             if(_gamemode=="normal") overNormalDrap();
             else if(_gamemode=="match") overMatchDrap();
-
-            //common
-            dropFishBox.visible=false;
-            Tween.clearAll(fishhookImg);
         }else if(action=="stop"){
-            if(_gamemode=="normal")drapNormal();
-            else if(_gamemode=="match")drapMatch();
+            if(_gamemode=="normal"){
+                fishhookImg.visible=false;
+                //动画播放完毕后重置canDrop=true
+                drapNormal();
+                changeFishhookTime("over");
+            }
+            else if(_gamemode=="match"){
+                fishhookImg.visible=false;
+                canDropMatch=true;//重置 canDropMatch
+                drapMatch();
+                changeFishhookTime("over");
+            }
+            else if(_gamemode=="boss"){
 
-            //common
-            drawFishline("over");
-            Tween.clearAll(fishhookImg);//fishhook stop Move
+                changeFishhookTime("stop");//钓到 停止
+                drapBoss();
+            }
         }
     }
+
+    private function changeFishhookTime(action:String):void
+    {
+        if(action=="start"){
+            changeFishhookSpd("init");
+            changeFishhookState("rightMove");
+
+            Laya.timer.frameLoop(1,this,fishhookMove);
+        }
+        else if(action=="over"){
+            changeFishhookSpd("stop");
+            changeFishhookState("clear");
+
+            drawFishline("over");
+            Laya.timer.clear(this,fishhookMove);
+        }
+        else if(action=="stop"){
+            changeFishhookSpd("stop");
+            changeFishhookState("stop");
+            Laya.timer.clear(this,fishhookMove);
+        }
+    }
+
+
+
+
+    private var powerIndex:int=0;
+    private function changePowerBox(action:String):void
+    {
+        const dx:int=48,dy=49,rad=47,starAngle=0;
+        //const endAngleArr:Array=[-356,-300,-270,-237,-209,-180,-150,-120,-90,-60,-10];
+        const endAngleArr:Array=[1,60,90,120,150,180,210,240,270,300,340];
+        powerMaskSp.graphics.clear();
+        if(action=="clear"){
+            fireAni.visible=false;
+            fireAni.stop();
+            floorbarAni.visible=false;
+            floorbarAni.stop();
+            powerIndex=0;
+            return;
+        }
+        else if(action=="init"){
+            powerIndex=0;
+            powerMaskSp.graphics.drawPie(dx,dy,rad,starAngle,endAngleArr[0],"#ff0000");
+        }
+        else if(action=="update"){
+            powerIndex++;
+            powerMaskSp.graphics.drawPie(dx,dy,rad,starAngle,endAngleArr[powerIndex],"#ff0000");
+            if(powerIndex>=endAngleArr.length-4){
+                fireAni.visible=true;
+                fireAni.play();
+                floorbarAni.visible=true;
+                floorbarAni.play();
+            }
+            if(powerIndex>=endAngleArr.length-1){
+                powerIndex=endAngleArr.length-1;
+                //来袭ANI
+                UiManager.instance.loadView("TimebossAni",null,0,"UITYPE_ANI");
+                //计时清理
+                GamemainM.instance.setTimeClock("stop",timeclip);
+            }
+        }
+        else if(action=="max"){
+            powerIndex=endAngleArr.length-1;
+            powerMaskSp.graphics.drawPie(dx,dy,rad,starAngle,endAngleArr[powerIndex],"#ff0000");
+        }
+    }
+
+
+
+
+
+
+
+    private var _fishhookBossSpd:int=3;
+    private var _fishhookMatchSpd:int=5;
+    private var _fishhookNormalSpd:int=5;
+    private function changeFishhookSpd(action:String,newSpd:Number=undefined,delay:int=0):void
+    {
+        if(action=="init"){
+            if(_gamemode=="normal")fishhookImg['spd']=_fishhookNormalSpd;
+            else if(_gamemode=="match")fishhookImg['spd']=_fishhookMatchSpd;
+            else if(_gamemode=="boss")fishhookImg['spd']=_fishhookBossSpd;
+        }
+        else if(action=="update"){
+            //combo lvup
+            const updateSpd:Number=2;
+            fishhookImg['spd']+=updateSpd;
+        }
+        else if(action=="buff"){
+            if(newSpd){
+                fishhookImg['spd']+=newSpd;
+                Laya.timer.once(delay,this,function () {
+                    changeFishhookSpd("init");
+                });
+            }
+        }
+        else if(action=="stop"){
+            fishhookImg['spd']=0;
+        }
+    }
+
+
+    private function fishhookMove():void
+    {
+        if(fishhookImg['state']=="rightMove"){
+            fishhookImg.x+=fishhookImg['spd'];
+            if(fishhookImg.x>=maxFishhook){
+                fishhookImg.x=maxFishhook;
+                changeFishhookState("leftMove");
+            }
+        }
+        else if(fishhookImg['state']=="leftMove"){
+            fishhookImg.x-=fishhookImg['spd'];
+            if(fishhookImg.x<=minFishhook){
+                fishhookImg.x=minFishhook;
+                changeFishhookState("rightMove");
+            }
+        }
+        else if(fishhookImg['state']=="stop"){
+            changeFishhookSpd("stop");
+        }
+
+    }
+
+    private function changeFishhookState(state:String):void
+    {
+        if(state=="rightMove"){
+            fishhookImg['state']="rightMove";
+        }
+        else if(state=="leftMove"){
+            fishhookImg['state']="leftMove";
+        }
+        else if(state=="stop"){
+            fishhookImg['state']="stop";
+        }
+        else if(state=="clear"){
+            fishhookImg['state']="rightMove";
+        }
+    }
+
+
 
 
 
@@ -297,20 +498,33 @@ public class Gamemain extends GameMainUI implements PanelVo {
     }
     private function getFishImg():void
     {
-        //console.log("--getFishImg",fishImgArr);
-        canDropMatch=false;
-        fishhookImg.x=minFishhook;
-
         clearfishImgArr();
-        fishImgArr=GamemainM.instance.getFishImg();
+        fishImgArr=GamemainM.instance.getFishImg(_gamemode);
 
         for(var i:int=0;i<fishImgArr.length;i++){
             fishhookMask.addChild(fishImgArr[i]);
         }
     }
 
+
+    private function drapBoss():void
+    {
+        fishhookPoint=fishhookMask.globalToLocal(dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y)));
+        var getdropObj:Object=GamemainM.instance.getdropFish(fishhookPoint);
+
+        if(!getdropObj){
+            console.log("--miss");
+        }
+
+        //快速点击屏幕
+        console.log("钓到----");
+
+    }
+
+
     private function overMatchDrap():void
     {
+        dropFishBox.visible=true;
         //console.log("--overMatchDrap");
         clearfishImgArr();
     }
@@ -361,14 +575,32 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
             if(getdropObj.comboNum>1){
+                //num
+                changePowerBox("update");
+
+                //effect
                 var aniData:AniD=new AniD();
                 aniData.startPoint=dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y));
                 aniData.aniUrl="EffectAni.ani";
+
                 GameEffect.instance.creatSignAni("combo",aniData,Handler.create(this,function () {
                     //comboBall
-                    aniData.startPoint=dropFishBox.localToGlobal(new Point(energyBall.x,energyBall.y));
-                    GameEffect.instance.creatSignAni("comboBall",aniData);
+                    //GameEffect.instance.creatSignAni("comboBall",aniData);
+                    var efData_c:EffectD=new EffectD();
+                    efData_c.startPoint=dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y));
+                    efData_c.endPoint=dropFishBox.localToGlobal(new Point(powerBox.x,powerBox.y));
+                    efData_c.startPoint.y-=100;
+                    efData_c.easeMode=Ease.circOut;
+                    GameEffect.instance.creatSignPopMove("jifen",efData_c,Handler.create(this,function () {
+                        getpowerAni.visible=true;
+                        getpowerAni.play();
+                        getpowerAni.on(Event.COMPLETE,this,function () {
+                            getpowerAni.stop();
+                            getpowerAni.visible=false;
+                        });
+                    }));
                 }));
+
 
                 var fontD:FontClipD=new FontClipD();
                 fontD.setFontSkin(3);
@@ -378,14 +610,12 @@ public class Gamemain extends GameMainUI implements PanelVo {
             }
         }
 
-        canDropMatch=true;
+
         changeDropFishBoxState("over");
     }
 
     private function getColorImg():void
     {
-        canDrop=false;
-        fishhookImg.x=minFishhook;
         var dxArr:Array=GamemainM.instance.gethookColorImg();
         blueImg.x=dxArr[0];
         yellowImg.x=dxArr[1];
@@ -393,6 +623,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
     }
     private function overNormalDrap():void
     {
+        dropFishBox.visible=false;
         blueImg.x=-100;
         yellowImg.x=-100;
         coloursImg.x=-100;
@@ -445,7 +676,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private function drawFishline(action:String):void
     {
         if(action=="start"){
-            fishhookImg.visible=true;
             _hookState="fishstart";
 
             _fishlineSp||=new Sprite();
@@ -454,9 +684,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
             Laya.timer.frameLoop(1,this,onfishLineTime);
         }
         else if(action=="over"){
-            fishhookImg.visible=false;
             _hookState="fishover";
 
+            //收竿
             var hookPot:Point=new Point(fishhookImg.x,fishhookImg.y-fishhookImg.height/2);
             hookPot=dropFishBox.localToGlobal(hookPot);
             _hookImgANI.pos(hookPot.x,hookPot.y);
@@ -732,6 +962,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
         GameEventDispatch.instance.on(GameEvent.ShowRedPoint,this,showRedPoint);
         GameEventDispatch.instance.on(GameEvent.RemoveRedPoint,this,removeRedPoint);
+
+
+        //Boss coming
+        GameEventDispatch.instance.on(GameEvent.BossComIngMode,this,changeGameMode,["boss"]);
     }
 
     public function unRegister():void
@@ -752,6 +986,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
         GameEventDispatch.instance.off(GameEvent.ShowRedPoint,this,showRedPoint);
         GameEventDispatch.instance.off(GameEvent.RemoveRedPoint,this,removeRedPoint);
+
+        GameEventDispatch.instance.off(GameEvent.BossComIngMode,this,changeGameMode,["boss"]);
     }
 
     public function closePanel():void

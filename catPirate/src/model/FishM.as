@@ -1,4 +1,6 @@
 package model {
+import conf.cfg_fish;
+
 import manager.ConfigManager;
 
 public class FishM {
@@ -76,6 +78,8 @@ public class FishM {
         });
         return arr;
     }
+
+
 
     public function chineseNameTransform(name:String):String
     {

@@ -1,4 +1,6 @@
 package model {
+import conf.cfg_fish;
+
 import laya.d3.math.Vector2;
 import laya.maths.Point;
 import laya.ui.FontClip;
@@ -52,7 +54,7 @@ public class GamemainM {
             Laya.timer.clear(this,onTimeClock);
             GameEventDispatch.instance.event(GameEvent.GameTimeout);
         }else if(action=="stop"){
-
+            Laya.timer.clear(this,onTimeClock);
         }else if(action=="update"){
 
         }
@@ -71,8 +73,23 @@ public class GamemainM {
         return num;
     }
 
-    public function getFishImg():Array
+    public function getFishImg(_gameMode:String):Array
     {
+        if(_gameMode=="boss"){
+            var bossArr:Array=[];
+            //15 翻车鱼 16 美人鱼
+            var obj:Object=cfg_fish.instance(15+"");
+            var bossImg:Image=new Image(obj.res);
+            bossImg.x=200;
+            bossImg.dataSource=obj;
+
+            bossArr.push(bossImg);
+            _fishImgArr=bossArr;
+            return bossArr;
+        }
+
+
+
         //get have fish
         var ownfishObj:Array=FishM.instance.getOwnfish();
         for(var i:int=0;i<ownfishObj.length;i++){
