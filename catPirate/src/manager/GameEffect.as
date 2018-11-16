@@ -227,14 +227,21 @@ public class GameEffect {
         popImg.scale(effectD.startScale,effectD.startScale);
         effectD.panelSp.addChild(popImg);
 
-        Tween.to(popImg,{x:effectD.endPoint.x,y:effectD.endPoint.y,scaleX:effectD.endScale,scaleY:effectD.endScale},effectD.dealtTime,effectD.easeMode,Handler.create(this,function () {
-            if(func) func.run();
-            if(effectD.stayTime>0){
-                Laya.timer.once(effectD.stayTime,this,function () {
-                    if(effectD.overDie) popImg.removeSelf();
-                });
-            }else if(effectD.overDie) popImg.removeSelf();
-        }));
+        if(effectD.endPoint){
+            Tween.to(popImg,{x:effectD.endPoint.x,y:effectD.endPoint.y,scaleX:effectD.endScale,scaleY:effectD.endScale},effectD.dealtTime,effectD.easeMode,Handler.create(this,function () {
+                if(func) func.run();
+                if(effectD.stayTime>0){
+                    Laya.timer.once(effectD.stayTime,this,function () {
+                        if(effectD.overDie) popImg.removeSelf();
+                    });
+                }else if(effectD.overDie) popImg.removeSelf();
+            }));
+        }else{
+            Laya.timer.once(effectD.dealtTime,this,function () {
+                popImg.visible=false;
+            });
+        }
+
     }
 
     public function creatBaseMove(name:String,effectD:EffectD,imgNum:int,func:Handler=null):void

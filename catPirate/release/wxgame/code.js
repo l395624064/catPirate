@@ -737,7 +737,7 @@ var GamemainC=(function(){
 	__class(GamemainC,'control.GamemainC');
 	var __proto=GamemainC.prototype;
 	__proto.openGame=function(){
-		UiManager.instance.loadView("Gamemain",null,1);
+		UiManager.instance.loadView("Gamemain",null,2);
 		GameEventDispatch.instance.event("StartLoopTime");
 	}
 
@@ -762,6 +762,7 @@ var GamemainC=(function(){
 		UiManager.instance.loadView("Gameend");
 	}
 
+	__proto.BossComingMode=function(){}
 	__proto.GameEndAward=function(_param){
 		var param={
 			img:"ui/common_ex/ico1.png",
@@ -1601,14 +1602,20 @@ var GameEffect=(function(){
 		popImg.zOrder=effectD.zOrder;
 		popImg.scale(effectD.startScale,effectD.startScale);
 		effectD.panelSp.addChild(popImg);
-		Tween.to(popImg,{x:effectD.endPoint.x,y:effectD.endPoint.y,scaleX:effectD.endScale,scaleY:effectD.endScale},effectD.dealtTime,effectD.easeMode,Handler.create(this,function(){
-			if(func)func.run();
-			if(effectD.stayTime>0){
-				Laya.timer.once(effectD.stayTime,this,function(){
-					if(effectD.overDie)popImg.removeSelf();
-				});
-			}else if(effectD.overDie)popImg.removeSelf();
-		}));
+		if(effectD.endPoint){
+			Tween.to(popImg,{x:effectD.endPoint.x,y:effectD.endPoint.y,scaleX:effectD.endScale,scaleY:effectD.endScale},effectD.dealtTime,effectD.easeMode,Handler.create(this,function(){
+				if(func)func.run();
+				if(effectD.stayTime>0){
+					Laya.timer.once(effectD.stayTime,this,function(){
+						if(effectD.overDie)popImg.removeSelf();
+					});
+				}else if(effectD.overDie)popImg.removeSelf();
+			}));
+			}else{
+			Laya.timer.once(effectD.dealtTime,this,function(){
+				popImg.visible=false;
+			});
+		}
 	}
 
 	__proto.creatBaseMove=function(name,effectD,imgNum,func){
@@ -1766,6 +1773,7 @@ var GameEvent=(function(){
 	GameEvent.GameEndAward="GameEndAward";
 	GameEvent.ShowRedPoint="ShowRedPoint";
 	GameEvent.RemoveRedPoint="RemoveRedPoint";
+	GameEvent.BossComIngMode="BossComIngAni";
 	GameEvent.ADDwheelNum="ADDwheelNum";
 	GameEvent.MinuswheelNum="MinuswheelNum";
 	GameEvent.ADDwheelNumFromShare="ADDwheelNumFromShare";
@@ -2345,6 +2353,7 @@ var UiManager=(function(){
 		this._emptyResUi['Explainbook']=true;
 		this._emptyResUi['TimestartAni']=true;
 		this._emptyResUi['TimeoverAni']=true;
+		this._emptyResUi['TimebossAni']=true;
 		this._emptyResUi['Endaward']=true;
 	}
 
@@ -2698,7 +2707,10 @@ var GamemainM=(function(){
 			Laya.timer.clear(this,this.onTimeClock);
 			GameEventDispatch.instance.event("GameTimeout");
 			}else if(action=="stop"){
-		}else if(action=="update"){}
+			Laya.timer.clear(this,this.onTimeClock);
+			}else if(action=="update"){
+			Laya.timer.loop(1000,this,this.onTimeClock);
+		}
 	}
 
 	__proto.onTimeClock=function(){
@@ -2713,7 +2725,17 @@ var GamemainM=(function(){
 		return num;
 	}
 
-	__proto.getFishImg=function(){
+	__proto.getFishImg=function(_gameMode){
+		if(_gameMode=="boss"){
+			var bossArr=[];
+			var obj=cfg_fish.instance(15+"");
+			var bossImg=new Image(obj.res);
+			bossImg.x=300;
+			bossImg.dataSource=obj;
+			bossArr.push(bossImg);
+			this._fishImgArr=bossArr;
+			return bossArr;
+		};
 		var ownfishObj=FishM.instance.getOwnfish();
 		for(var i=0;i<ownfishObj.length;i++){
 			var obj=ownfishObj[i];
@@ -44367,104 +44389,6 @@ var VScrollBar=(function(_super){
 
 
 /**
-*使用 <code>VSlider</code> 控件，用户可以通过在滑块轨道的终点之间移动滑块来选择值。
-*<p> <code>VSlider</code> 控件采用垂直方向。滑块轨道从下往上扩展，而标签位于轨道的左右两侧。</p>
-*
-*@example <caption>以下示例代码，创建了一个 <code>VSlider</code> 实例。</caption>
-*package
-*{
-	*import laya.ui.HSlider;
-	*import laya.ui.VSlider;
-	*import laya.utils.Handler;
-	*public class VSlider_Example
-	*{
-		*private var vSlider:VSlider;
-		*public function VSlider_Example()
-		*{
-			*Laya.init(640,800);//设置游戏画布宽高。
-			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-			*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,onLoadComplete));//加载资源。
-			*}
-		*private function onLoadComplete():void
-		*{
-			*vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
-			*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
-			*vSlider.min=0;//设置 vSlider 最低位置值。
-			*vSlider.max=10;//设置 vSlider 最高位置值。
-			*vSlider.value=2;//设置 vSlider 当前位置值。
-			*vSlider.tick=1;//设置 vSlider 刻度值。
-			*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
-			*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
-			*vSlider.changeHandler=new Handler(this,onChange);//设置 vSlider 位置变化处理器。
-			*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
-			*}
-		*private function onChange(value:Number):void
-		*{
-			*trace("滑块的位置： value="+value);
-			*}
-		*}
-	*}
-*@example
-*Laya.init(640,800);//设置游戏画布宽高
-*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
-*var vSlider;
-*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],laya.utils.Handler.create(this,onLoadComplete));//加载资源。
-*function onLoadComplete(){
-	*vSlider=new laya.ui.VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
-	*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
-	*vSlider.min=0;//设置 vSlider 最低位置值。
-	*vSlider.max=10;//设置 vSlider 最高位置值。
-	*vSlider.value=2;//设置 vSlider 当前位置值。
-	*vSlider.tick=1;//设置 vSlider 刻度值。
-	*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
-	*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
-	*vSlider.changeHandler=new laya.utils.Handler(this,onChange);//设置 vSlider 位置变化处理器。
-	*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
-	*}
-*function onChange(value){
-	*console.log("滑块的位置： value="+value);
-	*}
-*@example
-*import HSlider=laya.ui.HSlider;
-*import VSlider=laya.ui.VSlider;
-*import Handler=laya.utils.Handler;
-*class VSlider_Example {
-	*private vSlider:VSlider;
-	*constructor(){
-		*Laya.init(640,800);//设置游戏画布宽高。
-		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-		*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,this.onLoadComplete));//加载资源。
-		*}
-	*private onLoadComplete():void {
-		*this.vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
-		*this.vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
-		*this.vSlider.min=0;//设置 vSlider 最低位置值。
-		*this.vSlider.max=10;//设置 vSlider 最高位置值。
-		*this.vSlider.value=2;//设置 vSlider 当前位置值。
-		*this.vSlider.tick=1;//设置 vSlider 刻度值。
-		*this.vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
-		*this.vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
-		*this.vSlider.changeHandler=new Handler(this,this.onChange);//设置 vSlider 位置变化处理器。
-		*Laya.stage.addChild(this.vSlider);//把 vSlider 添加到显示列表。
-		*}
-	*private onChange(value:number):void {
-		*console.log("滑块的位置： value="+value);
-		*}
-	*}
-*@see laya.ui.Slider
-*/
-//class laya.ui.VSlider extends laya.ui.Slider
-var VSlider=(function(_super){
-	function VSlider(){
-		VSlider.__super.call(this);;
-	}
-
-	__class(VSlider,'laya.ui.VSlider',_super);
-	return VSlider;
-})(Slider)
-
-
-/**
 *<code>TextInput</code> 类用于创建显示对象以显示和输入文本。
 *
 *@example <caption>以下示例代码，创建了一个 <code>TextInput</code> 实例。</caption>
@@ -44787,6 +44711,104 @@ var TextInput=(function(_super){
 
 	return TextInput;
 })(Label)
+
+
+/**
+*使用 <code>VSlider</code> 控件，用户可以通过在滑块轨道的终点之间移动滑块来选择值。
+*<p> <code>VSlider</code> 控件采用垂直方向。滑块轨道从下往上扩展，而标签位于轨道的左右两侧。</p>
+*
+*@example <caption>以下示例代码，创建了一个 <code>VSlider</code> 实例。</caption>
+*package
+*{
+	*import laya.ui.HSlider;
+	*import laya.ui.VSlider;
+	*import laya.utils.Handler;
+	*public class VSlider_Example
+	*{
+		*private var vSlider:VSlider;
+		*public function VSlider_Example()
+		*{
+			*Laya.init(640,800);//设置游戏画布宽高。
+			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+			*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,onLoadComplete));//加载资源。
+			*}
+		*private function onLoadComplete():void
+		*{
+			*vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
+			*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
+			*vSlider.min=0;//设置 vSlider 最低位置值。
+			*vSlider.max=10;//设置 vSlider 最高位置值。
+			*vSlider.value=2;//设置 vSlider 当前位置值。
+			*vSlider.tick=1;//设置 vSlider 刻度值。
+			*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
+			*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
+			*vSlider.changeHandler=new Handler(this,onChange);//设置 vSlider 位置变化处理器。
+			*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
+			*}
+		*private function onChange(value:Number):void
+		*{
+			*trace("滑块的位置： value="+value);
+			*}
+		*}
+	*}
+*@example
+*Laya.init(640,800);//设置游戏画布宽高
+*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
+*var vSlider;
+*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],laya.utils.Handler.create(this,onLoadComplete));//加载资源。
+*function onLoadComplete(){
+	*vSlider=new laya.ui.VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
+	*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
+	*vSlider.min=0;//设置 vSlider 最低位置值。
+	*vSlider.max=10;//设置 vSlider 最高位置值。
+	*vSlider.value=2;//设置 vSlider 当前位置值。
+	*vSlider.tick=1;//设置 vSlider 刻度值。
+	*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
+	*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
+	*vSlider.changeHandler=new laya.utils.Handler(this,onChange);//设置 vSlider 位置变化处理器。
+	*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
+	*}
+*function onChange(value){
+	*console.log("滑块的位置： value="+value);
+	*}
+*@example
+*import HSlider=laya.ui.HSlider;
+*import VSlider=laya.ui.VSlider;
+*import Handler=laya.utils.Handler;
+*class VSlider_Example {
+	*private vSlider:VSlider;
+	*constructor(){
+		*Laya.init(640,800);//设置游戏画布宽高。
+		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+		*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,this.onLoadComplete));//加载资源。
+		*}
+	*private onLoadComplete():void {
+		*this.vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
+		*this.vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
+		*this.vSlider.min=0;//设置 vSlider 最低位置值。
+		*this.vSlider.max=10;//设置 vSlider 最高位置值。
+		*this.vSlider.value=2;//设置 vSlider 当前位置值。
+		*this.vSlider.tick=1;//设置 vSlider 刻度值。
+		*this.vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
+		*this.vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
+		*this.vSlider.changeHandler=new Handler(this,this.onChange);//设置 vSlider 位置变化处理器。
+		*Laya.stage.addChild(this.vSlider);//把 vSlider 添加到显示列表。
+		*}
+	*private onChange(value:number):void {
+		*console.log("滑块的位置： value="+value);
+		*}
+	*}
+*@see laya.ui.Slider
+*/
+//class laya.ui.VSlider extends laya.ui.Slider
+var VSlider=(function(_super){
+	function VSlider(){
+		VSlider.__super.call(this);;
+	}
+
+	__class(VSlider,'laya.ui.VSlider',_super);
+	return VSlider;
+})(Slider)
 
 
 //class laya.webgl.resource.WebGLImage extends laya.resource.HTMLImage
@@ -45224,6 +45246,8 @@ var GameloadUI=(function(_super){
 var GameMainUI=(function(_super){
 	function GameMainUI(){
 		this.ani1=null;
+		this.bgImg=null;
+		this.skystarAni=null;
 		this.shipBox=null;
 		this.shipmateImg=null;
 		this.shipsoldierImg=null;
@@ -45252,14 +45276,21 @@ var GameMainUI=(function(_super){
 		this.timeBox=null;
 		this.timeclip=null;
 		this.dropFishBox=null;
+		this.floorbarAni=null;
+		this.fireAni=null;
+		this.powerBox=null;
+		this.powerMaskSp=null;
 		this.getScoreClip=null;
 		this.fishhookImg=null;
+		this.bossPowerBox=null;
+		this.powermask=null;
 		this.fishhookMask=null;
 		this.yellowImg=null;
 		this.blueImg=null;
 		this.rainbowImg=null;
 		this.coloursImg=null;
-		this.energyBall=null;
+		this.refreshAni=null;
+		this.getpowerAni=null;
 		this.dropSp=null;
 		this.settingBtn=null;
 		GameMainUI.__super.call(this);
@@ -45273,7 +45304,7 @@ var GameMainUI=(function(_super){
 		this.createView(GameMainUI.uiView);
 	}
 
-	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Box","props":{"width":637,"height":1130,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}}]},{"type":"Button","props":{"y":298,"x":195,"width":217,"var":"gameStartBtn","stateNum":2,"skin":"ui/common_ex/btn_blue.png","labelSize":50,"label":"计时赛","height":135}}]},{"type":"Image","props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":0,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":181,"x":504,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":2,"x":34,"width":90,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":85}},{"type":"Button","props":{"y":104,"x":37,"width":87,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":95}},{"type":"Button","props":{"y":7,"x":-65,"width":85,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":88}}]},{"type":"Box","props":{"y":4,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":93}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":258,"x":1,"width":91,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":76}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":857,"x":58,"var":"dropFishBox"},"child":[{"type":"Image","props":{"y":32,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":54,"x":500,"width":54,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}}]},{"type":"Box","props":{"y":72,"x":51,"visible":false,"var":"energyBall","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Sprite","props":{"y":4,"x":4,"width":70,"renderType":"mask","height":70},"child":[{"type":"Pie","props":{"y":35,"x":35,"startAngle":-180,"radius":35,"lineWidth":1,"fillColor":"#00ffea","endAngle":-90.93485610931266}}]},{"type":"Sprite","props":{"y":4,"x":4,"width":70,"height":70},"child":[{"type":"Circle","props":{"y":35,"x":35,"radius":35,"lineWidth":1,"fillColor":"#ff1400"}}]}]}]},{"type":"Sprite","props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226}},{"type":"Image","props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":4,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
+	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Box","props":{"width":637,"height":1130,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":-3,"x":-2,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}}]},{"type":"Button","props":{"y":298,"x":195,"width":217,"var":"gameStartBtn","stateNum":2,"skin":"ui/common_ex/btn_blue.png","labelSize":50,"label":"计时赛","height":135}}]},{"type":"Image","props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":0,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":181,"x":504,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":2,"x":34,"width":90,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":85}},{"type":"Button","props":{"y":104,"x":37,"width":87,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":95}},{"type":"Button","props":{"y":7,"x":-65,"width":85,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":88}}]},{"type":"Box","props":{"y":4,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":93}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":258,"x":1,"width":91,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":76}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":857,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":54,"x":500,"width":54,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226}},{"type":"Image","props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":4,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
 	return GameMainUI;
 })(View)
 
@@ -45450,6 +45481,38 @@ var SmallTipsUI=(function(_super){
 })(View)
 
 
+//class ui.Boxlibs_shakeboxUI extends laya.display.EffectAnimation
+var Boxlibs_shakeboxUI=(function(_super){
+	function Boxlibs_shakeboxUI(){
+		Boxlibs_shakeboxUI.__super.call(this);
+		this.effectData=Boxlibs_shakeboxUI.uiView;;
+	}
+
+	__class(Boxlibs_shakeboxUI,'ui.Boxlibs_shakeboxUI',_super);
+	Boxlibs_shakeboxUI.uiView={"type":"View","props":{},"child":[{"type":"Image","props":{"y":50,"x":50,"width":100,"skin":"ui/boxlibs/di2.png","height":100,"anchorY":0.5,"anchorX":0.5},"compId":2}],"animations":[{"nodes":[{"target":2,"keyframes":{"rotation":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":1},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":5},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":7},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":9},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":11},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":13},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":23},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":25},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":27},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":29},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":31}],"height":[{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":0},{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":1},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":5},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":23},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":31}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
+	return Boxlibs_shakeboxUI;
+})(EffectAnimation)
+
+
+//class ui.TimeBossAniUI extends laya.ui.View
+var TimeBossAniUI=(function(_super){
+	function TimeBossAniUI(){
+		this.ani1=null;
+		TimeBossAniUI.__super.call(this);
+	}
+
+	__class(TimeBossAniUI,'ui.TimeBossAniUI',_super);
+	var __proto=TimeBossAniUI.prototype;
+	__proto.createChildren=function(){
+		laya.ui.Component.prototype.createChildren.call(this);
+		this.createView(TimeBossAniUI.uiView);
+	}
+
+	TimeBossAniUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"height":1135,"alpha":2},"child":[{"type":"Box","props":{"y":1,"x":1,"scaleY":1,"centerY":0,"centerX":0},"compId":8,"child":[{"type":"Image","props":{"y":0,"x":-1,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":192}},{"type":"Image","props":{"y":26,"x":39,"width":562,"skin":"ui/common_ef/bosscome.PNG","height":129}}]},{"type":"Label","props":{"y":687,"x":137,"wordWrap":true,"width":362,"text":"作战准备","strokeColor":"#000000","stroke":1,"height":47,"fontSize":28,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"}}]}],"animations":[{"nodes":[{"target":8,"keyframes":{"y":[{"value":672,"tweenMethod":"linearNone","tween":true,"target":8,"key":"y","index":0},{"value":672,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"y","index":5},{"value":672,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"y","index":7},{"value":672,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"y","index":9},{"value":672,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"y","index":11},{"value":672,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"y","index":13}],"x":[{"value":320,"tweenMethod":"linearNone","tween":true,"target":8,"key":"x","index":0},{"value":320,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"x","index":5},{"value":320,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"x","index":7},{"value":320,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"x","index":9},{"value":320,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"x","index":11},{"value":320,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"x","index":13}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"key":"skewX","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"key":"skewX","index":5},{"value":-20,"tweenMethod":"linearNone","tween":true,"target":8,"key":"skewX","index":7},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"skewX","index":9},{"value":10,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"skewX","index":11},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"skewX","index":13}],"scaleY":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"key":"scaleY","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"key":"scaleY","index":7},{"value":1.5,"tweenMethod":"linearNone","tween":true,"target":8,"key":"scaleY","index":9},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"scaleY","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"scaleY","index":13}],"scaleX":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"key":"scaleX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"key":"scaleX","index":9},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"scaleX","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"scaleX","index":13}],"centerY":[{"value":-57,"tweenMethod":"linearNone","tween":true,"target":8,"key":"centerY","index":9},{"value":7,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"centerY","index":11}],"centerX":[{"value":-650,"tweenMethod":"linearNone","tween":true,"target":8,"key":"centerX","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"key":"centerX","index":5},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"centerX","index":7},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"centerX","index":9},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"centerX","index":11},{"value":0,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"centerX","index":13}],"anchorY":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"key":"anchorY","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorY","index":5},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorY","index":7},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorY","index":9},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorY","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorY","index":13}],"anchorX":[{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":8,"key":"anchorX","index":0},{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorX","index":5},{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorX","index":7},{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorX","index":9},{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorX","index":11},{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":8,"label":null,"key":"anchorX","index":13}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
+	return TimeBossAniUI;
+})(View)
+
+
 //class ui.TimeGiftUI extends laya.ui.View
 var TimeGiftUI=(function(_super){
 	function TimeGiftUI(){
@@ -45473,19 +45536,6 @@ var TimeGiftUI=(function(_super){
 	TimeGiftUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"y":80,"x":80,"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":647,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":339,"x":94,"skin":"ui/timegift/bg1.png"}},{"type":"Image","props":{"width":77,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":58,"height":77,"bottom":783}},{"type":"Image","props":{"y":262,"x":100,"width":80,"skin":"ui/common_ex/giftBtn.png","height":80}},{"type":"Text","props":{"y":470,"x":137,"width":141,"text":"剩余时间:","strokeColor":"#224882","stroke":5,"height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":353,"x":232,"wordWrap":true,"width":266,"text":"每次升级将永久提高礼包等级(最高LV5)","strokeColor":"#224882","stroke":5,"height":23,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":614,"x":386,"wordWrap":true,"width":160,"text":"获得的礼包会自动放入宝箱库中","strokeColor":"#224882","stroke":5,"height":39,"fontSize":22,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":355,"x":128,"width":79,"var":"boxlv","text":"LV.1","strokeColor":"#224882","stroke":5,"height":36,"fontSize":35,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":530,"x":136,"width":204,"var":"timetxt","text":"00:00:00","strokeColor":"#224882","stroke":5,"height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Image","props":{"y":452,"x":387,"var":"lvupBtn","skin":"ui/timegift/btn0.png"}},{"type":"Image","props":{"y":518,"x":388,"var":"getBtn","skin":"ui/timegift/btn2.png"}}]}]};
 	return TimeGiftUI;
 })(View)
-
-
-//class ui.Boxlibs_shakeboxUI extends laya.display.EffectAnimation
-var Boxlibs_shakeboxUI=(function(_super){
-	function Boxlibs_shakeboxUI(){
-		Boxlibs_shakeboxUI.__super.call(this);
-		this.effectData=Boxlibs_shakeboxUI.uiView;;
-	}
-
-	__class(Boxlibs_shakeboxUI,'ui.Boxlibs_shakeboxUI',_super);
-	Boxlibs_shakeboxUI.uiView={"type":"View","props":{},"child":[{"type":"Image","props":{"y":50,"x":50,"width":100,"skin":"ui/boxlibs/di2.png","height":100,"anchorY":0.5,"anchorX":0.5},"compId":2}],"animations":[{"nodes":[{"target":2,"keyframes":{"rotation":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":1},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":5},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":7},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":9},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":11},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":13},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":23},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":25},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":27},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":29},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":31}],"height":[{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":0},{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":1},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":5},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":23},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":31}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
-	return Boxlibs_shakeboxUI;
-})(EffectAnimation)
 
 
 //class ui.TimeOverAniUI extends laya.ui.View
@@ -46931,10 +46981,13 @@ var Gamemain=(function(_super){
 		this.fishhookPoint=null;
 		this.minFishhook=75;
 		this.maxFishhook=500;
-		this.fishhookIndex=0;
 		this._gamemode="normal";
-		//fishhook stop Move
+		this.powerIndex=0;
+		this._fishhookBossSpd=3;
+		this._fishhookMatchSpd=5;
+		this._fishhookNormalSpd=5;
 		this.fishImgArr=[];
+		this.clickImgArr=[];
 		//绘制鱼线和hook动画
 		this._fishlineSp=null;
 		this._hookState=null;
@@ -47041,15 +47094,20 @@ var Gamemain=(function(_super){
 	__proto.changeGameMode=function(action){
 		var _$this=this;
 		this._gamemode=action;
-		if(action=="normal"){
-			this.changeScoreBoxState("start");
-			this.changeDropFishBoxState("over");
-			this.canDrop=true;
-			this.changeScoreBoxState("update");
+		if(this._gamemode=="normal"){
 			this.timeBox.visible=false;
 			this.rightbtnBox.visible=true;
 			this.leftbtnBox.visible=true;
 			this.gameStartBtn.visible=true;
+			this.bgImg.skin="ui/gamemain/gamemain_0.png";
+			this.powerBox.visible=false;
+			this.changeEffectAniState("refresh","close");
+			this.changeEffectAniState("skystar","close");
+			this.changeEffectAniState("fire","close");
+			this.canDrop=true;
+			this.changeScoreBoxState("start");
+			this.changeDropFishBoxState("over");
+			this.changeScoreBoxState("update");
 			this.dropSp.offAll();
 			this.dropSp.on("mousedown",this,function(e){
 				if(!_$this.canDrop)return;
@@ -47060,13 +47118,17 @@ var Gamemain=(function(_super){
 				})
 			});
 		}
-		else if(action=="match"){
-			this.canDropMatch=true;
-			this.changeScoreBoxState("update");
+		else if(this._gamemode=="match"){
 			this.timeBox.visible=true;
 			this.rightbtnBox.visible=false;
 			this.leftbtnBox.visible=false;
 			this.gameStartBtn.visible=false;
+			this.powerBox.visible=true;
+			this.dropFishBox.visible=true;
+			this.bgImg.skin="ui/gamemain/gamemain_0.png";
+			this.canDropMatch=true;
+			this.changeScoreBoxState("update");
+			this.changePowerBox("init");
 			this.dropSp.offAll();
 			this.dropSp.on("mousedown",this,function(e){
 				if(!_$this.canDropMatch)return;
@@ -47077,37 +47139,189 @@ var Gamemain=(function(_super){
 				})
 			});
 		}
+		else if(this._gamemode=="boss"){
+			this.bgImg.skin="ui/gamemain/gamemain_1.png";
+			this.changeEffectAniState("skystar","open");
+			this.dropSp.offAll();
+			this.dropSp.once("mousedown",this,function(e){
+				e.stopPropagation();
+				_$this.changeDropFishBoxState("start");
+				Laya.stage.once("mousedown",this,function(){
+					_$this.changeDropFishBoxState("stop");
+				});
+			});
+		}
 	}
 
 	//鱼钩box状态
 	__proto.changeDropFishBoxState=function(action){
 		var _$this=this;
 		if(action=="start"){
-			if(this._gamemode=="normal")this.getColorImg();
-			else if(this._gamemode=="match")this.getFishImg();
-			this.dropFishBox.visible=true;
-			this.fishhookIndex=0;
-			this.drawFishline("start");
-			this.changeDropFishBoxState("move");
-			}else if(action=="move"){
-			var aniTime=1000;
-			if(this._gamemode=="normal")aniTime=1200;
-			else if(this._gamemode=="match")aniTime=2000;
-			Tween.clearTween(this.fishhookImg);
-			Tween.to(this.fishhookImg,{x:(this.fishhookIndex%2)? this.minFishhook:this.maxFishhook},aniTime,null,Handler.create(this,function(){
-				_$this.fishhookIndex++;
-				_$this.changeDropFishBoxState(action);
-			}));
+			if(this._gamemode=="normal"){
+				this.fishhookImg.x=this.minFishhook;
+				this.fishhookImg.visible=true;
+				this.dropFishBox.visible=true;
+				this.canDrop=false;
+				this.getColorImg();
+				this.drawFishline("start");
+			}
+			else if(this._gamemode=="match"){
+				this.changeEffectAniState("refresh","open");
+				this.refreshAni.on("complete",this,function(){
+					_$this.fishhookImg.x=_$this.minFishhook;
+					_$this.fishhookImg.visible=true;
+					_$this.changeEffectAniState("refresh","close");
+					_$this.canDropMatch=false;
+					_$this.drawFishline("start");
+					_$this.getFishImg();
+				});
+			}
+			else if(this._gamemode=="boss"){
+				this.changeEffectAniState("refresh","open");
+				this.refreshAni.on("complete",this,function(){
+					_$this.fishhookImg.x=_$this.minFishhook;
+					_$this.fishhookImg.visible=true;
+					_$this.changeEffectAniState("refresh","close");
+					_$this.canDropMatch=false;
+					_$this.drawFishline("start");
+					_$this.getFishImg();
+				});
+			}
+			this.changeFishhookTime("start");
 			}else if(action=="over"){
 			if(this._gamemode=="normal")this.overNormalDrap();
 			else if(this._gamemode=="match")this.overMatchDrap();
-			this.dropFishBox.visible=false;
-			Tween.clearAll(this.fishhookImg);
+			else if(this._gamemode=="boss"){
+				this.changeGameMode("match");
+				GamemainM.instance.setTimeClock("update",this.timeclip);
+			}
 			}else if(action=="stop"){
-			if(this._gamemode=="normal")this.drapNormal();
-			else if(this._gamemode=="match")this.drapMatch();
+			if(this._gamemode=="normal"){
+				this.fishhookImg.visible=false;
+				this.drapNormal();
+				this.changeFishhookTime("over");
+			}
+			else if(this._gamemode=="match"){
+				this.fishhookImg.visible=false;
+				this.canDropMatch=true;
+				this.drapMatch();
+				this.changeFishhookTime("over");
+			}
+			else if(this._gamemode=="boss"){
+				this.changeFishhookTime("stop");
+				this.drapBoss();
+			}
+		}
+	}
+
+	__proto.changeFishhookTime=function(action){
+		if(action=="start"){
+			this.changeFishhookSpd("init");
+			this.changeFishhookState("rightMove");
+			Laya.timer.frameLoop(1,this,this.fishhookMove);
+		}
+		else if(action=="over"){
+			this.changeFishhookSpd("stop");
+			this.changeFishhookState("clear");
 			this.drawFishline("over");
-			Tween.clearAll(this.fishhookImg);
+			Laya.timer.clear(this,this.fishhookMove);
+		}
+		else if(action=="stop"){
+			this.changeFishhookSpd("stop");
+			this.changeFishhookState("stop");
+			Laya.timer.clear(this,this.fishhookMove);
+		}
+	}
+
+	__proto.changePowerBox=function(action){
+		var dx=48,dy=49,rad=47,starAngle=0;
+		var endAngleArr=[1,60,90,120,150,180,210,240,270,300,340];
+		this.powerMaskSp.graphics.clear();
+		if(action=="clear"){
+			this.changeEffectAniState("fire","close");
+			this.powerIndex=0;
+			return;
+		}
+		else if(action=="init"){
+			this.powerIndex=0;
+			this.powerMaskSp.graphics.drawPie(dx,dy,rad,starAngle,endAngleArr[0],"#ff0000");
+		}
+		else if(action=="update"){
+			this.powerIndex++;
+			this.powerMaskSp.graphics.drawPie(dx,dy,rad,starAngle,endAngleArr[this.powerIndex],"#ff0000");
+			if(this.powerIndex>=endAngleArr.length-4){
+				this.changeEffectAniState("fire","open");
+			}
+			if(this.powerIndex>=endAngleArr.length-1){
+				this.powerIndex=endAngleArr.length-1;
+				UiManager.instance.loadView("TimebossAni",null,0,"UITYPE_ANI");
+				GamemainM.instance.setTimeClock("stop",this.timeclip);
+			}
+		}
+		else if(action=="max"){
+			this.powerIndex=endAngleArr.length-1;
+			this.powerMaskSp.graphics.drawPie(dx,dy,rad,starAngle,endAngleArr[this.powerIndex],"#ff0000");
+		}
+	}
+
+	__proto.changeFishhookSpd=function(action,newSpd,delay){
+		var _$this=this;
+		(newSpd===void 0)&& (newSpd=undefined);
+		(delay===void 0)&& (delay=0);
+		if(action=="init"){
+			if(this._gamemode=="normal")this.fishhookImg['spd']=this._fishhookNormalSpd;
+			else if(this._gamemode=="match")this.fishhookImg['spd']=this._fishhookMatchSpd;
+			else if(this._gamemode=="boss")this.fishhookImg['spd']=this._fishhookBossSpd;
+		}
+		else if(action=="update"){
+			var updateSpd=2;
+			this.fishhookImg['spd']+=updateSpd;
+		}
+		else if(action=="buff"){
+			if(newSpd){
+				this.fishhookImg['spd']+=newSpd;
+				Laya.timer.once(delay,this,function(){
+					_$this.changeFishhookSpd("init");
+				});
+			}
+		}
+		else if(action=="stop"){
+			this.fishhookImg['spd']=0;
+		}
+	}
+
+	__proto.fishhookMove=function(){
+		if(this.fishhookImg['state']=="rightMove"){
+			this.fishhookImg.x+=this.fishhookImg['spd'];
+			if(this.fishhookImg.x>=this.maxFishhook){
+				this.fishhookImg.x=this.maxFishhook;
+				this.changeFishhookState("leftMove");
+			}
+		}
+		else if(this.fishhookImg['state']=="leftMove"){
+			this.fishhookImg.x-=this.fishhookImg['spd'];
+			if(this.fishhookImg.x<=this.minFishhook){
+				this.fishhookImg.x=this.minFishhook;
+				this.changeFishhookState("rightMove");
+			}
+		}
+		else if(this.fishhookImg['state']=="stop"){
+			this.changeFishhookSpd("stop");
+		}
+	}
+
+	__proto.changeFishhookState=function(state){
+		if(state=="rightMove"){
+			this.fishhookImg['state']="rightMove";
+		}
+		else if(state=="leftMove"){
+			this.fishhookImg['state']="leftMove";
+		}
+		else if(state=="stop"){
+			this.fishhookImg['state']="stop";
+		}
+		else if(state=="clear"){
+			this.fishhookImg['state']="rightMove";
 		}
 	}
 
@@ -47119,16 +47333,154 @@ var Gamemain=(function(_super){
 	}
 
 	__proto.getFishImg=function(){
-		this.canDropMatch=false;
-		this.fishhookImg.x=this.minFishhook;
 		this.clearfishImgArr();
-		this.fishImgArr=GamemainM.instance.getFishImg();
+		this.fishImgArr=GamemainM.instance.getFishImg(this._gamemode);
 		for(var i=0;i<this.fishImgArr.length;i++){
 			this.fishhookMask.addChild(this.fishImgArr[i]);
 		}
 	}
 
+	__proto.drapBoss=function(){
+		this.fishhookPoint=this.fishhookMask.globalToLocal(this.dropFishBox.localToGlobal(new Point(this.fishhookImg.x,this.fishhookImg.y)));
+		var getdropObj=GamemainM.instance.getdropFish(this.fishhookPoint);
+		if(!getdropObj){
+			console.log("--miss");
+			this.changeDropFishBoxState("over");
+			return;
+		}
+		console.log("钓到----");
+		var efData=new EffectD();
+		efData.startPoint=new Point(GameConfig.width/2-120,GameConfig.height/3*2);
+		efData.dealtTime=4000;
+		GameEffect.instance.creatSignPopMove("cliktip",efData);
+		this.changeBossPowerState("init");
+	}
+
+	//boss能量条
+	__proto.changeBossPowerState=function(action){
+		var _$this=this;
+		var minNum=50;
+		var maxNum=430;
+		var clickAdd=15;
+		if(action=="init"){
+			this.bossPowerBox.visible=true;
+			this.powermask.width=minNum;
+			Laya.timer.frameLoop(1,this,this.bossPowerTime);
+			Laya.stage.on("mousedown",this,function(){
+				_$this.powermask.width+=clickAdd;
+				_$this.creatClickImg();
+				if(_$this.powermask.width>=maxNum){
+					_$this.changeBossPowerState("stop");
+					console.log("--over click");
+				}
+			})
+		}
+		else if(action=="stop"){
+			this.powermask.width=maxNum;
+			Laya.stage.offAll("mousedown");
+			Laya.timer.clear(this,this.bossPowerTime);
+			this.fishhookImg.visible=false;
+			this.changeFishhookTime("over");
+			var bossMsg=this.fishImgArr[0].dataSource;
+			this.clearfishImgArr();
+			GamemainM.instance.putInFishBox(bossMsg.name,1);
+			var efData=new EffectD();
+			efData.startPoint=this.fishhookMask.localToGlobal(this.fishhookPoint);
+			efData.endPoint=new Point(GameConfig.width/2-100,GameConfig.height/2-100);
+			efData.startScale=3;
+			efData.endScale=1.2;
+			efData.easeMode=Ease.backOut;
+			efData.dealtTime=1000;
+			console.log("-bossMsg:",bossMsg);
+			var effectName=bossMsg.name;
+			effectName=FishM.instance.chineseNameTransform(effectName);
+			GameEffect.instance.creatSignPopMove(effectName,efData,Handler.create(this,function(){
+				var gainD=new GainnewD();
+				gainD.res=bossMsg.res;
+				gainD.name=bossMsg.name;
+				gainD.callback=Handler.create(this,_$this.changeBossPowerState,["over"]);
+				GameEventDispatch.instance.event("GainNewPOP",[gainD]);
+			}))
+		}
+		else if(action=="over"){
+			this.powermask.width=0;
+			Laya.stage.offAll("mousedown");
+			Laya.timer.clear(this,this.bossPowerTime);
+			this.clearfishImgArr();
+			this.changeEffectAniState("skystar","close");
+			this.changePowerBox("clear");
+			this.clearAllclickImg();
+			this.changeDropFishBoxState("over");
+		}
+	}
+
+	__proto.bossPowerTime=function(){
+		this.powermask.width-=1;
+		if(this.powermask.width<=0){
+			this.changeBossPowerState("over");
+		}
+	}
+
+	__proto.clearAllclickImg=function(){
+		for(var i=this.clickImgArr.length-1;i>=0;i--){
+			this.clickImgArr[i].removeSelf();
+		}
+		this.clickImgArr=[];
+	}
+
+	__proto.creatClickImg=function(){
+		var res;
+		(Math.random()>.5)? res="ui/common_ef/clickword0.png":res="ui/common_ef/clickword1.png";
+		var img=new Image(res);
+		this.addChild(img);
+		var scale=1+Math.random()*.5;
+		img.scale(scale,scale);
+		img.anchorX=.5;
+		img.anchorY=.5;
+		img.rotation=-20+Math.random()*40;
+		img.pos(Laya.stage.mouseX,Laya.stage.mouseY);
+		this.clickImgArr.push(img);
+	}
+
+	__proto.changeEffectAniState=function(name,state){
+		if(name=="skystar"){
+			if(state=="open"){
+				this.skystarAni.play();
+				this.skystarAni.visible=true;
+			}
+			else if(state=="close"){
+				this.skystarAni.stop();
+				this.skystarAni.visible=false;
+			}
+		}
+		else if(name=="fire"){
+			if(state=="open"){
+				this.fireAni.play();
+				this.floorbarAni.play();
+				this.fireAni.visible=true;
+				this.floorbarAni.visible=true;
+			}
+			else if(state=="close"){
+				this.fireAni.stop();
+				this.floorbarAni.stop();
+				this.fireAni.visible=false;
+				this.floorbarAni.visible=false;
+			}
+		}
+		else if(name=="refresh"){
+			if(state=="open"){
+				this.refreshAni.play();
+				this.refreshAni.visible=true;
+			}
+			else if(state=="close"){
+				this.refreshAni.stop();
+				this.refreshAni.visible=false;
+			}
+		}
+	}
+
 	__proto.overMatchDrap=function(){
+		this.dropFishBox.visible=true;
 		this.clearfishImgArr();
 	}
 
@@ -47159,12 +47511,24 @@ var Gamemain=(function(_super){
 				GameEffect.instance.creatBaseMove(effectName,efData,getdropObj.num);
 			}))
 			if(getdropObj.comboNum>1){
+				this.changePowerBox("update");
 				var aniData=new AniD();
 				aniData.startPoint=this.dropFishBox.localToGlobal(new Point(this.fishhookImg.x,this.fishhookImg.y));
 				aniData.aniUrl="EffectAni.ani";
 				GameEffect.instance.creatSignAni("combo",aniData,Handler.create(this,function(){
-					aniData.startPoint=_$this.dropFishBox.localToGlobal(new Point(_$this.energyBall.x,_$this.energyBall.y));
-					GameEffect.instance.creatSignAni("comboBall",aniData);
+					var efData_c=new EffectD();
+					efData_c.startPoint=_$this.dropFishBox.localToGlobal(new Point(_$this.fishhookImg.x,_$this.fishhookImg.y));
+					efData_c.endPoint=_$this.dropFishBox.localToGlobal(new Point(_$this.powerBox.x,_$this.powerBox.y));
+					efData_c.startPoint.y-=100;
+					efData_c.easeMode=Ease.circOut;
+					GameEffect.instance.creatSignPopMove("jifen",efData_c,Handler.create(this,function(){
+						_$this.getpowerAni.visible=true;
+						_$this.getpowerAni.play();
+						_$this.getpowerAni.on("complete",this,function(){
+							_$this.getpowerAni.stop();
+							_$this.getpowerAni.visible=false;
+						});
+					}));
 				}));
 				var fontD=new FontClipD();
 				fontD.setFontSkin(3);
@@ -47173,13 +47537,10 @@ var Gamemain=(function(_super){
 				GameEffect.instance.creatSignFontClip("comboNum",fontD);
 			}
 		}
-		this.canDropMatch=true;
 		this.changeDropFishBoxState("over");
 	}
 
 	__proto.getColorImg=function(){
-		this.canDrop=false;
-		this.fishhookImg.x=this.minFishhook;
 		var dxArr=GamemainM.instance.gethookColorImg();
 		this.blueImg.x=dxArr[0];
 		this.yellowImg.x=dxArr[1];
@@ -47187,6 +47548,7 @@ var Gamemain=(function(_super){
 	}
 
 	__proto.overNormalDrap=function(){
+		this.dropFishBox.visible=false;
 		this.blueImg.x=-100;
 		this.yellowImg.x=-100;
 		this.coloursImg.x=-100;
@@ -47226,13 +47588,11 @@ var Gamemain=(function(_super){
 	__proto.drawFishline=function(action){
 		var _$this=this;
 		if(action=="start"){
-			this.fishhookImg.visible=true;
 			this._hookState="fishstart";this._fishlineSp=this._fishlineSp||new Sprite();
 			this.addChild(this._fishlineSp);
 			Laya.timer.frameLoop(1,this,this.onfishLineTime);
 		}
 		else if(action=="over"){
-			this.fishhookImg.visible=false;
 			this._hookState="fishover";
 			var hookPot=new Point(this.fishhookImg.x,this.fishhookImg.y-this.fishhookImg.height/2);
 			hookPot=this.dropFishBox.localToGlobal(hookPot);
@@ -47471,6 +47831,7 @@ var Gamemain=(function(_super){
 		GameEventDispatch.instance.on("GameMatchStart",this,this.gameMatch);
 		GameEventDispatch.instance.on("ShowRedPoint",this,this.showRedPoint);
 		GameEventDispatch.instance.on("RemoveRedPoint",this,this.removeRedPoint);
+		GameEventDispatch.instance.on("BossComIngAni",this,this.changeGameMode,["boss"]);
 	}
 
 	__proto.unRegister=function(){
@@ -47487,6 +47848,7 @@ var Gamemain=(function(_super){
 		GameEventDispatch.instance.off("GameMatchStart",this,this.gameMatch);
 		GameEventDispatch.instance.off("ShowRedPoint",this,this.showRedPoint);
 		GameEventDispatch.instance.off("RemoveRedPoint",this,this.removeRedPoint);
+		GameEventDispatch.instance.off("BossComIngAni",this,this.changeGameMode,["boss"]);
 	}
 
 	__proto.closePanel=function(){
@@ -48901,6 +49263,40 @@ var Smalltips=(function(_super){
 	Smalltips._instance=null;
 	return Smalltips;
 })(SmallTipsUI)
+
+
+//class view.timebossAni.TimebossAni extends ui.TimeBossAniUI
+var TimebossAni=(function(_super){
+	function TimebossAni(){
+		TimebossAni.__super.call(this);
+	}
+
+	__class(TimebossAni,'view.timebossAni.TimebossAni',_super);
+	var __proto=TimebossAni.prototype;
+	Laya.imps(__proto,{"view.PanelVo":true})
+	__proto.openPanel=function(param){
+		this.ani1.play(0,false);
+		Laya.timer.once(1000,this,function(){
+			GameEventDispatch.instance.event("BossComIngAni");
+			UiManager.instance.closePanel("TimebossAni");
+		})
+	}
+
+	__proto.closePanel=function(){
+		this.visible=false;
+		this.ani1.stop();
+	}
+
+	__proto.clearAllNum=function(){}
+	__proto.register=function(){}
+	__proto.unRegister=function(){}
+	__getset(1,TimebossAni,'instance',function(){
+		return TimebossAni._instance=TimebossAni._instance||new TimebossAni();
+	},ui.TimeBossAniUI._$SET_instance);
+
+	TimebossAni._instance=null;
+	return TimebossAni;
+})(TimeBossAniUI)
 
 
 //class view.timegift.Timegift extends ui.TimeGiftUI

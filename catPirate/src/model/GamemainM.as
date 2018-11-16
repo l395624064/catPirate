@@ -56,7 +56,7 @@ public class GamemainM {
         }else if(action=="stop"){
             Laya.timer.clear(this,onTimeClock);
         }else if(action=="update"){
-
+            Laya.timer.loop(1000,this,onTimeClock);
         }
     }
     private function onTimeClock():void
@@ -80,7 +80,7 @@ public class GamemainM {
             //15 翻车鱼 16 美人鱼
             var obj:Object=cfg_fish.instance(15+"");
             var bossImg:Image=new Image(obj.res);
-            bossImg.x=200;
+            bossImg.x=300;
             bossImg.dataSource=obj;
 
             bossArr.push(bossImg);
@@ -232,7 +232,7 @@ public class GamemainM {
         return _fishBoxDic;
     }
 
-    private function putInFishBox(name:String,num:int):void
+    public function putInFishBox(name:String,num:int):void
     {
         if(_fishBoxDic.hasOwnProperty(name)){
             _fishBoxDic[name]+=num;

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":72,
-    "selecteID":19,
+    "selectedBox":19,
+    "selecteID":16,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -12,22 +12,6 @@
     "hasChild":true,
     "compId":1,
     "child":[
-        {
-            "x":15,
-            "type":"Image",
-            "props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136},
-            "nodeParent":1,
-            "label":"Image(bgImg)",
-            "isOpen":true,
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":2,
-            "child":[
-                ],
-            "$LOCKED":false,
-            "$HIDDEN":false
-        },
         {
             "x":15,
             "type":"Box",
@@ -43,6 +27,37 @@
                 {
                     "x":30,
                     "type":"Image",
+                    "props":{"y":-3,"x":-2,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136},
+                    "nodeParent":72,
+                    "label":"Image(bgImg)",
+                    "isOpen":true,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":2,
+                    "child":[
+                        ],
+                    "$LOCKED":false,
+                    "$HIDDEN":false
+                },
+                {
+                    "x":30,
+                    "type":"Animation",
+                    "props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8},
+                    "nodeParent":72,
+                    "label":"Animation(skystarAni)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":118,
+                    "child":[
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":true
+                },
+                {
+                    "x":30,
+                    "type":"Image",
                     "props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},
                     "nodeParent":72,
                     "label":"Image",
@@ -51,7 +66,8 @@
                     "hasChild":false,
                     "compId":87,
                     "child":[
-                        ]
+                        ],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
@@ -492,7 +508,6 @@
                     "compId":84,
                     "child":[
                         {
-                            "x":45,
                             "type":"Text",
                             "props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},
                             "nodeParent":84,
@@ -506,7 +521,6 @@
                             "$LOCKED":false
                         },
                         {
-                            "x":45,
                             "type":"FontClip",
                             "props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"},
                             "nodeParent":84,
@@ -544,7 +558,8 @@
                             "hasChild":false,
                             "compId":101,
                             "child":[
-                                ]
+                                ],
+                            "$LOCKED":true
                         },
                         {
                             "x":45,
@@ -668,7 +683,7 @@
                             "compId":12,
                             "child":[
                                 ],
-                            "$LOCKED":false,
+                            "$LOCKED":true,
                             "$HIDDEN":false
                         },
                         {
@@ -687,7 +702,7 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":54,"x":500,"width":54,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53},
+                            "props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53},
                             "nodeParent":19,
                             "label":"Image(fishhookImg)",
                             "isDirectory":false,
@@ -696,6 +711,47 @@
                             "compId":16,
                             "child":[
                                 ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Box",
+                            "props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},
+                            "nodeParent":19,
+                            "label":"Box(bossPowerBox)",
+                            "isOpen":false,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":105,
+                            "child":[
+                                {
+                                    "type":"Image",
+                                    "props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39},
+                                    "nodeParent":105,
+                                    "label":"Image",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":113,
+                                    "child":[
+                                        ],
+                                    "$LOCKED":false
+                                },
+                                {
+                                    "type":"Image",
+                                    "props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52},
+                                    "nodeParent":105,
+                                    "label":"Image(powermask)",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":117,
+                                    "child":[
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$LOCKED":false,
+                            "$HIDDEN":false
                         },
                         {
                             "x":45,
@@ -721,7 +777,7 @@
                                     "child":[
                                         ],
                                     "$LOCKED":true,
-                                    "$HIDDEN":false
+                                    "$HIDDEN":true
                                 },
                                 {
                                     "type":"Image",
@@ -735,7 +791,7 @@
                                     "child":[
                                         ],
                                     "$LOCKED":true,
-                                    "$HIDDEN":false
+                                    "$HIDDEN":true
                                 },
                                 {
                                     "type":"Image",
@@ -749,7 +805,7 @@
                                     "child":[
                                         ],
                                     "$LOCKED":true,
-                                    "$HIDDEN":false
+                                    "$HIDDEN":true
                                 },
                                 {
                                     "type":"Image",
@@ -763,7 +819,7 @@
                                     "child":[
                                         ],
                                     "$LOCKED":true,
-                                    "$HIDDEN":false
+                                    "$HIDDEN":true
                                 },
                                 {
                                     "type":"Image",
@@ -777,7 +833,8 @@
                                     "compId":13,
                                     "child":[
                                         ],
-                                    "$LOCKED":true
+                                    "$LOCKED":true,
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Animation",
@@ -789,9 +846,10 @@
                                     "hasChild":false,
                                     "compId":97,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 }],
-                            "$LOCKED":false,
+                            "$LOCKED":true,
                             "$HIDDEN":false
                         },
                         {
@@ -805,7 +863,8 @@
                             "hasChild":false,
                             "compId":96,
                             "child":[
-                                ]
+                                ],
+                            "$LOCKED":true
                         }],
                     "$LOCKED":true,
                     "$HIDDEN":false
