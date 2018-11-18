@@ -61,6 +61,7 @@ public class Gameend extends GameendUI implements PanelVo{
         var fishBox:Object=GamemainM.instance.getFishBox;
         _fishMsgArr=sortFishFromWeight(fishBox);
 
+        console.log("--_fishMsgArr:",_fishMsgArr);
         if(_fishMsgArr.length>0){
             putFishInBox("start");
             Laya.timer.frameLoop(1,this,onFishTime);
@@ -178,6 +179,7 @@ public class Gameend extends GameendUI implements PanelVo{
             fish['spd']=minSpd+Math.random()*maxSpd;
 
             var weight:Number=FishM.instance.getWeightByName(fish['name']);
+            console.log("--",fish['name'],":",weight);
             updateWater(weight);
         }
     }

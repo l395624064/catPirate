@@ -1,5 +1,6 @@
 ﻿package src {
 import laya.display.Sprite;
+import laya.display.Stage;
 import laya.utils.Browser;
 import laya.utils.ClassUtils;
 import laya.utils.Stat;
@@ -39,6 +40,9 @@ public class LayaSample {
             Laya.stage.screenMode = GameConfig.screenMode;
             Laya.stage.alignV = GameConfig.alignV;
             Laya.stage.alignH = GameConfig.alignH;
+
+            Laya.stage.scaleMode = Stage.SCALE_EXACTFIT;//拉伸适配
+            Laya.stage.screenMode = "vertical";//强制竖屏
             //兼容微信不支持加载scene后缀场景
             //URL.exportSceneToJson = GameConfig.exportSceneToJson;
 

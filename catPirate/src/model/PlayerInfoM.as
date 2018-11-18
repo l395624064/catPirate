@@ -35,7 +35,9 @@ public class PlayerInfoM {
         孔雀鱼:0,
         彩虹鱼:0,
         红龙鱼:0,
-        黄龙鱼:0
+        黄龙鱼:0,
+        翻车鱼:0,
+        美人鱼:0
     };
 
     private var _gameSetting:Object={

@@ -235,7 +235,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 Laya.stage.offAll();
                 Laya.stage.once(Event.MOUSE_DOWN,this,function (e:Event) {
                     e.stopPropagation();
-                    console.log("---laya stage click");
                     changeDropFishBoxState("stop");
                     //GameEventDispatch.instance.event(GameEvent.GameReady);
                 })
@@ -269,6 +268,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
             });
         }
         else if(_gamemode=="boss"){
+            console.log("--boss mode",_gamemode);
+
             //页面effect 侦听
             bgImg.skin="ui/gamemain/gamemain_1.png";
             changeEffectAniState("skystar","open");
@@ -283,6 +284,17 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 });
             });
         }
+    }
+
+    private function clearClick():void
+    {
+        //-强制收杆
+        if(!canDropMatch){
+            changeDropFishBoxState("stop");
+        }
+        dropSp.offAll();
+        Laya.stage.offAll();
+        console.log("-清理事件-");
     }
 
 
@@ -306,7 +318,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 changeFishhookTime("start");
             }
             else if(_gamemode=="match"){
-                console.log("--fishhookImg.x:",fishhookImg.x);
                 changeEffectAniState("refresh","open");
                 refreshAni.offAll();
                 refreshAni.on(Event.COMPLETE,this,function () {
@@ -338,6 +349,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
                     changeFishhookTime("start");
                 });
             }
+
+            changeFishhookSpd("init");
         }
 
         else if(action=="over"){
@@ -372,7 +385,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private function changeFishhookTime(action:String):void
     {
         if(action=="start"){
-            changeFishhookSpd("init");
             changeFishhookState("rightMove");
 
             Laya.timer.frameLoop(1,this,fishhookMove);
@@ -418,10 +430,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
             }
             if(powerIndex>=endAngleArr.length-1){
                 powerIndex=endAngleArr.length-1;
-                //来袭ANI
-                UiManager.instance.loadView("TimebossAni",null,0,"UITYPE_ANI");
-                //计时清理
-                GamemainM.instance.setTimeClock("stop",timeclip);
+                clearClick();//清理鱼竿事件
+                UiManager.instance.loadView("TimebossAni",null,0,"UITYPE_ANI");//来袭ANI
+                GamemainM.instance.setTimeClock("stop",timeclip);//计时清理
             }
         }
         else if(action=="max"){
@@ -437,19 +448,34 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
     private var _fishhookBossSpd:int=3;
-    private var _fishhookMatchSpd:int=5;
+    private var _fishhookMatchSpd:int=4.5;
     private var _fishhookNormalSpd:int=5;
     private function changeFishhookSpd(action:String,newSpd:Number=undefined,delay:int=0):void
     {
         if(action=="init"){
             if(_gamemode=="normal")fishhookImg['spd']=_fishhookNormalSpd;
-            else if(_gamemode=="match")fishhookImg['spd']=_fishhookMatchSpd;
+            else if(_gamemode=="match"){
+                if(fishhookImg.hasOwnProperty('updateSpd') && fishhookImg['updateSpd']>0){
+                    fishhookImg['spd']=_fishhookMatchSpd+fishhookImg['updateSpd'];
+                }
+                else{
+                    fishhookImg['updateSpd']=0;
+                    fishhookImg['spd']=_fishhookMatchSpd;
+                }
+            }
             else if(_gamemode=="boss")fishhookImg['spd']=_fishhookBossSpd;
         }
         else if(action=="update"){
             //combo lvup
-            const updateSpd:Number=2;
-            fishhookImg['spd']+=updateSpd;
+            if(_gamemode=="match"){
+                const updateSpd:Number=0.15;
+                fishhookImg['updateSpd']+=updateSpd;
+            }
+        }
+        else if(action=="reset"){
+            if(_gamemode=="match"){
+                fishhookImg['updateSpd']=0;
+            }
         }
         else if(action=="buff"){
             if(newSpd){
@@ -523,8 +549,35 @@ public class Gamemain extends GameMainUI implements PanelVo {
         clearfishImgArr();
         fishImgArr=GamemainM.instance.getFishImg(_gamemode);
 
+        //boss标记
+        if(_gamemode=="boss"){
+            changeBossMarkState("open");
+        }
+
         for(var i:int=0;i<fishImgArr.length;i++){
             fishhookMask.addChild(fishImgArr[i]);
+        }
+    }
+
+    //boss标记
+    private function changeBossMarkState(action:String):void
+    {
+        if(action=="open"){
+            bossmarkImg.visible=true;
+            var bossImg:Image=fishImgArr[0];
+            var pot:Point=new Point(GamemainM.instance.getFishmouthX(bossImg)+fishImgArr[0].x,0);//
+            pot=fishhookMask.localToGlobal(pot);
+            pot=dropFishBox.globalToLocal(pot);
+            bossmarkImg.x=pot.x;
+        }
+        else if(action=="close"){
+            Tween.to(bossmarkImg,{alpha:0},1000,null,Handler.create(this,function () {
+                bossmarkImg.visible=false;
+                bossmarkImg.alpha=1;
+            }));
+        }
+        else if(action=="over"){
+            bossmarkImg.visible=false;
         }
     }
 
@@ -537,10 +590,12 @@ public class Gamemain extends GameMainUI implements PanelVo {
         if(!getdropObj){
             console.log("--miss");
             //Miss 特效
-            changeDropFishBoxState("over");
+            changeBossPowerState("over");
+            changeBossMarkState("over");
             return;
         }
-        console.log("钓到----");
+        console.log("---get Boss");
+        changeBossMarkState("close");
 
         //点击提示
         var efData:EffectD=new EffectD();
@@ -555,7 +610,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
     {
         const minNum:int=50;
         const maxNum:int=430;
-        const clickAdd:int=15;
+        const clickAdd:int=20;
         if(action=="init"){
             bossPowerBox.visible=true;
             powermask.width=minNum;
@@ -584,9 +639,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
             var bossMsg:Object=fishImgArr[0].dataSource;
             clearfishImgArr();
 
-            //重量添加至
-            GamemainM.instance.putInFishBox(bossMsg.name,1);
-
             var efData:EffectD=new EffectD();
             efData.startPoint=fishhookMask.localToGlobal(fishhookPoint);
             efData.endPoint=new Point(GameConfig.width/2-100,GameConfig.height/2-100);
@@ -595,7 +647,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
             efData.easeMode=Ease.backOut;
             efData.dealtTime=1000;
 
-            console.log("-bossMsg:",bossMsg);
             //creat effect
             var effectName:String=bossMsg.name;
             effectName=FishM.instance.chineseNameTransform(effectName);
@@ -605,6 +656,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 gainD.res=bossMsg.res;
                 gainD.name=bossMsg.name;
                 gainD.callback=Handler.create(this,changeBossPowerState,["over"]);
+                gainD.stayTime=1500;
                 GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
             }))
             //changeDropFishBoxState("over");
@@ -652,6 +704,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         img.rotation=-20+Math.random()*40;
         img.pos(Laya.stage.mouseX,Laya.stage.mouseY);
         clickImgArr.push(img);
+        Tween.to(img,{alpha:0},1200);
     }
 
     private function changeEffectAniState(name:String,state:String):void
@@ -706,7 +759,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private function overMatchDrap():void
     {
         dropFishBox.visible=true;
-        //console.log("--overMatchDrap");
         clearfishImgArr();
     }
     private function drapMatch():void
@@ -718,6 +770,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         //console.log("-getdropObj:",getdropObj)
         if(!getdropObj){
             console.log("--miss");
+            changeFishhookSpd("reset");//速度重置
         }
 
 
@@ -738,7 +791,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
             //Ease.backOut
             //Ease.backInOut
             efData.easeMode=Ease.backOut;
-            efData.dealtTime=800;
+            efData.dealtTime=1000;
 
             //creat effect
             var effectName:String=getdropObj.cfg.name;
@@ -755,9 +808,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
             }))
 
 
+
             if(getdropObj.comboNum>1){
-                //num
-                changePowerBox("update");
+                changePowerBox("update");//能量box更新
+                changeFishhookSpd("update");//速度更新
 
                 //effect
                 var aniData:AniD=new AniD();
@@ -1077,7 +1131,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
             GameAdaptive.instance.setRightFromPanel(redImg,timegiftBtn);
         }
         else if(btnname=="Boxlibs"){
-            console.log("--boxlibs redpoint",boxlibsBtn.numChildren)
             if(boxlibsBtn.numChildren>0)return;
             redImg=new Image(url);
             boxlibsBtn.addChild(redImg);
@@ -1147,6 +1200,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
         //Boss coming
         GameEventDispatch.instance.on(GameEvent.BossComIngMode,this,changeGameMode,["boss"]);
+
+        GameEventDispatch.instance.on(GameEvent.ClearClick,this,clearClick);
     }
 
     public function unRegister():void
@@ -1169,6 +1224,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
         GameEventDispatch.instance.off(GameEvent.RemoveRedPoint,this,removeRedPoint);
 
         GameEventDispatch.instance.off(GameEvent.BossComIngMode,this,changeGameMode,["boss"]);
+
+        GameEventDispatch.instance.off(GameEvent.ClearClick,this,clearClick);
     }
 
     public function closePanel():void

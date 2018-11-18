@@ -9,6 +9,8 @@ public class GainnewD {
     public var res:String="";
     public var callback:Handler=null;
 
+    public var stayTime:int=500;
+
     //获得多项
     public var award_type:Array=[];
     public var award_num:Array=[];

@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":4,
+    "selecteID":2,
     "props":{"width":400,"sceneColor":"#999999","height":500},
     "nodeParent":-1,
     "label":"View",
@@ -15,7 +15,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","height":2244,"centerY":0,"centerX":0},
+            "props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0},
             "nodeParent":1,
             "label":"Image(bmask)",
             "isDirectory":false,
@@ -27,29 +27,42 @@
         },
         {
             "x":15,
-            "type":"Image",
-            "props":{"y":250,"x":200,"width":174,"var":"tipImg","skin":"ui/common_img/notopen.png","height":174,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
+            "type":"Box",
+            "props":{"y":0,"x":0,"width":406,"var":"panelbox","height":504},
             "nodeParent":1,
-            "label":"Image(tipImg)",
-            "isDirectory":false,
+            "label":"Box(panelbox)",
+            "isOpen":true,
+            "isDirectory":true,
             "isAniNode":true,
-            "hasChild":false,
-            "compId":3,
+            "hasChild":true,
+            "compId":5,
             "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Text",
-            "props":{"y":388,"x":205,"width":215,"var":"tipFont","text":"暂未开放","strokeColor":"#ffffff","stroke":6,"pivotY":1,"pivotX":105,"height":54,"fontSize":50,"font":"SimHei","color":"#0999f9","bold":true},
-            "nodeParent":1,
-            "label":"Text(tipFont)",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":4,
-            "child":[
-                ]
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"y":116,"x":100,"width":174,"var":"tipImg","skin":"ui/common_img/notopen.png","height":174,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
+                    "nodeParent":5,
+                    "label":"Image(tipImg)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":3,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":382,"x":203,"width":215,"var":"tipFont","text":"暂未开放","strokeColor":"#ffffff","stroke":6,"pivotY":1,"pivotX":105,"height":54,"fontSize":50,"font":"SimHei","color":"#0999f9","bold":true},
+                    "nodeParent":5,
+                    "label":"Text(tipFont)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":4,
+                    "child":[
+                        ]
+                }]
         }],
     "animations":[
         {

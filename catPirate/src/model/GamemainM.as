@@ -167,34 +167,43 @@ public class GamemainM {
     {
         var dropObj:Object;
         var typeName:String;
-        const pixNum:Number=10;
+        const fishPixNum:Number=10;
+        const bossPixNum:Number=20;
         var mouthX:Number=0;
         var dropName:String;
         for(var i:int=0;i<_fishImgArr.length;i++){
-            mouthX=_fishImgArr[i].x+_fishImgArr[i].width*_fishImgArr[i]['dataSource']['anchor_pos'][0];
-            if(Math.abs(hookPoint.x-mouthX)<pixNum){
-                typeName=FishM.instance.checkTypeByTypeId(_fishImgArr[i]['dataSource']['typeId']);
-                dropObj={cfg:_fishImgArr[i]['dataSource'],num:1,type:typeName};
-                dropName=_fishImgArr[i]['dataSource']['name'];
+            mouthX=_fishImgArr[i].x+getFishmouthX(_fishImgArr[i]);
+            typeName=FishM.instance.checkTypeByTypeId(_fishImgArr[i]['dataSource']['typeId']);
 
-                if(typeName=="fish"){
-                    //putInFishBox(_fishImgArr[i]['name']);
+            if(typeName=="fish"){
+                if(Math.abs(hookPoint.x-mouthX)<fishPixNum) {
+                    dropObj={cfg:_fishImgArr[i]['dataSource'],num:1,type:typeName};
+                    dropName=_fishImgArr[i]['dataSource']['name'];
+
                     var num:int=checkCombo(dropName);
                     dropObj['num']=num;
                     dropObj['comboNum']=_lastDrop['combo'];
                     putInFishBox(dropName,num);
                 }
-                else if(typeName=="pop"){
+            }
+            else if(typeName=="pop"){
 
+            }
+            else if(typeName=="bigfish"){
+                if(Math.abs(hookPoint.x-mouthX)<bossPixNum) {
+                    dropObj={cfg:_fishImgArr[i]['dataSource'],num:1,type:typeName};
+                    dropName=_fishImgArr[i]['dataSource']['name'];
+                    putInFishBox(dropName,1);
                 }
-                else if(typeName=="bigfish"){
-
-                }
-                break;
             }
         }
         setlastDrop(dropObj);
         return dropObj;
+    }
+
+    public function getFishmouthX(fishImg:Image):Number
+    {
+        return fishImg.width*fishImg['dataSource']['anchor_pos'][0];
     }
 
     public function getFishpileEndY(basewidth:Number):Number

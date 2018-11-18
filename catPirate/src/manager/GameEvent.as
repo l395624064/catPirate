@@ -40,6 +40,8 @@ package manager
         //boss coming
         public static const BossComIngMode:String="BossComIngAni";
 
+        public static const ClearClick:String="ClearClick";
+
         //playerInfoC
         public static const ADDwheelNum:String="ADDwheelNum";
         public static const MinuswheelNum:String="MinuswheelNum";

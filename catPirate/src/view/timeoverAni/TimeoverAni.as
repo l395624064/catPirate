@@ -25,10 +25,17 @@ public class TimeoverAni extends TimeOverAniUI implements PanelVo{
     {
         ani1.play(0,false);
         ani2.play();
+        Laya.timer.once(1000,this,overClick);
+    }
+
+    private function overClick():void
+    {
+        this.offAll();
         this.on(Event.MOUSE_DOWN,this,function () {
             GameEventDispatch.instance.event(GameEvent.GameEnd);
         })
     }
+
 
     public function closePanel():void
     {

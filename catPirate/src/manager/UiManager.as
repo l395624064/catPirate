@@ -2,10 +2,13 @@ package manager {
 import laya.debug.tools.StringTool;
 import laya.display.Sprite;
 import laya.net.Loader;
+import laya.utils.Browser;
 import laya.utils.ClassUtils;
 import laya.utils.Ease;
 import laya.utils.Handler;
 import laya.utils.Tween;
+
+import src.GameConfig;
 
 import view.gamemap.Gamemap;
 import view.gamemain.Gamemain;
@@ -13,7 +16,6 @@ import view.loadview.Loadview;
 import view.shiprefit.Shiprefit;
 import view.tips.Tips;
 import view.smalltips.Smalltips;
-import view.sailingbook.Sailingbook;
 import view.gainnewpop.Gainnewpop;
 import view.unopend.Unopened;
 import view.wait.Wait;
@@ -23,7 +25,6 @@ import view.friendrank.Friendrank;
 import view.gameshop.Gameshop;
 import view.boxlibs.Boxlibs;
 import view.timegift.Timegift;
-import view.explainbook.Explainbook;
 import view.gameend.Gameend;
 import view.timestartAni.TimestartAni;
 import view.timeoverAni.TimeoverAni;
@@ -90,14 +91,12 @@ public class UiManager {
 //        _emptyResUi['Loadview']=true;
         _emptyResUi['CommonTip']=true;
         _emptyResUi['Shiprefit']=true;
-        _emptyResUi['Sailingbook']=true;
         _emptyResUi['Gainnewpop']=true;
         _emptyResUi['Tips']=true;
         _emptyResUi['Smalltips']=true;
 
         //new panel
         _emptyResUi['Gamemenu']=true;
-        _emptyResUi['Explainbook']=true;
         _emptyResUi['TimestartAni']=true;
         _emptyResUi['TimeoverAni']=true;
         _emptyResUi['TimebossAni']=true;
@@ -171,6 +170,7 @@ public class UiManager {
         _panel.visible=true;
         _panel['uiType']=_uiType;
         _panel['name']=_name;
+        //setPanelScale(_panel);
         _panel.register();
         _panel.openPanel(_param);
         Laya.stage.addChild(_panel);
@@ -187,6 +187,23 @@ public class UiManager {
             loadView(obj['name'],obj['param'],obj['pngNum'],obj['uiZorder']);
         }
     }
+
+    private function setPanelScale(panel:*):void
+    {
+        if(panel.hasOwnProperty('panelbox')){
+            //640 1136
+            var scaleWidth:Number=Browser.clientWidth/GameConfig.width;
+            var scaleHeight:Number=Browser.clientHeight/GameConfig.height;
+            scaleWidth=scaleWidth.toFixed(2) as Number;
+            scaleHeight=scaleHeight.toFixed(2) as Number;
+            panel.scale(scaleWidth,scaleHeight);
+            console.log("-",Browser.width,Browser.height,scaleWidth,scaleHeight);
+            console.log("-",Browser.clientWidth,Browser.clientHeight,Browser.pixelRatio);
+            panel.centerX=0;
+            panel.centerY=0;
+        }
+    }
+
 
     private function showAni(panel:*):void
     {

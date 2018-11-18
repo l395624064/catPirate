@@ -33,6 +33,7 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
     public var _name:String="";
     public var _content:String="";
     public var _res:String="";
+    public var _stayTime:int;
 
     public function Gainnewpop() {
         super();
@@ -51,6 +52,7 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
         _content=param.explain_content;
         _res=param.res;
         _callback=param.callback;
+        _stayTime=param.stayTime;
 
         if(_awardType.length !=_awardNum.length){
             throw new Error("_awardType or _awardNum length Error");
@@ -74,12 +76,19 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
             changeShowState("array_three");
         }
         this.hitTestPrior=true;
-        this.on(Event.MOUSE_DOWN,this,function () {
+        Laya.timer.once(_stayTime,this,overClick);
+
+        getAwardNum();
+    }
+
+    private function overClick():void
+    {
+        this.offAll();
+        this.once(Event.MOUSE_DOWN,this,function () {
+            console.log("-click this pop");
             if(_callback)_callback.run();
             UiManager.instance.closePanel("Gainnewpop");
         });
-
-        getAwardNum();
     }
 
     private function getAwardNum():void
