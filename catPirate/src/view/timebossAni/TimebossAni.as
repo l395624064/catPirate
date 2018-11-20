@@ -1,4 +1,6 @@
 package view.timebossAni {
+import laya.events.Event;
+
 import manager.GameEvent;
 import manager.GameEventDispatch;
 import manager.UiManager;
@@ -16,23 +18,34 @@ public class TimebossAni extends TimeBossAniUI implements PanelVo{
         return _instance||=new TimebossAni();
     }
 
-    public function openPanel(param:Object=null):void
-    {
-        this.ani1.play(0,false);
-        Laya.timer.once(1000,this,function () {
-            GameEventDispatch.instance.event(GameEvent.BossComIngMode);
-            UiManager.instance.closePanel("TimebossAni");
+    public function openPanel(param:Object=null):void {
+        into.play(0, false);
+        into.offAll();
+        into.once(Event.COMPLETE, this, function () {
+            Laya.timer.once(1300, this, outAni);
+        });
+        this.hitTestPrior=true;
+        this.on(Event.MOUSE_DOWN,this,function (e:Event) {
+            e.stopPropagation();
         })
     }
-
+    private function outAni():void
+    {
+        out.play(0,false);
+        out.offAll();
+        out.once(Event.COMPLETE,this,function () {
+            GameEventDispatch.instance.event(GameEvent.BossComIngMode);
+            UiManager.instance.closePanel("TimebossAni");
+        });
+    }
     public function closePanel():void
     {
         this.visible=false;
-        this.ani1.stop();
     }
     public function clearAllNum():void
     {
-
+        into.stop();
+        out.stop();
     }
     public function register():void
     {

@@ -31,6 +31,7 @@ import view.timeoverAni.TimeoverAni;
 import view.endaward.Endaward;
 import view.setting.Setting;
 import view.timebossAni.TimebossAni;
+import view.gameguide.Gameguide;
 
 public class UiManager {
     public static var _instance:UiManager;
@@ -55,6 +56,7 @@ public class UiManager {
     private const _UITYPE_WAIT:int=2003;
     private const _UITYPE_EFFECT:int=2004;
     private const _UITYPE_GAINNEW:int=2005;
+    private const _UITYPE_GUIDE:int=3000;
 
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
@@ -101,6 +103,7 @@ public class UiManager {
         _emptyResUi['TimeoverAni']=true;
         _emptyResUi['TimebossAni']=true;
         _emptyResUi['Endaward']=true;
+        _emptyResUi['Gameguide']=true;
     }
     private function getEmptyRes(name:String):Boolean
     {
@@ -269,6 +272,11 @@ public class UiManager {
             case "UITYPE_GAINNEW":
             {
                 deep=_UITYPE_GAINNEW;
+                break;
+            }
+            case "UITYPE_GUIDE":
+            {
+                deep=_UITYPE_GUIDE;
                 break;
             }
             default:

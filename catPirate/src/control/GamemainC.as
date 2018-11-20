@@ -29,18 +29,22 @@ public class GamemainC {
     private function openGame():void
     {
         UiManager.instance.loadView("Gamemain",null,2);
-        //console.log("--GameMainPanelOpen");
+        console.log("--GameMainPanelOpen");
 
         //init local obj
 
         //init local time
         GameEventDispatch.instance.event(GameEvent.StartLoopTime);
+
+        //新手引导
+        Laya.timer.once(1000,this,function () {
+            UiManager.instance.loadView("Gameguide",null,0,"UITYPE_ANI");
+        })
     }
 
 
     private function GameReady():void
     {
-        //新手引导
         UiManager.instance.loadView("TimestartAni",null,0,"UITYPE_ANI");
     }
     private function GameStart():void

@@ -26,11 +26,25 @@ public class TimestartAni extends TimeStartAniUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
-        ani1.play(0,false);
-        ani2.play();
-        this.on(Event.MOUSE_DOWN,this,function () {
-            GameEventDispatch.instance.event(GameEvent.GameStart);
+        into.play(0,false);
+        into.offAll();
+        into.once(Event.COMPLETE,this,function () {
+            Laya.timer.once(1500,this,outAni);
+        });
+        this.hitTestPrior=true;
+        this.on(Event.MOUSE_DOWN,this,function (e:Event) {
+            e.stopPropagation();
         })
+    }
+
+    private function outAni():void
+    {
+        out.play(0,false);
+        out.offAll();
+        out.once(Event.COMPLETE,this,function () {
+            GameEventDispatch.instance.event(GameEvent.GameStart);
+            UiManager.instance.closePanel("TimestartAni");
+        });
     }
 
     public function closePanel():void
@@ -39,8 +53,8 @@ public class TimestartAni extends TimeStartAniUI implements PanelVo{
     }
     public function clearAllNum():void
     {
-        ani1.stop();
-        ani2.stop();
+        into.stop();
+        out.stop();
     }
 
     public function register():void

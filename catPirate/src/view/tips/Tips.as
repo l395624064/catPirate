@@ -67,7 +67,6 @@ public class Tips extends TipsUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
-        //console.log("-tips param:",param)
         checkMsg(param);
         confirmBtn.on(Event.MOUSE_DOWN,this,onConfirm);
         cancelBtn.on(Event.MOUSE_DOWN,this,onCancel);

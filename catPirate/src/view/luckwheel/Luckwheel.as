@@ -51,6 +51,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
     {
         initNum();
         this.closeBtn.on(Event.MOUSE_DOWN,this,function () {
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.closePanel("Luckwheel");
         });
 
@@ -64,6 +65,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
             changewheelNum("minus");
             initNum();
             changewheelState("start");
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         });
 
         shareBtn.offAll();
@@ -79,7 +81,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
 
         explainCloseBtn.on(Event.MOUSE_DOWN,this,function () {
             changeExplainState("close");
-        })
+        });
     }
 
     private function changeExplainState(action:String):void
@@ -88,9 +90,11 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
             explainBox.visible=true;
             explainlist.array=ConfigManager.items("cfg_wheel");
             explainlist.renderHandler=new Handler(this,updatelist);
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         }
         else if(action=="close"){
             explainBox.visible=false;
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         }
 
     }
@@ -316,8 +320,17 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
         var gainD:GainnewD=new GainnewD();
         gainD.award_type=_awardObj.award_type;
         gainD.award_num=_awardObj.award_num;
+        gainD.callback=new Handler(this,luckwheelAward);
         GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+
+        GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
     }
+
+    private function luckwheelAward():void
+    {
+        GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
+    }
+
 
     private function onTimer():void
     {

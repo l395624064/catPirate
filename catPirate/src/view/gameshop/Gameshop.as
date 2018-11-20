@@ -42,6 +42,7 @@ public class Gameshop extends GameShopUI implements PanelVo{
     private function initListener():void
     {
         this.closeBtn.on(Event.MOUSE_DOWN,this,function () {
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.closePanel("Gameshop");
         });
 
@@ -144,11 +145,15 @@ public class Gameshop extends GameShopUI implements PanelVo{
         ele_lvup_btn.offAll();
         ele_lvup_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
             e.stopPropagation();
+            if(index==0||index==1){
+                GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
+            }
             var info:TipsD=new TipsD();
             config['cost_num']=costNumArr;
             info.content="是否购买此物品？";
             info.conFirmArgs=config;
             info.conFirmEvent=GameEvent.ShopBuy;
+            info.aotoClose=false;
             info.buySucceedCallback=new Handler(this,lvupSucceed);
             GameEventDispatch.instance.event(GameEvent.ShowTips,[info]);
         });
@@ -157,6 +162,7 @@ public class Gameshop extends GameShopUI implements PanelVo{
 
     private function lvupSucceed(param:Object):void
     {
+        GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         //console.log("-lvupSucceed:",param);
         var lv:int=ShopM.instance.getFishlvByName(param['name']);
         ShopM.instance.setFishlvByName(param['name'],++lv);

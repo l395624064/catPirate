@@ -51,7 +51,9 @@ public class PlayerInfoM {
         Boxlibs:false,
         Luckwheel:false,
         Friendrank:false
-    }
+    };
+
+    private var _guideComplete:Boolean=false;
 
     public function PlayerInfoM() {
     }
@@ -59,6 +61,15 @@ public class PlayerInfoM {
     public static function get instance():PlayerInfoM
     {
         return _instance || (_instance=new PlayerInfoM());
+    }
+
+    public function getGuide():Boolean
+    {
+        return _guideComplete;
+    }
+    public function setGuide(value:Boolean):void
+    {
+        _guideComplete=value;
     }
 
     public function getRedPointByName(name:String):Boolean

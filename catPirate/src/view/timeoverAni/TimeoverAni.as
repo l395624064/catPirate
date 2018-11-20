@@ -13,6 +13,7 @@ import view.PanelVo;
 
 public class TimeoverAni extends TimeOverAniUI implements PanelVo{
     public static var _instance:TimeoverAni;
+    private var _canClick:Boolean;
     public function TimeoverAni() {
         super();
     }
@@ -23,17 +24,26 @@ public class TimeoverAni extends TimeOverAniUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
-        ani1.play(0,false);
-        ani2.play();
-        Laya.timer.once(1000,this,overClick);
+        into.play(0,false);
+        into.offAll();
+        into.once(Event.COMPLETE,this,function () {
+            _canClick=true;
+        });
+
+        this.on(Event.MOUSE_DOWN,this,function (e:Event) {
+            if(!_canClick) return;
+            outAni();
+        });
     }
 
-    private function overClick():void
+    private function outAni():void
     {
-        this.offAll();
-        this.on(Event.MOUSE_DOWN,this,function () {
+        out.play(0,false);
+        out.offAll();
+        out.once(Event.COMPLETE,this,function () {
             GameEventDispatch.instance.event(GameEvent.GameEnd);
-        })
+            UiManager.instance.closePanel("TimeoverAni");
+        });
     }
 
 
@@ -43,8 +53,9 @@ public class TimeoverAni extends TimeOverAniUI implements PanelVo{
     }
     public function clearAllNum():void
     {
-        ani1.stop();
-        ani2.stop();
+        _canClick=false;
+        into.stop();
+        out.stop();
     }
 
     public function register():void

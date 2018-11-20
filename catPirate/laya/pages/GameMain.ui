@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":189,
+    "selectedBox":72,
+    "selecteID":4,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -32,13 +32,14 @@
             "props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},
             "nodeParent":1,
             "label":"Box(panelbox)",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":72,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136},
                     "nodeParent":72,
@@ -50,10 +51,11 @@
                     "compId":2,
                     "child":[
                         ],
-                    "$LOCKED":false,
+                    "$LOCKED":true,
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Animation",
                     "props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8},
                     "nodeParent":72,
@@ -68,6 +70,7 @@
                     "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},
                     "nodeParent":72,
@@ -82,6 +85,7 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},
                     "nodeParent":72,
@@ -249,6 +253,7 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},
                     "nodeParent":72,
@@ -263,6 +268,7 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":18,"x":6,"visible":false},
                     "nodeParent":72,
@@ -315,6 +321,7 @@
                     "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":492,"width":158,"var":"scoreBox","height":136},
                     "nodeParent":72,
@@ -402,8 +409,9 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
-                    "props":{"y":181,"x":504,"var":"rightbtnBox"},
+                    "props":{"y":181,"x":511,"var":"rightbtnBox"},
                     "nodeParent":72,
                     "label":"Box(rightbtnBox)",
                     "isOpen":false,
@@ -413,8 +421,9 @@
                     "compId":75,
                     "child":[
                         {
+                            "x":45,
                             "type":"Button",
-                            "props":{"y":2,"x":34,"width":90,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":85},
+                            "props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":73},
                             "nodeParent":75,
                             "label":"Button(friendRankBtn)",
                             "isDirectory":false,
@@ -425,8 +434,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Button",
-                            "props":{"y":104,"x":37,"width":87,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":95},
+                            "props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":77},
                             "nodeParent":75,
                             "label":"Button(shopBtn)",
                             "isDirectory":false,
@@ -435,22 +445,11 @@
                             "compId":59,
                             "child":[
                                 ]
-                        },
-                        {
-                            "type":"Button",
-                            "props":{"y":7,"x":-65,"width":85,"var":"luckwheelBtn","stateNum":"1","skin":"ui/gamemain/btn3b.png","labelSize":35,"height":88},
-                            "nodeParent":75,
-                            "label":"Button(luckwheelBtn)",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":70,
-                            "child":[
-                                ]
                         }],
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":4,"x":2,"var":"leftbtnBox"},
                     "nodeParent":72,
@@ -462,8 +461,9 @@
                     "compId":76,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":93},
+                            "props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74},
                             "nodeParent":76,
                             "label":"Image(timegiftBtn)",
                             "isOpen":true,
@@ -475,6 +475,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63},
                             "nodeParent":76,
@@ -488,8 +489,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":258,"x":1,"width":91,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":76},
+                            "props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65},
                             "nodeParent":76,
                             "label":"Image(boxlibsBtn)",
                             "isOpen":true,
@@ -499,10 +501,24 @@
                             "compId":63,
                             "child":[
                                 ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Button",
+                            "props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":"1","skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74},
+                            "nodeParent":76,
+                            "label":"Button(luckwheelBtn)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":70,
+                            "child":[
+                                ]
                         }],
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},
                     "nodeParent":72,
@@ -542,6 +558,7 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":857,"x":58,"var":"dropFishBox"},
                     "nodeParent":72,
@@ -701,7 +718,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":237,"anchorY":1,"anchorX":0.5},
+                            "props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5},
                             "nodeParent":19,
                             "label":"Image(bossmarkImg)",
                             "isDirectory":false,
@@ -879,6 +896,7 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226},
                     "nodeParent":72,
@@ -890,9 +908,10 @@
                     "child":[
                         ],
                     "$LOCKED":true,
-                    "$HIDDEN":false
+                    "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},
                     "nodeParent":72,
@@ -917,6 +936,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":4,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78},
                     "nodeParent":72,

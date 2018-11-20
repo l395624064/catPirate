@@ -33,6 +33,8 @@ public class GamemainM {
     private const _gameAllTime:int=30;
     private var _gameTime:int;
 
+    private var _guideState:Boolean;
+
 
     public function GamemainM() {
     }
@@ -40,6 +42,15 @@ public class GamemainM {
     public static function get instance():GamemainM
     {
         return _instance||=new GamemainM();
+    }
+
+    public function getGuideState():Boolean
+    {
+        return _guideState;
+    }
+    public function setGuideState(value:Boolean):void
+    {
+        _guideState=value;
     }
 
 
@@ -184,16 +195,19 @@ public class GamemainM {
                     dropObj['num']=num;
                     dropObj['comboNum']=_lastDrop['combo'];
                     putInFishBox(dropName,num);
+                    break;
                 }
             }
             else if(typeName=="pop"){
 
+                break;
             }
             else if(typeName=="bigfish"){
                 if(Math.abs(hookPoint.x-mouthX)<bossPixNum) {
                     dropObj={cfg:_fishImgArr[i]['dataSource'],num:1,type:typeName};
                     dropName=_fishImgArr[i]['dataSource']['name'];
                     putInFishBox(dropName,1);
+                    break;
                 }
             }
         }

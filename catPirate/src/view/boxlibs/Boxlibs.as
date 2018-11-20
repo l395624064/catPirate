@@ -44,6 +44,7 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
     public function openPanel(param:Object=null):void
     {
         closeBtn.on(Event.MOUSE_DOWN,this,function () {
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.closePanel("Boxlibs");
         });
         
@@ -77,7 +78,12 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         }
         else if(action=="right"){
             _pageNum++;
-            if(_pageNum>=boxlist.array.length) _pageNum=boxlist.array.length-1;
+            if(_pageNum==boxlist.array.length-1){
+                GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
+            }
+            if(_pageNum>=boxlist.array.length-1) {
+                _pageNum=boxlist.array.length-1;
+            }
             boxlist.tweenTo(_pageNum,500);
         }
         else if(action=="reset"){
@@ -133,10 +139,10 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         _tagetGift.dataSource=cfg;
         _tagetGift.anchorX=.5;
         _tagetGift.anchorY=.5;
-        _tagetGift.startDrag();
         _tagetGift.zOrder=3000;
         _tagetGift.pos(Laya.stage.mouseX,Laya.stage.mouseY);
         Laya.stage.addChild(_tagetGift);
+        _tagetGift.startDrag();
         Laya.stage.once(Event.MOUSE_UP,this,recoverGift);
         Laya.stage.once(Event.MOUSE_OUT,this,recoverGift);
     }
@@ -160,6 +166,7 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
                 _tagetGift.removeSelf();
                 changeOpenAniState("ready");
             }));
+            GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         }else{
             var config:Object=_tagetGift.dataSource;
             Tween.to(_tagetGift,{x:config['startPos'].x,y:config['startPos'].y},300,Ease.sineIn,Handler.create(this,function () {
@@ -224,8 +231,15 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         var gainD:GainnewD=new GainnewD();
         gainD.award_type=cfg.award_type;
         gainD.award_num=cfg.award_num;
+        gainD.callback=new Handler(this,boxlibsAward);
 
         GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+        GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
+    }
+
+    private function boxlibsAward():void
+    {
+        GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
     }
 
 
