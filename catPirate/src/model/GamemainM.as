@@ -33,7 +33,6 @@ public class GamemainM {
     private const _gameAllTime:int=30;
     private var _gameTime:int;
 
-    private var _guideState:Boolean;
 
 
     public function GamemainM() {
@@ -44,14 +43,6 @@ public class GamemainM {
         return _instance||=new GamemainM();
     }
 
-    public function getGuideState():Boolean
-    {
-        return _guideState;
-    }
-    public function setGuideState(value:Boolean):void
-    {
-        _guideState=value;
-    }
 
 
     public function setTimeClock(action:String,clip:FontClip=null):void

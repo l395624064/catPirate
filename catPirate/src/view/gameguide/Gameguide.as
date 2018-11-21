@@ -27,7 +27,6 @@ public class Gameguide extends GuideUI implements PanelVo{
 
     private var _stepBox:Box;
 
-    private var _guideComplete:Boolean;
     public function Gameguide() {
         super();
     }
@@ -40,7 +39,7 @@ public class Gameguide extends GuideUI implements PanelVo{
     {
         this.zOrder=UiManager.instance.getUiBaseDepth("UITYPE_GUIDE");
 
-        _guideComplete=PlayerInfoM.instance.getGuide();
+        var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
         if(_guideComplete){
             UiManager.instance.closePanel("Gameguide");
             return;
@@ -73,6 +72,7 @@ public class Gameguide extends GuideUI implements PanelVo{
 
     private function clickToNext():void
     {
+        var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
         if(_guideComplete)return;
         _stepNum++;
         if(_stepNum>_stepArr[_taskNum-1]){
@@ -81,7 +81,7 @@ public class Gameguide extends GuideUI implements PanelVo{
             if(_taskNum>_stepArr.length){
                 console.log("--guide complete");
                 //获得奖励
-                GamemainM.instance.setGuideState(true);
+                PlayerInfoM.instance.setGuide(true);
                 UiManager.instance.closePanel("Gameguide");
                 return;
             }
@@ -92,7 +92,7 @@ public class Gameguide extends GuideUI implements PanelVo{
     {
         showTaskBox();
         showStepBox();
-        console.log("-task:",_taskNum,"-step:",_stepNum,"-zorder:",this.zOrder);
+        //console.log("-task:",_taskNum,"-step:",_stepNum,"-zorder:",this.zOrder);
     }
 
 

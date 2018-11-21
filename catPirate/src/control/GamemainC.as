@@ -5,6 +5,7 @@ import manager.GameEventDispatch;
 import manager.UiManager;
 
 import model.GamemainM;
+import model.PlayerInfoM;
 
 
 public class GamemainC {
@@ -36,10 +37,14 @@ public class GamemainC {
         //init local time
         GameEventDispatch.instance.event(GameEvent.StartLoopTime);
 
-        //新手引导
-        Laya.timer.once(1000,this,function () {
-            UiManager.instance.loadView("Gameguide",null,0,"UITYPE_ANI");
-        })
+        var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
+        console.log("--_guideComplete:",_guideComplete);
+        if(!_guideComplete){
+            //新手引导
+            Laya.timer.once(200,this,function () {
+                UiManager.instance.loadView("Gameguide",null,0,"UITYPE_ANI");
+            });
+        }
     }
 
 

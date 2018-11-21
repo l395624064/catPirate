@@ -424,7 +424,7 @@ var ___Laya=(function(){
 	Laya.timer=null;
 	Laya.scaleTimer=null;
 	Laya.loader=null;
-	Laya.version="1.7.20";
+	Laya.version="1.7.21";
 	Laya.render=null;
 	Laya._currentStage=null;
 	Laya._isinit=false;
@@ -738,7 +738,15 @@ var GamemainC=(function(){
 	var __proto=GamemainC.prototype;
 	__proto.openGame=function(){
 		UiManager.instance.loadView("Gamemain",null,2);
+		console.log("--GameMainPanelOpen");
 		GameEventDispatch.instance.event("StartLoopTime");
+		var _guideComplete=PlayerInfoM.instance.getGuide();
+		console.log("--_guideComplete:",_guideComplete);
+		if(!_guideComplete){
+			Laya.timer.once(200,this,function(){
+				UiManager.instance.loadView("Gameguide",null,0,"UITYPE_ANI");
+			});
+		}
 	}
 
 	__proto.GameReady=function(){
@@ -1797,6 +1805,7 @@ var GameEvent=(function(){
 	GameEvent.ShipSlotInit="ShipSlotInit";
 	GameEvent.CreatShipRole="CreatShipRole";
 	GameEvent.GetFriendRank="GetFriendRank";
+	GameEvent.GameGuideNext="GameGuideNext";
 	return GameEvent;
 })()
 
@@ -2324,6 +2333,7 @@ var UiManager=(function(){
 		this._UITYPE_WAIT=2003;
 		this._UITYPE_EFFECT=2004;
 		this._UITYPE_GAINNEW=2005;
+		this._UITYPE_GUIDE=3000;
 		this._taskArr=[];
 		this._taskState="Empty";
 		//Empty Busy
@@ -2359,6 +2369,7 @@ var UiManager=(function(){
 		this._emptyResUi['TimeoverAni']=true;
 		this._emptyResUi['TimebossAni']=true;
 		this._emptyResUi['Endaward']=true;
+		this._emptyResUi['Gameguide']=true;
 	}
 
 	__proto.getEmptyRes=function(name){
@@ -2499,6 +2510,10 @@ var UiManager=(function(){
 				}
 			case "UITYPE_GAINNEW":{
 					deep=this._UITYPE_GAINNEW;
+					break ;
+				}
+			case "UITYPE_GUIDE":{
+					deep=this._UITYPE_GUIDE;
 					break ;
 				}
 			default :{
@@ -3096,11 +3111,20 @@ var PlayerInfoM=(function(){
 			Boxlibs:false,
 			Luckwheel:false,
 			Friendrank:false
-		}
+		};
+		this._guideComplete=false;
 	}
 
 	__class(PlayerInfoM,'model.PlayerInfoM');
 	var __proto=PlayerInfoM.prototype;
+	__proto.getGuide=function(){
+		return this._guideComplete;
+	}
+
+	__proto.setGuide=function(value){
+		this._guideComplete=value;
+	}
+
 	__proto.getRedPointByName=function(name){
 		return this._redPointObj[name];
 	}
@@ -7013,7 +7037,7 @@ var TouchManager=(function(){
 			preO.tar=ele;
 		}
 		if (Browser.onMobile)
-			this.sendEvents(arrs,"mouseover",touchID);
+			this.sendEvents(arrs,"mouseover");
 		var preDowns;
 		preDowns=isLeft ? this.preDowns :this.preRightDowns;
 		preO=this.getTouchFromArr(touchID,preDowns);
@@ -7023,7 +7047,7 @@ var TouchManager=(function(){
 			}else {
 			preO.tar=ele;
 		}
-		this.sendEvents(arrs,isLeft ? "mousedown" :"rightmousedown",touchID);
+		this.sendEvents(arrs,isLeft ? "mousedown" :"rightmousedown");
 		this._clearTempArrs();
 	}
 
@@ -7031,10 +7055,8 @@ var TouchManager=(function(){
 	*派发事件。
 	*@param eles 对象列表。
 	*@param type 事件类型。
-	*@param touchID （可选）touchID，默认为0。
 	*/
-	__proto.sendEvents=function(eles,type,touchID){
-		(touchID===void 0)&& (touchID=0);
+	__proto.sendEvents=function(eles,type){
 		var i=0,len=0;
 		len=eles.length;
 		this._event._stoped=false;
@@ -7085,10 +7107,10 @@ var TouchManager=(function(){
 		var i=0,len=0;
 		if (elePre.contains(eleNew)){
 			arrs=this.getEles(eleNew,elePre,TouchManager._tEleArr);
-			this.sendEvents(arrs,"mouseover",touchID);
+			this.sendEvents(arrs,"mouseover");
 			}else if (eleNew.contains(elePre)){
 			arrs=this.getEles(elePre,eleNew,TouchManager._tEleArr);
-			this.sendEvents(arrs,"mouseout",touchID);
+			this.sendEvents(arrs,"mouseout");
 			}else {
 			arrs=TouchManager._tEleArr;
 			arrs.length=0;
@@ -7109,10 +7131,10 @@ var TouchManager=(function(){
 				}
 			}
 			if (arrs.length > 0){
-				this.sendEvents(arrs,"mouseout",touchID);
+				this.sendEvents(arrs,"mouseout");
 			}
 			if (newArr.length > 0){
-				this.sendEvents(newArr,"mouseover",touchID);
+				this.sendEvents(newArr,"mouseover");
 			}
 		}
 	}
@@ -7132,14 +7154,14 @@ var TouchManager=(function(){
 		var tO;
 		if (!preO){
 			arrs=this.getEles(ele,null,TouchManager._tEleArr);
-			this.sendEvents(arrs,"mouseover",touchID);
+			this.sendEvents(arrs,"mouseover");
 			this.preOvers.push(this.createTouchO(ele,touchID));
 			}else {
 			this.checkMouseOutAndOverOfMove(ele,preO.tar);
 			preO.tar=ele;
 			arrs=this.getEles(ele,null,TouchManager._tEleArr);
 		}
-		this.sendEvents(arrs,"mousemove",touchID);
+		this.sendEvents(arrs,"mousemove");
 		this._clearTempArrs();
 	}
 
@@ -7156,7 +7178,7 @@ var TouchManager=(function(){
 		var lastOvers;
 		lastOvers=this.getLastOvers();
 		this.preOvers.length=0;
-		this.sendEvents(lastOvers,"mouseout",0);
+		this.sendEvents(lastOvers,"mouseout");
 	}
 
 	/**
@@ -7178,7 +7200,7 @@ var TouchManager=(function(){
 		var sendArr;
 		var onMobile=Browser.onMobile;
 		arrs=this.getEles(ele,null,TouchManager._tEleArr);
-		this.sendEvents(arrs,isLeft ? "mouseup" :"rightmouseup",touchID);
+		this.sendEvents(arrs,isLeft ? "mouseup" :"rightmouseup");
 		var preDowns;
 		preDowns=isLeft ? this.preDowns :this.preRightDowns;
 		preO=this.getTouchFromArr(touchID,preDowns);
@@ -7203,10 +7225,10 @@ var TouchManager=(function(){
 				}
 			}
 			if (sendArr.length > 0){
-				this.sendEvents(sendArr,isLeft ? "click" :"rightclick",touchID);
+				this.sendEvents(sendArr,isLeft ? "click" :"rightclick");
 			}
 			if (isLeft && isDouble){
-				this.sendEvents(sendArr,"doubleclick",touchID);
+				this.sendEvents(sendArr,"doubleclick");
 			}
 			this.removeTouchFromArr(touchID,preDowns);
 			preO.tar=null;
@@ -7218,7 +7240,7 @@ var TouchManager=(function(){
 			if (onMobile){
 				sendArr=this.getEles(preO.tar,null,sendArr);
 				if (sendArr && sendArr.length > 0){
-					this.sendEvents(sendArr,"mouseout",touchID);
+					this.sendEvents(sendArr,"mouseout");
 				}
 				this.removeTouchFromArr(touchID,this.preOvers);
 				preO.tar=null;
@@ -13693,11 +13715,7 @@ var Dragging=(function(){
 		this.data=data;
 		this._disableMouseEvent=disableMouseEvent;
 		this.ratio=ratio;
-		if (target.globalScaleX !=1 || target.globalScaleY !=1){
-			this._parent=target.parent;
-			}else {
-			this._parent=Laya.stage;
-		}
+		this._parent=target.parent;
 		this._clickOnly=true;
 		this._dragging=true;
 		this._elasticRateX=this._elasticRateY=1;
@@ -20401,6 +20419,12 @@ var MiniAdpter=(function(){
 			MiniFileMgr.existDir(MiniFileMgr.fileNativeDir,Handler.create(MiniAdpter,MiniAdpter.onMkdirCallBack));
 		}
 		MiniAdpter.systemInfo=wx.getSystemInfoSync();
+		if (MiniAdpter.systemInfo.system.toLowerCase()==='ios 10.1.1'){
+			try{
+				laya.webgl.resource.WebGLCharImage.canUseCanvas=false;
+				}catch(e){
+			}
+		}
 		MiniAdpter.window.focus=function (){
 		};
 		Laya['_getUrlPath']=function (){
@@ -20443,6 +20467,8 @@ var MiniAdpter=(function(){
 					if(message.url){
 						MiniFileMgr.ziyuFileData[message.url]=message.atlasdata;
 					}
+					}else if(message['isLoad']=="openJsondatacontextPic"){
+					MiniFileMgr.ziyuFileTextureData[message.imgReadyUrl]=message.imgNativeUrl;
 				}
 			});
 		}
@@ -20581,26 +20607,61 @@ var MiniAdpter=(function(){
 
 	MiniAdpter.sendAtlasToOpenDataContext=function(url){
 		if(!laya.wx.mini.MiniAdpter.isZiYu){
-			var atlasJson=Loader.getRes(url);
+			var atlasJson=Loader.getRes(URL.formatURL(url));
 			if(atlasJson){
-				var postData={"frames":atlasJson.frames,"meta":atlasJson.meta};
-				var textureUrl;
-				if(url.indexOf(".atlas")){
-					textureUrl=url.replace(".atlas",".png");
-					}else{
-					textureUrl=url.replace(".json",".png");
-				};
-				var fileObj=MiniFileMgr.getFileInfo(textureUrl);
-				var fileMd5Name=fileObj.md5;
-				var fileNativeUrl=MiniFileMgr.getFileNativePath(fileMd5Name);
-				if(fileNativeUrl){
-					wx.postMessage({url:url,atlasdata:postData,imgNativeUrl:fileNativeUrl,imgReadyUrl:textureUrl,isLoad:"opendatacontext"});
-					}else{
-					throw "获取图集的磁盘url路径不存在！";
+				var textureArr=(atlasJson.meta.image).split(",");
+				if (atlasJson.meta && atlasJson.meta.image){
+					var toloadPics=atlasJson.meta.image.split(",");
+					var split=url.indexOf("/")>=0 ? "/" :"\\";
+					var idx=url.lastIndexOf(split);
+					var folderPath=idx >=0 ? url.substr(0,idx+1):"";
+					for (var i=0,len=toloadPics.length;i < len;i++){
+						toloadPics[i]=folderPath+toloadPics[i];
+					}
+					}else {
+					toloadPics=[url.replace(".json",".png")];
+				}
+				for(i=0;i<toloadPics.length;i++){
+					var tempAtlasPngUrl=toloadPics[i];
+					MiniAdpter.postInfoToContext(url,tempAtlasPngUrl,atlasJson);
 				}
 				}else{
 				throw "传递的url没有获取到对应的图集数据信息，请确保图集已经过！";
 			}
+		}
+	}
+
+	MiniAdpter.postInfoToContext=function(url,atlaspngUrl,atlasJson){
+		var postData={"frames":atlasJson.frames,"meta":atlasJson.meta};
+		var textureUrl=atlaspngUrl;
+		var fileObj=MiniFileMgr.getFileInfo(URL.formatURL(atlaspngUrl));
+		if(fileObj){
+			var fileMd5Name=fileObj.md5;
+			var fileNativeUrl=MiniFileMgr.getFileNativePath(fileMd5Name);
+			}else{
+			fileNativeUrl=textureUrl;
+		}
+		if(fileNativeUrl){
+			wx.postMessage({url:url,atlasdata:postData,imgNativeUrl:fileNativeUrl,imgReadyUrl:textureUrl,isLoad:"opendatacontext"});
+			}else{
+			throw "获取图集的磁盘url路径不存在！";
+		}
+	}
+
+	MiniAdpter.sendSinglePicToOpenDataContext=function(url){
+		var tempTextureUrl=URL.formatURL(url);
+		var fileObj=MiniFileMgr.getFileInfo(tempTextureUrl);
+		if(fileObj){
+			var fileMd5Name=fileObj.md5;
+			var fileNativeUrl=MiniFileMgr.getFileNativePath(fileMd5Name);
+			url=tempTextureUrl;
+			}else{
+			fileNativeUrl=url;
+		}
+		if(fileNativeUrl){
+			wx.postMessage({url:url,imgNativeUrl:fileNativeUrl,imgReadyUrl:url,isLoad:"openJsondatacontextPic"});
+			}else{
+			throw "获取图集的磁盘url路径不存在！";
 		}
 	}
 
@@ -20624,6 +20685,9 @@ var MiniAdpter=(function(){
 	MiniAdpter.isPosMsgYu=false;
 	MiniAdpter.autoCacheFile=true;
 	MiniAdpter.minClearSize=(5 *1024 *1024);
+	MiniAdpter.subNativeFiles=null;
+	MiniAdpter.subNativeheads=[];
+	MiniAdpter.subMaps=[];
 	MiniAdpter.AutoCacheDownFile=false;
 	MiniAdpter._measureText=null;
 	MiniAdpter.parseXMLFromString=function(value){
@@ -20700,7 +20764,11 @@ var MiniFileMgr=(function(){
 				if (data.statusCode===200)
 					MiniFileMgr.readFile(data.tempFilePath,encoding,callBack,readyUrl,isSaveFile,fileType,isAutoClear);
 				else
-				callBack !=null && callBack.runWith([1,data]);
+				if(data.statusCode===403){
+					callBack !=null && callBack.runWith([0,fileUrl]);
+					}else{
+					callBack !=null && callBack.runWith([1,data]);
+				}
 				},fail:function (data){
 				callBack !=null && callBack.runWith([1,data]);
 		}});
@@ -20739,6 +20807,8 @@ var MiniFileMgr=(function(){
 						MiniFileMgr.copyFile(data.tempFilePath,readyUrl,callBack,"",isAutoClear);
 					else
 					callBack !=null && callBack.runWith([0,data.tempFilePath]);
+					}else{
+					callBack !=null && callBack.runWith([1,data]);
 				}
 				},fail:function (data){
 				callBack !=null && callBack.runWith([1,data]);
@@ -20816,7 +20886,7 @@ var MiniFileMgr=(function(){
 		for(var key in MiniFileMgr.filesListObj){
 			tempFileListArr.push(MiniFileMgr.filesListObj[key]);
 		}
-		MiniFileMgr.sortOn(tempFileListArr,"time",16);
+		MiniFileMgr.sortOn(tempFileListArr,"times",16);
 		var clearSize=0;
 		for(var i=1,sz=tempFileListArr.length;i<sz;i++){
 			var fileObj=tempFileListArr[i];
@@ -20869,6 +20939,10 @@ var MiniFileMgr=(function(){
 			var fileObj=tempFileListArr[i];
 			MiniFileMgr.deleteFile("",fileObj.readyUrl);
 		}
+		if(laya.wx.mini.MiniFileMgr.filesListObj && laya.wx.mini.MiniFileMgr.filesListObj.fileUsedSize){
+			laya.wx.mini.MiniFileMgr.filesListObj.fileUsedSize=0;
+		}
+		laya.wx.mini.MiniFileMgr.writeFilesList("",JSON.stringify({}),false);
 	}
 
 	MiniFileMgr.onSaveFile=function(readyUrl,md5Name,isAdd,encoding,callBack,fileSize){
@@ -20978,8 +21052,28 @@ var MiniImage=(function(){
 					url=url.split(MiniFileMgr.loadPath)[1];
 					}else{
 					var tempStr=URL.rootPath !="" ? URL.rootPath :URL.basePath;
+					var tempUrl=url;
 					if(tempStr !="")
 						url=url.split(tempStr)[1];
+					if(!url){
+						url=tempUrl;
+					}
+				}
+			}
+			if (MiniAdpter.subNativeFiles && MiniAdpter.subNativeheads.length==0){
+				for (var key in MiniAdpter.subNativeFiles){
+					var tempArr=MiniAdpter.subNativeFiles[key];
+					MiniAdpter.subNativeheads=MiniAdpter.subNativeheads.concat(tempArr);
+					for (var aa=0;aa < tempArr.length;aa++){
+						MiniAdpter.subMaps[tempArr[aa]]=key+"/"+tempArr[aa];
+					}
+				}
+			}
+			if(MiniAdpter.subNativeFiles && url.indexOf("/")!=-1){
+				var curfileHead=url.split("/")[0]+"/";
+				if(curfileHead && MiniAdpter.subNativeheads.indexOf(curfileHead)!=-1){
+					var newfileHead=MiniAdpter.subMaps[curfileHead];
+					url=url.replace(curfileHead,newfileHead);
 				}
 			}
 		}
@@ -23763,7 +23857,7 @@ var Loader=(function(_super){
 	Loader.TTF="ttf";
 	Loader.PLF="plf";
 	Loader.PKM="pkm";
-	Loader.typeMap={"png":"image","jpg":"image","jpeg":"image","txt":"text","json":"json","xml":"xml","als":"atlas","atlas":"atlas","mp3":"sound","ogg":"sound","wav":"sound","part":"json","fnt":"font","pkm":"pkm","ttf":"ttf","plf":"plf"};
+	Loader.typeMap={"png":"image","jpg":"image","jpeg":"image","txt":"text","json":"json","xml":"xml","als":"atlas","atlas":"atlas","mp3":"sound","ogg":"sound","wav":"sound","part":"json","fnt":"font","pkm":"pkm","ttf":"ttf","plf":"plf","ani":"json","sk":"arraybuffer"};
 	Loader.parserMap={};
 	Loader.groupMap={};
 	Loader.maxTimeOut=100;
@@ -24178,7 +24272,8 @@ var AutoBitmap=(function(_super){
 		var sw=source.sourceWidth;
 		var sh=source.sourceHeight;
 		if (!sizeGrid || (sw===width && sh===height)){
-			this.cleanByTexture(source,this._offset ? this._offset[0] :0,this._offset ? this._offset[1] :0,width,height);
+			this.clear();
+			this.drawTexture(source,this._offset ? this._offset[0] :0,this._offset ? this._offset[1] :0,width,height);
 			}else {
 			source.$_GID || (source.$_GID=Utils.getGID());
 			var key=source.$_GID+"."+width+"."+height+"."+sizeGrid.join(".");
@@ -24318,7 +24413,7 @@ var AutoBitmap=(function(_super){
 		tex.$_GID || (tex.$_GID=Utils.getGID())
 		var key=tex.$_GID+"."+x+"."+y+"."+width+"."+height;
 		var texture=WeakObject.I.get(key);
-		if (!texture||!texture.source){
+		if (!texture || !texture.source){
 			texture=Texture.createFromTexture(tex,x,y,width,height);
 			WeakObject.I.set(key,texture);
 		}
@@ -24384,6 +24479,22 @@ var MiniLoader=(function(_super){
 			}
 			if (!MiniFileMgr.getFileInfo(url)){
 				if (MiniFileMgr.isLocalNativeFile(url)){
+					if (MiniAdpter.subNativeFiles && MiniAdpter.subNativeheads.length==0){
+						for (var key in MiniAdpter.subNativeFiles){
+							var tempArr=MiniAdpter.subNativeFiles[key];
+							MiniAdpter.subNativeheads=MiniAdpter.subNativeheads.concat(tempArr);
+							for (var aa=0;aa < tempArr.length;aa++){
+								MiniAdpter.subMaps[tempArr[aa]]=key+"/"+tempArr[aa];
+							}
+						}
+					}
+					if(MiniAdpter.subNativeFiles && url.indexOf("/")!=-1){
+						var curfileHead=url.split("/")[0]+"/";
+						if(curfileHead && MiniAdpter.subNativeheads.indexOf(curfileHead)!=-1){
+							var newfileHead=MiniAdpter.subMaps[curfileHead];
+							url=url.replace(curfileHead,newfileHead);
+						}
+					}
 					MiniFileMgr.read(url,encoding,new Handler(MiniLoader,MiniLoader.onReadNativeCallBack,[encoding,url,type,cache,group,ignoreCache,thisLoader]));
 					return;
 				};
@@ -24487,7 +24598,34 @@ var MiniSound=(function(_super){
 			if(!MiniAdpter.autoCacheFile){
 				this.onDownLoadCallBack(url,0);
 				}else{
-				MiniFileMgr.downOtherFiles(url,Handler.create(this,this.onDownLoadCallBack,[url]),url);
+				if (MiniFileMgr.isLocalNativeFile(url)){
+					tempStr=URL.rootPath !="" ? URL.rootPath :URL.basePath;
+					var tempUrl=url;
+					if(tempStr !="")
+						url=url.split(tempStr)[1];
+					if (!url){
+						url=tempUrl;
+					}
+					if (MiniAdpter.subNativeFiles && MiniAdpter.subNativeheads.length==0){
+						for (var key in MiniAdpter.subNativeFiles){
+							var tempArr=MiniAdpter.subNativeFiles[key];
+							MiniAdpter.subNativeheads=MiniAdpter.subNativeheads.concat(tempArr);
+							for (var aa=0;aa < tempArr.length;aa++){
+								MiniAdpter.subMaps[tempArr[aa]]=key+"/"+tempArr[aa];
+							}
+						}
+					}
+					if(MiniAdpter.subNativeFiles && url.indexOf("/")!=-1){
+						var curfileHead=url.split("/")[0]+"/";
+						if(curfileHead && MiniAdpter.subNativeheads.indexOf(curfileHead)!=-1){
+							var newfileHead=MiniAdpter.subMaps[curfileHead];
+							url=url.replace(curfileHead,newfileHead);
+						}
+					}
+					this.onDownLoadCallBack(url,0);
+					}else{
+					MiniFileMgr.downOtherFiles(url,Handler.create(this,this.onDownLoadCallBack,[url]),url);
+				}
 			}
 		}
 	}
@@ -27224,7 +27362,7 @@ var Atlaser=(function(_super){
 			this._InAtlasWebGLImagesKey[sUrl?sUrl:webImage.id]={bitmap:mergeAtlasBitmap,offsetInfoID:this._InAtlasWebGLImagesOffsetValue.length};
 			this._InAtlasWebGLImagesOffsetValue.push([offsetX,offsetY]);
 		}
-		this._atlasCanvas.texSubImage2D(offsetX,offsetY,mergeAtlasBitmap.atlasSource);
+		this._atlasCanvas.texSubImage2D(offsetX,offsetY,mergeAtlasBitmap.atlasImgData || mergeAtlasBitmap.atlasSource);
 		mergeAtlasBitmap.clearAtlasSource();
 	}
 
@@ -27798,12 +27936,12 @@ var MeshTexture=(function(_super){
 	__class(MeshTexture,'laya.webgl.utils.MeshTexture',_super);
 	var __proto=MeshTexture.prototype;
 	__proto.addData=function(vertices,uvs,idx,matrix,rgba,ctx){
-		var sz=vertices.length / 2;
-		var startpos=this._vb.needSize(sz *MeshTexture.const_stride);
+		var vertsz=vertices.length / 2;
+		var startpos=this._vb.needSize(vertsz *MeshTexture.const_stride);
 		var f32pos=startpos >> 2;
 		var vbdata=this._vb.getFloat32Array();
 		var ci=0;
-		for (var i=0;i < sz;i++){
+		for (var i=0;i < vertsz;i++){
 			var x=vertices[ci],y=vertices[ci+1];
 			var x1=x *matrix.a+y *matrix.c+matrix.tx;
 			var y1=x *matrix.b+y *matrix.d+matrix.ty;
@@ -27814,7 +27952,7 @@ var MeshTexture=(function(_super){
 		this._vb.setNeedUpload();
 		var vertN=this.vertNum;
 		if (vertN > 0){
-			sz=idx.length;
+			var sz=idx.length;
 			if (sz > MeshTexture.tmpIdx.length)MeshTexture.tmpIdx=new Uint16Array(sz);
 			for (var ii=0;ii < sz;ii++){
 				MeshTexture.tmpIdx[ii]=idx[ii]+vertN;
@@ -27824,7 +27962,7 @@ var MeshTexture=(function(_super){
 			this._ib.append(idx);
 		}
 		this._ib.setNeedUpload();
-		this.vertNum+=sz;
+		this.vertNum+=vertsz;
 		this.indexNum+=idx.length;
 	}
 
@@ -29515,7 +29653,8 @@ var AudioSoundChannel=(function(_super){
 	}
 
 	__proto.__resumePlay=function(){
-		if(this._audio)this._audio.removeEventListener("canplay",this._resumePlay);
+		if (this._audio)this._audio.removeEventListener("canplay",this._resumePlay);
+		if (this.isStopped)return;
 		try {
 			this._audio.currentTime=this.startTime;
 			Browser.container.appendChild(this._audio);
@@ -29530,6 +29669,7 @@ var AudioSoundChannel=(function(_super){
 	*/
 	__proto.play=function(){
 		this.isStopped=false;
+		if (!this._audio)return;
 		try {
 			this._audio.playbackRate=SoundManager.playbackRate;
 			this._audio.currentTime=this.startTime;
@@ -29693,14 +29833,14 @@ var WebAudioSoundChannel=(function(_super){
 		if (this.startTime >=this.duration)this.startTime=0;
 		this._startTime=Browser.now();
 		if (this.gain.gain.setTargetAtTime){
-			this.gain.gain.setTargetAtTime(this._volume,this.context.currentTime,0.1);
+			this.gain.gain.setTargetAtTime(this._volume,this.context.currentTime,0.001);
 		}else
 		this.gain.gain.value=this._volume;
 		if (this.loops==0){
 			bufferSource.loop=true;
 		}
 		if (bufferSource.playbackRate.setTargetAtTime){
-			bufferSource.playbackRate.setTargetAtTime(SoundManager.playbackRate,this.context.currentTime,0.1)
+			bufferSource.playbackRate.setTargetAtTime(SoundManager.playbackRate,this.context.currentTime,0.001)
 		}else
 		bufferSource.playbackRate.value=SoundManager.playbackRate;
 		bufferSource.start(0,this.startTime);
@@ -29815,12 +29955,13 @@ var WebAudioSoundChannel=(function(_super){
 		}
 		this._volume=v;
 		if (this.gain.gain.setTargetAtTime){
-			this.gain.gain.setTargetAtTime(v,this.context.currentTime,0.1);
+			this.gain.gain.setTargetAtTime(v,this.context.currentTime,0.001);
 		}else
 		this.gain.gain.value=v;
 	});
 
 	WebAudioSoundChannel._tryCleanFailed=false;
+	WebAudioSoundChannel.SetTargetDelay=0.001;
 	return WebAudioSoundChannel;
 })(SoundChannel)
 
@@ -30423,6 +30564,10 @@ var Component=(function(_super){
 	*/
 	__proto.changeSize=function(){
 		this.event("resize");
+		if (this._layout.enable){
+			this.resetLayoutX();
+			this.resetLayoutY();
+		}
 	}
 
 	/**
@@ -30533,6 +30678,11 @@ var Component=(function(_super){
 	*/
 	__proto.onMouseOut=function(e){
 		Laya.stage.event("hidetip",this._toolTip);
+	}
+
+	__proto._childChanged=function(child){
+		this.callLater(this.changeSize);
+		_super.prototype._childChanged.call(this,child);
 	}
 
 	/**
@@ -31377,6 +31527,7 @@ var Text=(function(_super){
 					word+="●";
 				}
 			}
+			if (word===undefined)word="";
 			x=startX-(this._clipPoint ? this._clipPoint.x :0);
 			y=startY+lineHeight *i-(this._clipPoint ? this._clipPoint.y :0);
 			this.underline && this.drawUnderline(textAlgin,x,y,i);
@@ -34756,6 +34907,14 @@ var WebGLCharImage=(function(_super){
 		return this.canvas;
 	});
 
+	__getset(0,__proto,'atlasImgData',function(){
+		if (!WebGLCharImage.canUseCanvas){
+			if(this._ctx.getImageData)
+				return this._ctx.getImageData(0,0,this._w,this._h);
+		}
+		return null;
+	});
+
 	/**
 	*是否创建私有Source,通常禁止修改
 	*@param value 是否创建
@@ -34775,6 +34934,7 @@ var WebGLCharImage=(function(_super){
 		return char;
 	}
 
+	WebGLCharImage.canUseCanvas=true;
 	WebGLCharImage._fontSizeReg=new RegExp("\\d+(?=px)","g");
 	return WebGLCharImage;
 })(Bitmap)
@@ -36204,7 +36364,7 @@ var Animation=(function(_super){
 		this._url=url;
 		var _this_=this;
 		if (!this._actionName)this._actionName="";
-		if (!_this_._setFramesFromCache("")){
+		if (!_this_._setFramesFromCache(this._actionName)){
 			if (!atlas || Loader.getAtlas(atlas)){
 				this._loadAnimationData(url,loaded,atlas);
 				}else {
@@ -36351,6 +36511,216 @@ var Animation=(function(_super){
 	Animation.framesMap={};
 	return Animation;
 })(AnimationPlayerBase)
+
+
+/**
+*<code>Image</code> 类是用于表示位图图像或绘制图形的显示对象。
+*Image和Clip组件是唯一支持异步加载的两个组件，比如img.skin="abc/xxx.png"，其他UI组件均不支持异步加载。
+*
+*@example <caption>以下示例代码，创建了一个新的 <code>Image</code> 实例，设置了它的皮肤、位置信息，并添加到舞台上。</caption>
+*package
+*{
+	*import laya.ui.Image;
+	*public class Image_Example
+	*{
+		*public function Image_Example()
+		*{
+			*Laya.init(640,800);//设置游戏画布宽高。
+			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+			*onInit();
+			*}
+		*private function onInit():void
+		*{
+			*var bg:Image=new Image("resource/ui/bg.png");//创建一个 Image 类的实例对象 bg ,并传入它的皮肤。
+			*bg.x=100;//设置 bg 对象的属性 x 的值，用于控制 bg 对象的显示位置。
+			*bg.y=100;//设置 bg 对象的属性 y 的值，用于控制 bg 对象的显示位置。
+			*bg.sizeGrid="40,10,5,10";//设置 bg 对象的网格信息。
+			*bg.width=150;//设置 bg 对象的宽度。
+			*bg.height=250;//设置 bg 对象的高度。
+			*Laya.stage.addChild(bg);//将此 bg 对象添加到显示列表。
+			*var image:Image=new Image("resource/ui/image.png");//创建一个 Image 类的实例对象 image ,并传入它的皮肤。
+			*image.x=100;//设置 image 对象的属性 x 的值，用于控制 image 对象的显示位置。
+			*image.y=100;//设置 image 对象的属性 y 的值，用于控制 image 对象的显示位置。
+			*Laya.stage.addChild(image);//将此 image 对象添加到显示列表。
+			*}
+		*}
+	*}
+*@example
+*Laya.init(640,800);//设置游戏画布宽高
+*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
+*onInit();
+*function onInit(){
+	*var bg=new laya.ui.Image("resource/ui/bg.png");//创建一个 Image 类的实例对象 bg ,并传入它的皮肤。
+	*bg.x=100;//设置 bg 对象的属性 x 的值，用于控制 bg 对象的显示位置。
+	*bg.y=100;//设置 bg 对象的属性 y 的值，用于控制 bg 对象的显示位置。
+	*bg.sizeGrid="40,10,5,10";//设置 bg 对象的网格信息。
+	*bg.width=150;//设置 bg 对象的宽度。
+	*bg.height=250;//设置 bg 对象的高度。
+	*Laya.stage.addChild(bg);//将此 bg 对象添加到显示列表。
+	*var image=new laya.ui.Image("resource/ui/image.png");//创建一个 Image 类的实例对象 image ,并传入它的皮肤。
+	*image.x=100;//设置 image 对象的属性 x 的值，用于控制 image 对象的显示位置。
+	*image.y=100;//设置 image 对象的属性 y 的值，用于控制 image 对象的显示位置。
+	*Laya.stage.addChild(image);//将此 image 对象添加到显示列表。
+	*}
+*@example
+*class Image_Example {
+	*constructor(){
+		*Laya.init(640,800);//设置游戏画布宽高。
+		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+		*this.onInit();
+		*}
+	*private onInit():void {
+		*var bg:laya.ui.Image=new laya.ui.Image("resource/ui/bg.png");//创建一个 Image 类的实例对象 bg ,并传入它的皮肤。
+		*bg.x=100;//设置 bg 对象的属性 x 的值，用于控制 bg 对象的显示位置。
+		*bg.y=100;//设置 bg 对象的属性 y 的值，用于控制 bg 对象的显示位置。
+		*bg.sizeGrid="40,10,5,10";//设置 bg 对象的网格信息。
+		*bg.width=150;//设置 bg 对象的宽度。
+		*bg.height=250;//设置 bg 对象的高度。
+		*Laya.stage.addChild(bg);//将此 bg 对象添加到显示列表。
+		*var image:laya.ui.Image=new laya.ui.Image("resource/ui/image.png");//创建一个 Image 类的实例对象 image ,并传入它的皮肤。
+		*image.x=100;//设置 image 对象的属性 x 的值，用于控制 image 对象的显示位置。
+		*image.y=100;//设置 image 对象的属性 y 的值，用于控制 image 对象的显示位置。
+		*Laya.stage.addChild(image);//将此 image 对象添加到显示列表。
+		*}
+	*}
+*@see laya.ui.AutoBitmap
+*/
+//class laya.ui.Image extends laya.ui.Component
+var Image=(function(_super){
+	function Image(skin){
+		/**@private */
+		this._bitmap=null;
+		/**@private */
+		this._skin=null;
+		/**@private */
+		this._group=null;
+		Image.__super.call(this);
+		this.skin=skin;
+	}
+
+	__class(Image,'laya.ui.Image',_super);
+	var __proto=Image.prototype;
+	/**@inheritDoc */
+	__proto.destroy=function(destroyChild){
+		(destroyChild===void 0)&& (destroyChild=true);
+		_super.prototype.destroy.call(this,true);
+		this._bitmap && this._bitmap.destroy();
+		this._bitmap=null;
+	}
+
+	/**
+	*销毁对象并释放加载的皮肤资源。
+	*/
+	__proto.dispose=function(){
+		this.destroy(true);
+		Laya.loader.clearRes(this._skin);
+	}
+
+	/**@inheritDoc */
+	__proto.createChildren=function(){
+		this.graphics=this._bitmap=new AutoBitmap();
+		this._bitmap.autoCacheCmd=false;
+	}
+
+	/**
+	*@private
+	*设置皮肤资源。
+	*/
+	__proto.setSource=function(url,img){
+		if (url===this._skin && img){
+			this.source=img
+			this.onCompResize();
+		}
+	}
+
+	/**
+	*@copy laya.ui.AutoBitmap#source
+	*/
+	__getset(0,__proto,'source',function(){
+		return this._bitmap.source;
+		},function(value){
+		if (!this._bitmap)return;
+		this._bitmap.source=value;
+		this.event("loaded");
+		this.repaint();
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'dataSource',_super.prototype._$get_dataSource,function(value){
+		this._dataSource=value;
+		if ((typeof value=='string'))this.skin=value;
+		else Laya.superSet(Component,this,'dataSource',value);
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'measureHeight',function(){
+		return this._bitmap.height;
+	});
+
+	/**
+	*<p>对象的皮肤地址，以字符串表示。</p>
+	*<p>如果资源未加载，则先加载资源，加载完成后应用于此对象。</p>
+	*<b>注意：</b>资源加载完成后，会自动缓存至资源库中。
+	*/
+	__getset(0,__proto,'skin',function(){
+		return this._skin;
+		},function(value){
+		if (this._skin !=value){
+			this._skin=value;
+			if (value){
+				var source=Loader.getRes(value);
+				if (source){
+					this.source=source;
+					this.onCompResize();
+				}else Laya.loader.load(this._skin,Handler.create(this,this.setSource,[this._skin]),null,"image",1,true,this._group);
+				}else {
+				this.source=null;
+			}
+		}
+	});
+
+	/**
+	*资源分组。
+	*/
+	__getset(0,__proto,'group',function(){
+		return this._group;
+		},function(value){
+		if (value && this._skin)Loader.setGroup(this._skin,value);
+		this._group=value;
+	});
+
+	/**
+	*<p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
+	*<p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
+	*<ul><li>例如："4,4,4,4,1"。</li></ul></p>
+	*@see laya.ui.AutoBitmap#sizeGrid
+	*/
+	__getset(0,__proto,'sizeGrid',function(){
+		if (this._bitmap.sizeGrid)return this._bitmap.sizeGrid.join(",");
+		return null;
+		},function(value){
+		this._bitmap.sizeGrid=UIUtils.fillArray(Styles.defaultSizeGrid,value,Number);
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'measureWidth',function(){
+		return this._bitmap.width;
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'width',_super.prototype._$get_width,function(value){
+		Laya.superSet(Component,this,'width',value);
+		this._bitmap.width=value==0 ? 0.0000001 :value;
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'height',_super.prototype._$get_height,function(value){
+		Laya.superSet(Component,this,'height',value);
+		this._bitmap.height=value==0 ? 0.0000001 :value;
+	});
+
+	return Image;
+})(Component)
 
 
 /**
@@ -38640,216 +39010,6 @@ var Slider=(function(_super){
 	['label',function(){return this.label=new Label();}
 	]);
 	return Slider;
-})(Component)
-
-
-/**
-*<code>Image</code> 类是用于表示位图图像或绘制图形的显示对象。
-*Image和Clip组件是唯一支持异步加载的两个组件，比如img.skin="abc/xxx.png"，其他UI组件均不支持异步加载。
-*
-*@example <caption>以下示例代码，创建了一个新的 <code>Image</code> 实例，设置了它的皮肤、位置信息，并添加到舞台上。</caption>
-*package
-*{
-	*import laya.ui.Image;
-	*public class Image_Example
-	*{
-		*public function Image_Example()
-		*{
-			*Laya.init(640,800);//设置游戏画布宽高。
-			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-			*onInit();
-			*}
-		*private function onInit():void
-		*{
-			*var bg:Image=new Image("resource/ui/bg.png");//创建一个 Image 类的实例对象 bg ,并传入它的皮肤。
-			*bg.x=100;//设置 bg 对象的属性 x 的值，用于控制 bg 对象的显示位置。
-			*bg.y=100;//设置 bg 对象的属性 y 的值，用于控制 bg 对象的显示位置。
-			*bg.sizeGrid="40,10,5,10";//设置 bg 对象的网格信息。
-			*bg.width=150;//设置 bg 对象的宽度。
-			*bg.height=250;//设置 bg 对象的高度。
-			*Laya.stage.addChild(bg);//将此 bg 对象添加到显示列表。
-			*var image:Image=new Image("resource/ui/image.png");//创建一个 Image 类的实例对象 image ,并传入它的皮肤。
-			*image.x=100;//设置 image 对象的属性 x 的值，用于控制 image 对象的显示位置。
-			*image.y=100;//设置 image 对象的属性 y 的值，用于控制 image 对象的显示位置。
-			*Laya.stage.addChild(image);//将此 image 对象添加到显示列表。
-			*}
-		*}
-	*}
-*@example
-*Laya.init(640,800);//设置游戏画布宽高
-*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
-*onInit();
-*function onInit(){
-	*var bg=new laya.ui.Image("resource/ui/bg.png");//创建一个 Image 类的实例对象 bg ,并传入它的皮肤。
-	*bg.x=100;//设置 bg 对象的属性 x 的值，用于控制 bg 对象的显示位置。
-	*bg.y=100;//设置 bg 对象的属性 y 的值，用于控制 bg 对象的显示位置。
-	*bg.sizeGrid="40,10,5,10";//设置 bg 对象的网格信息。
-	*bg.width=150;//设置 bg 对象的宽度。
-	*bg.height=250;//设置 bg 对象的高度。
-	*Laya.stage.addChild(bg);//将此 bg 对象添加到显示列表。
-	*var image=new laya.ui.Image("resource/ui/image.png");//创建一个 Image 类的实例对象 image ,并传入它的皮肤。
-	*image.x=100;//设置 image 对象的属性 x 的值，用于控制 image 对象的显示位置。
-	*image.y=100;//设置 image 对象的属性 y 的值，用于控制 image 对象的显示位置。
-	*Laya.stage.addChild(image);//将此 image 对象添加到显示列表。
-	*}
-*@example
-*class Image_Example {
-	*constructor(){
-		*Laya.init(640,800);//设置游戏画布宽高。
-		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-		*this.onInit();
-		*}
-	*private onInit():void {
-		*var bg:laya.ui.Image=new laya.ui.Image("resource/ui/bg.png");//创建一个 Image 类的实例对象 bg ,并传入它的皮肤。
-		*bg.x=100;//设置 bg 对象的属性 x 的值，用于控制 bg 对象的显示位置。
-		*bg.y=100;//设置 bg 对象的属性 y 的值，用于控制 bg 对象的显示位置。
-		*bg.sizeGrid="40,10,5,10";//设置 bg 对象的网格信息。
-		*bg.width=150;//设置 bg 对象的宽度。
-		*bg.height=250;//设置 bg 对象的高度。
-		*Laya.stage.addChild(bg);//将此 bg 对象添加到显示列表。
-		*var image:laya.ui.Image=new laya.ui.Image("resource/ui/image.png");//创建一个 Image 类的实例对象 image ,并传入它的皮肤。
-		*image.x=100;//设置 image 对象的属性 x 的值，用于控制 image 对象的显示位置。
-		*image.y=100;//设置 image 对象的属性 y 的值，用于控制 image 对象的显示位置。
-		*Laya.stage.addChild(image);//将此 image 对象添加到显示列表。
-		*}
-	*}
-*@see laya.ui.AutoBitmap
-*/
-//class laya.ui.Image extends laya.ui.Component
-var Image=(function(_super){
-	function Image(skin){
-		/**@private */
-		this._bitmap=null;
-		/**@private */
-		this._skin=null;
-		/**@private */
-		this._group=null;
-		Image.__super.call(this);
-		this.skin=skin;
-	}
-
-	__class(Image,'laya.ui.Image',_super);
-	var __proto=Image.prototype;
-	/**@inheritDoc */
-	__proto.destroy=function(destroyChild){
-		(destroyChild===void 0)&& (destroyChild=true);
-		_super.prototype.destroy.call(this,true);
-		this._bitmap && this._bitmap.destroy();
-		this._bitmap=null;
-	}
-
-	/**
-	*销毁对象并释放加载的皮肤资源。
-	*/
-	__proto.dispose=function(){
-		this.destroy(true);
-		Laya.loader.clearRes(this._skin);
-	}
-
-	/**@inheritDoc */
-	__proto.createChildren=function(){
-		this.graphics=this._bitmap=new AutoBitmap();
-		this._bitmap.autoCacheCmd=false;
-	}
-
-	/**
-	*@private
-	*设置皮肤资源。
-	*/
-	__proto.setSource=function(url,img){
-		if (url===this._skin && img){
-			this.source=img
-			this.onCompResize();
-		}
-	}
-
-	/**
-	*@copy laya.ui.AutoBitmap#source
-	*/
-	__getset(0,__proto,'source',function(){
-		return this._bitmap.source;
-		},function(value){
-		if (!this._bitmap)return;
-		this._bitmap.source=value;
-		this.event("loaded");
-		this.repaint();
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'dataSource',_super.prototype._$get_dataSource,function(value){
-		this._dataSource=value;
-		if ((typeof value=='string'))this.skin=value;
-		else Laya.superSet(Component,this,'dataSource',value);
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'measureHeight',function(){
-		return this._bitmap.height;
-	});
-
-	/**
-	*<p>对象的皮肤地址，以字符串表示。</p>
-	*<p>如果资源未加载，则先加载资源，加载完成后应用于此对象。</p>
-	*<b>注意：</b>资源加载完成后，会自动缓存至资源库中。
-	*/
-	__getset(0,__proto,'skin',function(){
-		return this._skin;
-		},function(value){
-		if (this._skin !=value){
-			this._skin=value;
-			if (value){
-				var source=Loader.getRes(value);
-				if (source){
-					this.source=source;
-					this.onCompResize();
-				}else Laya.loader.load(this._skin,Handler.create(this,this.setSource,[this._skin]),null,"image",1,true,this._group);
-				}else {
-				this.source=null;
-			}
-		}
-	});
-
-	/**
-	*资源分组。
-	*/
-	__getset(0,__proto,'group',function(){
-		return this._group;
-		},function(value){
-		if (value && this._skin)Loader.setGroup(this._skin,value);
-		this._group=value;
-	});
-
-	/**
-	*<p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
-	*<p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
-	*<ul><li>例如："4,4,4,4,1"。</li></ul></p>
-	*@see laya.ui.AutoBitmap#sizeGrid
-	*/
-	__getset(0,__proto,'sizeGrid',function(){
-		if (this._bitmap.sizeGrid)return this._bitmap.sizeGrid.join(",");
-		return null;
-		},function(value){
-		this._bitmap.sizeGrid=UIUtils.fillArray(Styles.defaultSizeGrid,value,Number);
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'measureWidth',function(){
-		return this._bitmap.width;
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'width',_super.prototype._$get_width,function(value){
-		Laya.superSet(Component,this,'width',value);
-		this._bitmap.width=value==0 ? 0.0000001 :value;
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'height',_super.prototype._$get_height,function(value){
-		Laya.superSet(Component,this,'height',value);
-		this._bitmap.height=value==0 ? 0.0000001 :value;
-	});
-
-	return Image;
 })(Component)
 
 
@@ -42296,13 +42456,6 @@ var LayoutBox=(function(_super){
 	}
 
 	/**@inheritDoc */
-	__proto.removeChild=function(child){
-		child.off("resize",this,this.onResize);
-		this._setItemChanged();
-		return laya.display.Node.prototype.removeChild.call(this,child);
-	}
-
-	/**@inheritDoc */
 	__proto.removeChildAt=function(index){
 		this.getChildAt(index).off("resize",this,this.onResize);
 		this._setItemChanged();
@@ -44423,104 +44576,6 @@ var VScrollBar=(function(_super){
 
 
 /**
-*使用 <code>VSlider</code> 控件，用户可以通过在滑块轨道的终点之间移动滑块来选择值。
-*<p> <code>VSlider</code> 控件采用垂直方向。滑块轨道从下往上扩展，而标签位于轨道的左右两侧。</p>
-*
-*@example <caption>以下示例代码，创建了一个 <code>VSlider</code> 实例。</caption>
-*package
-*{
-	*import laya.ui.HSlider;
-	*import laya.ui.VSlider;
-	*import laya.utils.Handler;
-	*public class VSlider_Example
-	*{
-		*private var vSlider:VSlider;
-		*public function VSlider_Example()
-		*{
-			*Laya.init(640,800);//设置游戏画布宽高。
-			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-			*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,onLoadComplete));//加载资源。
-			*}
-		*private function onLoadComplete():void
-		*{
-			*vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
-			*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
-			*vSlider.min=0;//设置 vSlider 最低位置值。
-			*vSlider.max=10;//设置 vSlider 最高位置值。
-			*vSlider.value=2;//设置 vSlider 当前位置值。
-			*vSlider.tick=1;//设置 vSlider 刻度值。
-			*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
-			*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
-			*vSlider.changeHandler=new Handler(this,onChange);//设置 vSlider 位置变化处理器。
-			*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
-			*}
-		*private function onChange(value:Number):void
-		*{
-			*trace("滑块的位置： value="+value);
-			*}
-		*}
-	*}
-*@example
-*Laya.init(640,800);//设置游戏画布宽高
-*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
-*var vSlider;
-*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],laya.utils.Handler.create(this,onLoadComplete));//加载资源。
-*function onLoadComplete(){
-	*vSlider=new laya.ui.VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
-	*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
-	*vSlider.min=0;//设置 vSlider 最低位置值。
-	*vSlider.max=10;//设置 vSlider 最高位置值。
-	*vSlider.value=2;//设置 vSlider 当前位置值。
-	*vSlider.tick=1;//设置 vSlider 刻度值。
-	*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
-	*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
-	*vSlider.changeHandler=new laya.utils.Handler(this,onChange);//设置 vSlider 位置变化处理器。
-	*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
-	*}
-*function onChange(value){
-	*console.log("滑块的位置： value="+value);
-	*}
-*@example
-*import HSlider=laya.ui.HSlider;
-*import VSlider=laya.ui.VSlider;
-*import Handler=laya.utils.Handler;
-*class VSlider_Example {
-	*private vSlider:VSlider;
-	*constructor(){
-		*Laya.init(640,800);//设置游戏画布宽高。
-		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-		*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,this.onLoadComplete));//加载资源。
-		*}
-	*private onLoadComplete():void {
-		*this.vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
-		*this.vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
-		*this.vSlider.min=0;//设置 vSlider 最低位置值。
-		*this.vSlider.max=10;//设置 vSlider 最高位置值。
-		*this.vSlider.value=2;//设置 vSlider 当前位置值。
-		*this.vSlider.tick=1;//设置 vSlider 刻度值。
-		*this.vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
-		*this.vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
-		*this.vSlider.changeHandler=new Handler(this,this.onChange);//设置 vSlider 位置变化处理器。
-		*Laya.stage.addChild(this.vSlider);//把 vSlider 添加到显示列表。
-		*}
-	*private onChange(value:number):void {
-		*console.log("滑块的位置： value="+value);
-		*}
-	*}
-*@see laya.ui.Slider
-*/
-//class laya.ui.VSlider extends laya.ui.Slider
-var VSlider=(function(_super){
-	function VSlider(){
-		VSlider.__super.call(this);;
-	}
-
-	__class(VSlider,'laya.ui.VSlider',_super);
-	return VSlider;
-})(Slider)
-
-
-/**
 *<code>TextInput</code> 类用于创建显示对象以显示和输入文本。
 *
 *@example <caption>以下示例代码，创建了一个 <code>TextInput</code> 实例。</caption>
@@ -44843,6 +44898,104 @@ var TextInput=(function(_super){
 
 	return TextInput;
 })(Label)
+
+
+/**
+*使用 <code>VSlider</code> 控件，用户可以通过在滑块轨道的终点之间移动滑块来选择值。
+*<p> <code>VSlider</code> 控件采用垂直方向。滑块轨道从下往上扩展，而标签位于轨道的左右两侧。</p>
+*
+*@example <caption>以下示例代码，创建了一个 <code>VSlider</code> 实例。</caption>
+*package
+*{
+	*import laya.ui.HSlider;
+	*import laya.ui.VSlider;
+	*import laya.utils.Handler;
+	*public class VSlider_Example
+	*{
+		*private var vSlider:VSlider;
+		*public function VSlider_Example()
+		*{
+			*Laya.init(640,800);//设置游戏画布宽高。
+			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+			*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,onLoadComplete));//加载资源。
+			*}
+		*private function onLoadComplete():void
+		*{
+			*vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
+			*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
+			*vSlider.min=0;//设置 vSlider 最低位置值。
+			*vSlider.max=10;//设置 vSlider 最高位置值。
+			*vSlider.value=2;//设置 vSlider 当前位置值。
+			*vSlider.tick=1;//设置 vSlider 刻度值。
+			*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
+			*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
+			*vSlider.changeHandler=new Handler(this,onChange);//设置 vSlider 位置变化处理器。
+			*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
+			*}
+		*private function onChange(value:Number):void
+		*{
+			*trace("滑块的位置： value="+value);
+			*}
+		*}
+	*}
+*@example
+*Laya.init(640,800);//设置游戏画布宽高
+*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
+*var vSlider;
+*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],laya.utils.Handler.create(this,onLoadComplete));//加载资源。
+*function onLoadComplete(){
+	*vSlider=new laya.ui.VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
+	*vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
+	*vSlider.min=0;//设置 vSlider 最低位置值。
+	*vSlider.max=10;//设置 vSlider 最高位置值。
+	*vSlider.value=2;//设置 vSlider 当前位置值。
+	*vSlider.tick=1;//设置 vSlider 刻度值。
+	*vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
+	*vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
+	*vSlider.changeHandler=new laya.utils.Handler(this,onChange);//设置 vSlider 位置变化处理器。
+	*Laya.stage.addChild(vSlider);//把 vSlider 添加到显示列表。
+	*}
+*function onChange(value){
+	*console.log("滑块的位置： value="+value);
+	*}
+*@example
+*import HSlider=laya.ui.HSlider;
+*import VSlider=laya.ui.VSlider;
+*import Handler=laya.utils.Handler;
+*class VSlider_Example {
+	*private vSlider:VSlider;
+	*constructor(){
+		*Laya.init(640,800);//设置游戏画布宽高。
+		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+		*Laya.loader.load(["resource/ui/vslider.png","resource/ui/vslider$bar.png"],Handler.create(this,this.onLoadComplete));//加载资源。
+		*}
+	*private onLoadComplete():void {
+		*this.vSlider=new VSlider();//创建一个 VSlider 类的实例对象 vSlider 。
+		*this.vSlider.skin="resource/ui/vslider.png";//设置 vSlider 的皮肤。
+		*this.vSlider.min=0;//设置 vSlider 最低位置值。
+		*this.vSlider.max=10;//设置 vSlider 最高位置值。
+		*this.vSlider.value=2;//设置 vSlider 当前位置值。
+		*this.vSlider.tick=1;//设置 vSlider 刻度值。
+		*this.vSlider.x=100;//设置 vSlider 对象的属性 x 的值，用于控制 vSlider 对象的显示位置。
+		*this.vSlider.y=100;//设置 vSlider 对象的属性 y 的值，用于控制 vSlider 对象的显示位置。
+		*this.vSlider.changeHandler=new Handler(this,this.onChange);//设置 vSlider 位置变化处理器。
+		*Laya.stage.addChild(this.vSlider);//把 vSlider 添加到显示列表。
+		*}
+	*private onChange(value:number):void {
+		*console.log("滑块的位置： value="+value);
+		*}
+	*}
+*@see laya.ui.Slider
+*/
+//class laya.ui.VSlider extends laya.ui.Slider
+var VSlider=(function(_super){
+	function VSlider(){
+		VSlider.__super.call(this);;
+	}
+
+	__class(VSlider,'laya.ui.VSlider',_super);
+	return VSlider;
+})(Slider)
 
 
 //class laya.webgl.resource.WebGLImage extends laya.resource.HTMLImage
@@ -45290,11 +45443,11 @@ var GameMainUI=(function(_super){
 		this.rightbtnBox=null;
 		this.friendRankBtn=null;
 		this.shopBtn=null;
-		this.luckwheelBtn=null;
 		this.leftbtnBox=null;
 		this.timegiftBtn=null;
 		this.gameboxBtn=null;
 		this.boxlibsBtn=null;
+		this.luckwheelBtn=null;
 		this.timeBox=null;
 		this.timeclip=null;
 		this.dropFishBox=null;
@@ -45327,7 +45480,7 @@ var GameMainUI=(function(_super){
 		this.createView(GameMainUI.uiView);
 	}
 
-	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}}]},{"type":"Button","props":{"y":298,"x":195,"width":217,"var":"gameStartBtn","stateNum":2,"skin":"ui/common_ex/btn_blue.png","labelSize":50,"label":"计时赛","height":135}}]},{"type":"Image","props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":0,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":181,"x":504,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":2,"x":34,"width":90,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":85}},{"type":"Button","props":{"y":104,"x":37,"width":87,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":95}},{"type":"Button","props":{"y":7,"x":-65,"width":85,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":88}}]},{"type":"Box","props":{"y":4,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":126,"x":1,"width":84,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":93}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":258,"x":1,"width":91,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":76}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":857,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5}},{"type":"Image","props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226}},{"type":"Image","props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":4,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
+	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}}]},{"type":"Button","props":{"y":298,"x":195,"width":217,"var":"gameStartBtn","stateNum":2,"skin":"ui/common_ex/btn_blue.png","labelSize":50,"label":"计时赛","height":135}}]},{"type":"Image","props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":0,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":181,"x":511,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":73}},{"type":"Button","props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":77}}]},{"type":"Box","props":{"y":4,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65}},{"type":"Button","props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":857,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5}},{"type":"Image","props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226}},{"type":"Image","props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":4,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
 	return GameMainUI;
 })(View)
 
@@ -45379,6 +45532,28 @@ var GameShopUI=(function(_super){
 
 	GameShopUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":260,"x":40,"width":567,"skin":"ui/gameshop/di2.png","sizeGrid":"10,10,10,10","height":794}},{"type":"List","props":{"y":270,"x":45,"width":582,"var":"shoplist","spaceY":40,"spaceX":0,"repeatY":5,"repeatX":1,"mouseEnabled":false,"height":792},"child":[{"type":"Box","props":{"y":26,"x":16,"width":567,"renderType":"render","height":114},"child":[{"type":"Image","props":{"y":-4,"x":-2,"width":433,"skin":"ui/gameshop/tiao1.png","sizeGrid":"9,12,10,11","height":118}},{"type":"Box","props":{"y":6,"x":13,"width":100,"scaleY":1,"scaleX":1,"name":"headimg_box","height":100},"child":[{"type":"Image","props":{"y":0,"x":0,"width":100,"sizeGrid":"0,0,0,0","name":"head_img","height":100}},{"type":"Image","props":{"y":0,"x":0,"width":100,"skin":"ui/common_ex/blank.png","sizeGrid":"3,3,3,3","name":"lock_img","height":100},"child":[{"type":"Image","props":{"y":59,"x":68,"width":43,"skin":"ui/common_ex/lock.png","height":44}}]}]},{"type":"Box","props":{"y":55,"x":288,"name":"cost2_box"},"child":[{"type":"Image","props":{"y":17,"x":18,"width":116,"skin":"ui/gameshop/tiaodi.png","sizeGrid":"11,18,10,14","height":36}},{"type":"Image","props":{"width":47,"skin":"ui/common_ef/plank.png","name":"cost2_img","height":54}},{"type":"Text","props":{"y":27,"x":48,"width":78,"text":"100000","strokeColor":"#224882","stroke":5,"name":"cost2_txt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true}}]},{"type":"Text","props":{"y":14,"x":123,"width":90,"text":"XXXX鱼","strokeColor":"#ffffff","stroke":3,"name":"name_txt","height":32,"fontSize":30,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"}},{"type":"Text","props":{"y":77,"x":123,"width":93,"text":"最大重量:","strokeColor":"#224882","stroke":5,"height":22,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Button","props":{"y":53,"x":432,"width":92,"stateNum":1,"skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","name":"lvupBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"升级","hitTestPrior":true,"height":63}},{"type":"Button","props":{"y":-7,"x":431,"width":93,"stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"freeBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"免费升级","hitTestPrior":true,"height":63}},{"type":"Text","props":{"y":71,"x":219,"width":60,"text":"20kg","strokeColor":"#224882","stroke":5,"name":"weight_txt","height":29,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"left"}},{"type":"Box","props":{"y":-2,"x":288,"name":"cost1_box"},"child":[{"type":"Image","props":{"y":17,"x":18,"width":116,"skin":"ui/gameshop/tiaodi.png","sizeGrid":"11,18,10,14","height":36}},{"type":"Image","props":{"width":47,"skin":"ui/common_ef/gold.png","name":"cost1_img","height":54}},{"type":"Text","props":{"y":27,"x":48,"width":78,"text":"100000","strokeColor":"#224882","stroke":5,"name":"cost1_txt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true}}]}]}]},{"type":"Image","props":{"y":79,"x":-6,"width":663,"skin":"ui/gameshop/di1.png","mouseEnabled":false,"height":1036}},{"type":"Image","props":{"y":142,"x":9,"width":414,"skin":"ui/common_ex/p4.png","sizeGrid":"12,11,13,17","height":50}},{"type":"Text","props":{"y":156,"x":27,"width":381,"text":"升级能更容易钓到大鱼哦","strokeColor":"#ffffff","stroke":3,"name":"popname_txt","height":26,"fontSize":20,"font":"SimHei","color":"#0099ff","bold":true,"align":"center"}},{"type":"Image","props":{"width":77,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":4,"height":77,"bottom":931}},{"type":"Button","props":{"y":165,"x":12,"width":144,"var":"tab0","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"鱼类","height":92}},{"type":"Button","props":{"y":165,"x":182,"width":144,"var":"tab1","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"道具","height":92}},{"type":"Button","props":{"y":165,"x":352,"width":144,"var":"tab2","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"鱼钩","height":92}}]}]};
 	return GameShopUI;
+})(View)
+
+
+//class ui.GuideUI extends laya.ui.View
+var GuideUI=(function(_super){
+	function GuideUI(){
+		this.guideTip=null;
+		this.confirmBtn=null;
+		this.cancelBtn=null;
+		GuideUI.__super.call(this);
+	}
+
+	__class(GuideUI,'ui.GuideUI',_super);
+	var __proto=GuideUI.prototype;
+	__proto.createChildren=function(){
+		View.regComponent("Text",Text);
+		laya.ui.Component.prototype.createChildren.call(this);
+		this.createView(GuideUI.uiView);
+	}
+
+	GuideUI.uiView={"type":"View","props":{"width":640,"mouseThrough":true,"height":1136},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"var":"guideTip","height":1136},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Image","props":{"y":515,"x":66,"width":498,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":196}},{"type":"Text","props":{"y":566,"x":227,"wordWrap":true,"width":305,"text":"进入新手引导,可以获得礼包嚯!","strokeColor":"#a43c6d","stroke":6,"height":67,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Button","props":{"y":626,"x":246,"width":94,"var":"confirmBtn","stateNum":1,"skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"进入","hitTestPrior":true,"height":65}},{"type":"Button","props":{"y":626,"x":421,"width":97,"var":"cancelBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"取消","hitTestPrior":true,"height":65}},{"type":"Image","props":{"y":569,"x":90,"width":119,"skin":"ui/common_img/role3.png","height":116}}]},{"type":"Box","props":{"y":0,"x":0,"visible":false,"name":"taskBox_1","mouseThrough":true,"mouseEnabled":true},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":338,"x":77,"width":1,"name":"area","height":1},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":1,"lineWidth":1,"height":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":1136,"alpha":0}},{"type":"Image","props":{"y":354,"x":88,"width":439,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":184}},{"type":"Image","props":{"y":407,"x":113,"width":115,"skin":"ui/common_img/role3.png","height":104}},{"type":"Button","props":{"y":464,"x":413,"width":94,"stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"nextBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"next","hitTestPrior":true,"height":57}},{"type":"Text","props":{"y":436,"x":274,"wordWrap":true,"width":189,"text":"俺系你滴导师","strokeColor":"#a43c6d","stroke":6,"height":35,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Text","props":{"y":382,"x":184,"wordWrap":true,"width":271,"text":"欢迎来到<钓了个鱼>","strokeColor":"#a43c6d","stroke":6,"height":35,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":730,"x":18,"width":602,"name":"area","height":231},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":602,"lineWidth":1,"height":243,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":732,"alpha":0}},{"type":"Image","props":{"y":965,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":172,"alpha":0}},{"type":"Image","props":{"y":551,"x":95,"width":415,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":169}},{"type":"Text","props":{"y":609,"x":277,"wordWrap":true,"width":200,"text":"点击以下区域,扔下鱼钩","strokeColor":"#a43c6d","stroke":6,"height":62,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":589,"x":119,"width":148,"skin":"ui/common_img/role1.png","height":104}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_3","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":813,"x":18,"width":602,"name":"area","height":156},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":602,"lineWidth":1,"height":161,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":812,"alpha":0}},{"type":"Image","props":{"y":968,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":170,"alpha":0}},{"type":"Image","props":{"y":610,"x":90,"width":490,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":197}},{"type":"Image","props":{"y":660,"x":115,"width":140,"skin":"ui/common_img/role2.png","height":120}},{"type":"Text","props":{"y":672,"x":257,"wordWrap":true,"width":301,"text":"再次点击可以收杆啦！(鱼钩越靠近色块中间,奖励越高哦)","strokeColor":"#a43c6d","stroke":6,"height":96,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_4","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":1,"x":491,"width":148,"name":"area","height":175},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":150,"lineWidth":1,"height":181,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":1136,"alpha":0}},{"type":"Image","props":{"y":71,"x":113,"width":357,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":195}},{"type":"Text","props":{"y":113,"x":257,"wordWrap":true,"width":168,"text":"金币,海星和珍珠是你最宝贵的财富哟！","strokeColor":"#a43c6d","stroke":6,"height":93,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":127,"x":136,"width":119,"skin":"ui/common_img/role3.png","height":113}},{"type":"Button","props":{"y":193,"x":351,"width":94,"stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"nextBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"next","hitTestPrior":true,"height":57}}]}]},{"type":"Box","props":{"y":0,"x":0,"visible":false,"name":"taskBox_2","mouseThrough":true,"mouseEnabled":true},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":258,"x":-3,"width":100,"name":"area","height":100},"child":[{"type":"Circle","props":{"y":50,"x":50,"radius":50,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":267,"alpha":0}},{"type":"Image","props":{"y":370,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":612,"alpha":0}},{"type":"Image","props":{"y":259,"x":110,"width":531,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":148,"alpha":0}},{"type":"Image","props":{"y":296,"x":159,"width":374,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":168}},{"type":"Text","props":{"y":341,"x":197,"wordWrap":true,"width":184,"text":"让我们在转转乐里获得更多金币吧！","strokeColor":"#a43c6d","stroke":6,"height":93,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":351,"x":379,"skin":"ui/common_img/role4.png"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":298,"x":459,"width":100,"name":"area","height":100},"child":[{"type":"Circle","props":{"y":50,"x":50,"radius":50,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":295,"alpha":0}},{"type":"Image","props":{"y":410,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":723,"alpha":0}},{"type":"Image","props":{"y":176,"x":520,"width":124,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":151,"alpha":0}},{"type":"Image","props":{"y":142,"x":110,"width":345,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":143}},{"type":"Image","props":{"y":118,"x":277,"width":146,"skin":"ui/common_img/role6.png","scaleX":-1,"height":139}},{"type":"Text","props":{"y":190,"x":273,"wordWrap":true,"width":166,"text":"让我们来看下倍率说明","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_3","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":206,"x":535,"width":100,"name":"area","height":100},"child":[{"type":"Circle","props":{"y":50,"x":50,"radius":50,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":203,"alpha":0}},{"type":"Image","props":{"y":308,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":825,"alpha":0}},{"type":"Image","props":{"y":124,"x":0,"width":535,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":243,"alpha":0}},{"type":"Image","props":{"y":97,"x":96,"width":397,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":180}},{"type":"Image","props":{"y":141,"x":273,"width":155,"skin":"ui/common_img/role4.png","scaleX":-1,"height":110}},{"type":"Text","props":{"y":153,"x":279,"wordWrap":true,"width":166,"text":"规则会时常更新哦,记得多看看牙","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_4","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":752,"x":115,"width":200,"name":"area","height":80},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":200,"lineWidth":1,"height":80,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":642,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":731,"alpha":0}},{"type":"Image","props":{"y":667,"x":335,"width":305,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":272,"alpha":0}},{"type":"Image","props":{"y":862,"x":0,"width":642,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":272,"alpha":0}},{"type":"Image","props":{"y":912,"x":261,"width":305,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":143}},{"type":"Image","props":{"y":936,"x":422,"skin":"ui/common_img/role8.png"}},{"type":"Text","props":{"y":945,"x":315,"wordWrap":true,"width":126,"text":"让我们转起来!","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_5","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":400,"x":130,"width":380,"name":"area","height":320},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":380,"lineWidth":1,"height":320,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":1136,"alpha":0}},{"type":"Image","props":{"y":805,"x":213,"width":318,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":154}},{"type":"Image","props":{"y":800,"x":371,"width":144,"skin":"ui/common_img/role6.png","height":136}},{"type":"Text","props":{"y":854,"x":244,"wordWrap":true,"width":150,"text":"稍等片刻.祈祷好运","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_6","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":409,"x":122,"width":400,"name":"area","height":400},"child":[{"type":"Circle","props":{"y":200,"x":200,"radius":200,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":383,"alpha":0}},{"type":"Image","props":{"y":819,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":319,"alpha":0}},{"type":"Image","props":{"y":812,"x":221,"width":340,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":158}},{"type":"Text","props":{"y":848,"x":266,"wordWrap":true,"width":166,"text":"吼,中大奖了呢(其实是送你的)","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":851,"x":409,"skin":"ui/common_img/role8.png"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_7","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":201,"x":521,"width":120,"name":"area","height":120},"child":[{"type":"Circle","props":{"y":60,"x":60,"radius":60,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":201,"alpha":0}},{"type":"Image","props":{"y":315,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":823,"alpha":0}},{"type":"Image","props":{"y":134,"x":0,"width":524,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":258,"alpha":0}},{"type":"Image","props":{"y":117,"x":178,"width":335,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":162}},{"type":"Image","props":{"y":167,"x":324,"skin":"ui/common_img/role4.png","scaleX":-1}},{"type":"Text","props":{"y":159,"x":315,"wordWrap":true,"width":166,"text":"转转乐每天都会刷新,记得常来哦","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]}]},{"type":"Box","props":{"y":0,"x":0,"visible":false,"name":"taskBox_3","mouseThrough":true,"mouseEnabled":true},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":177,"x":2,"width":90,"name":"area","height":90},"child":[{"type":"Circle","props":{"y":45,"x":45,"radius":45,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":178,"alpha":0}},{"type":"Image","props":{"y":268,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":714,"alpha":0}},{"type":"Image","props":{"y":136,"x":100,"width":541,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":271,"alpha":0}},{"type":"Image","props":{"y":132,"x":117,"width":354,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":181}},{"type":"Text","props":{"y":183,"x":149,"wordWrap":true,"width":166,"text":"刚才获得的宝箱都在这里哟","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":146,"x":293,"skin":"ui/common_img/role5.png"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":193,"x":565,"width":70,"name":"area","height":120},"child":[{"type":"Rect","props":{"width":70,"lineWidth":1,"height":120,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":189,"alpha":0}},{"type":"Image","props":{"y":320,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":813,"alpha":0}},{"type":"Image","props":{"y":158,"x":0,"width":558,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":206,"alpha":0}},{"type":"Image","props":{"y":19,"x":99,"width":380,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":179}},{"type":"Image","props":{"y":33,"x":121,"width":146,"skin":"ui/common_img/role3.png","scaleX":1,"height":139}},{"type":"Text","props":{"y":73,"x":281,"wordWrap":true,"width":166,"text":"让我们来找到刚才的宝箱吧","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_3","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":180,"x":81,"width":485,"name":"area","height":683},"child":[{"type":"Rect","props":{"width":485,"lineWidth":1,"height":683,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":186,"alpha":0}},{"type":"Image","props":{"y":849,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":284,"alpha":0}},{"type":"Image","props":{"y":124,"x":0,"width":327,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":235,"alpha":0}},{"type":"Image","props":{"y":712,"x":237,"width":372,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":181}},{"type":"Image","props":{"y":740,"x":439,"skin":"ui/common_img/role9.png"}},{"type":"Text","props":{"y":764,"x":274,"wordWrap":true,"width":166,"text":"把宝箱拖进来,将会有好事发生哦!","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_4","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":400,"x":130,"width":380,"name":"area","height":320},"child":[{"type":"Rect","props":{"y":0,"x":0,"width":380,"lineWidth":1,"height":320,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":1136,"alpha":0}},{"type":"Image","props":{"y":804,"x":214,"width":322,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":156}},{"type":"Image","props":{"y":800,"x":369,"width":144,"skin":"ui/common_img/role6.png","height":136}},{"type":"Text","props":{"y":866,"x":248,"wordWrap":true,"width":138,"text":"好运快来,好运快来","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_5","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":409,"x":122,"width":400,"name":"area","height":400},"child":[{"type":"Circle","props":{"y":200,"x":200,"radius":200,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":383,"alpha":0}},{"type":"Image","props":{"y":819,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":319,"alpha":0}},{"type":"Image","props":{"y":809,"x":227,"width":317,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":159}},{"type":"Text","props":{"y":854,"x":263,"wordWrap":true,"width":150,"text":"哇哦,开到好东西了呢","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":848,"x":400,"skin":"ui/common_img/role8.png"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_6","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":38,"x":519,"width":120,"name":"area","height":120},"child":[{"type":"Circle","props":{"y":60,"x":60,"radius":60,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":513,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":197,"alpha":0}},{"type":"Image","props":{"y":167,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":971,"alpha":0}},{"type":"Image","props":{"y":40,"x":146,"width":341,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":163}},{"type":"Image","props":{"y":88,"x":295,"skin":"ui/common_img/role4.png","scaleX":-1}},{"type":"Text","props":{"y":77,"x":293,"wordWrap":true,"width":150,"text":"开箱越多,幸运值越高哟!","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]}]},{"type":"Box","props":{"y":0,"x":0,"visible":false,"name":"taskBox_4","mouseThrough":true,"mouseEnabled":true},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":180,"x":556,"width":90,"name":"area","height":90},"child":[{"type":"Circle","props":{"y":45,"x":45,"radius":45,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":178,"alpha":0}},{"type":"Image","props":{"y":268,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":714,"alpha":0}},{"type":"Image","props":{"y":136,"x":0,"width":558,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":271,"alpha":0}},{"type":"Image","props":{"y":57,"x":179,"width":347,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":175}},{"type":"Text","props":{"y":103,"x":344,"wordWrap":true,"width":150,"text":"接下来我们去商店买点东西","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":67,"x":351,"skin":"ui/common_img/role5.png","scaleX":-1}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":350,"x":493,"width":102,"name":"area","height":57},"child":[{"type":"Rect","props":{"width":102,"lineWidth":1,"height":57,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":346,"alpha":0}},{"type":"Image","props":{"y":417,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":716,"alpha":0}},{"type":"Image","props":{"y":16,"x":80,"width":386,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":184}},{"type":"Image","props":{"y":35,"x":102,"width":146,"skin":"ui/common_img/role3.png","scaleX":1,"height":139}},{"type":"Text","props":{"y":71,"x":255,"wordWrap":true,"width":188,"text":"升级后可增加最大重量及出现概率哟","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_3","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":689,"x":147,"width":151,"name":"area","height":70},"child":[{"type":"Rect","props":{"width":151,"lineWidth":1,"height":70,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":671,"alpha":0}},{"type":"Image","props":{"y":784,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":349,"alpha":0}},{"type":"Image","props":{"y":435,"x":319,"width":313,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":426,"alpha":0}},{"type":"Image","props":{"y":781,"x":103,"width":413,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":185}},{"type":"Text","props":{"y":839,"x":302,"wordWrap":true,"width":198,"text":"升级等级越高,需要花费越高,请留心","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":836,"x":128,"width":171,"skin":"ui/common_img/role1.png","height":103}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_4","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":689,"x":147,"width":1,"name":"area","height":1},"child":[{"type":"Rect","props":{"width":1,"lineWidth":1,"height":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":1136,"alpha":0}},{"type":"Image","props":{"y":656,"x":137,"width":430,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":199}},{"type":"Image","props":{"y":697,"x":379,"width":171,"skin":"ui/common_img/role8.png","height":134}},{"type":"Button","props":{"y":784,"x":454,"width":94,"stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"nextBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"next","hitTestPrior":true,"height":57}},{"type":"Text","props":{"y":702,"x":186,"wordWrap":true,"width":198,"text":"小鱼重量虽不及大鱼,但是combo后能钓起很多哟","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_5","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":120,"alpha":0}},{"type":"Image","props":{"y":209,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":926,"alpha":0}},{"type":"Image","props":{"y":33,"x":0,"width":548,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":264,"alpha":0}},{"type":"Sprite","props":{"y":119,"x":552,"width":90,"name":"area","height":90},"child":[{"type":"Circle","props":{"y":45,"x":45,"radius":45,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":69,"x":115,"width":387,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":185}},{"type":"Text","props":{"y":126,"x":278,"wordWrap":true,"width":198,"text":"每种鱼的特性都不一样,请留心观察","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Image","props":{"y":94,"x":279,"width":144,"skin":"ui/common_img/role6.png","scaleX":-1,"height":136}}]}]},{"type":"Box","props":{"y":0,"x":0,"visible":false,"name":"taskBox_5","mouseThrough":true,"mouseEnabled":true},"child":[{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":540,"x":533,"width":1,"name":"area","height":1},"child":[{"type":"Circle","props":{"y":45,"x":45,"radius":1,"lineWidth":1,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":178,"alpha":0}},{"type":"Image","props":{"y":268,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":714,"alpha":0}},{"type":"Image","props":{"y":136,"x":0,"width":558,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":271,"alpha":0}},{"type":"Image","props":{"y":518,"x":314,"width":75,"skin":"ui/common_img/role3.png","height":73}},{"type":"Image","props":{"y":503,"x":393,"width":103,"skin":"ui/common_img/role9.png","height":90}},{"type":"Image","props":{"y":500,"x":311,"width":123,"skin":"ui/common_img/role8.png","scaleX":-1,"height":92}},{"type":"Image","props":{"y":582,"x":176,"width":339,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":150}},{"type":"Text","props":{"y":607,"x":250,"wordWrap":true,"width":198,"text":"据说伟大的秘宝就隐藏在这片海域之中!","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}},{"type":"Button","props":{"y":680,"x":416,"width":94,"stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"nextBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"next","hitTestPrior":true,"height":57}}]},{"type":"Box","props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136}},{"type":"Sprite","props":{"y":583,"x":193,"width":287,"name":"area","height":128},"child":[{"type":"Rect","props":{"width":287,"lineWidth":1,"height":128,"fillColor":"#ff0000"}}]},{"type":"Image","props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":575,"alpha":0}},{"type":"Image","props":{"y":702,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":431,"alpha":0}},{"type":"Image","props":{"y":722,"x":151,"width":405,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":182}},{"type":"Image","props":{"y":729,"x":176,"width":153,"skin":"ui/common_img/role3.png","height":149}},{"type":"Text","props":{"y":776,"x":335,"wordWrap":true,"width":198,"text":"不过在此之前,还是勤加练习吧!","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"}}]}]}]};
+	return GuideUI;
 })(View)
 
 
@@ -45510,6 +45685,19 @@ var TimeBossAniUI=(function(_super){
 })(View)
 
 
+//class ui.Boxlibs_shakeboxUI extends laya.display.EffectAnimation
+var Boxlibs_shakeboxUI=(function(_super){
+	function Boxlibs_shakeboxUI(){
+		Boxlibs_shakeboxUI.__super.call(this);
+		this.effectData=Boxlibs_shakeboxUI.uiView;;
+	}
+
+	__class(Boxlibs_shakeboxUI,'ui.Boxlibs_shakeboxUI',_super);
+	Boxlibs_shakeboxUI.uiView={"type":"View","props":{},"child":[{"type":"Image","props":{"y":50,"x":50,"width":100,"skin":"ui/boxlibs/di2.png","height":100,"anchorY":0.5,"anchorX":0.5},"compId":2}],"animations":[{"nodes":[{"target":2,"keyframes":{"rotation":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":1},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":5},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":7},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":9},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":11},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":13},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":23},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":25},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":27},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":29},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":31}],"height":[{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":0},{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":1},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":5},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":23},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":31}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
+	return Boxlibs_shakeboxUI;
+})(EffectAnimation)
+
+
 //class ui.TimeGiftUI extends laya.ui.View
 var TimeGiftUI=(function(_super){
 	function TimeGiftUI(){
@@ -45556,19 +45744,6 @@ var TimeOverAniUI=(function(_super){
 	TimeOverAniUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0,"alpha":2},"child":[{"type":"Image","props":{"y":490,"x":-649,"width":651,"skin":"ui/common_ex/blank.png","skewY":-5.5,"sizeGrid":"2,2,2,2","height":192},"compId":2},{"type":"Label","props":{"y":687,"x":137,"wordWrap":true,"width":362,"visible":true,"text":"轻点继续","strokeColor":"#000000","stroke":1,"height":47,"fontSize":28,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"alpha":0,"align":"center"},"compId":6},{"type":"Animation","props":{"y":474,"x":-647,"width":300,"source":"TimeOver.ani","scaleY":1.5,"scaleX":1.5,"interval":100,"height":119,"autoPlay":true},"compId":10}]}],"animations":[{"nodes":[{"target":2,"keyframes":{"y":[{"value":483,"tweenMethod":"linearNone","tween":true,"target":2,"key":"y","index":0},{"value":331,"tweenMethod":"linearNone","tween":true,"target":2,"key":"y","index":5}],"x":[{"value":-657,"tweenMethod":"linearNone","tween":true,"target":2,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":2,"key":"x","index":5}],"skewY":[{"value":-7,"tweenMethod":"linearNone","tween":true,"target":2,"key":"skewY","index":0},{"value":-6,"tweenMethod":"linearNone","tween":true,"target":2,"key":"skewY","index":10}]}},{"target":10,"keyframes":{"y":[{"value":474,"tweenMethod":"linearNone","tween":true,"target":10,"key":"y","index":0},{"value":315,"tweenMethod":"linearNone","tween":true,"target":10,"key":"y","index":10}],"x":[{"value":-647,"tweenMethod":"linearNone","tween":true,"target":10,"key":"x","index":0},{"value":-647,"tweenMethod":"linearNone","tween":true,"target":10,"label":null,"key":"x","index":5},{"value":1,"tweenMethod":"linearNone","tween":true,"target":10,"label":null,"key":"x","index":10}]}},{"target":6,"keyframes":{"x":[{"value":137,"tweenMethod":"linearNone","tween":true,"target":6,"key":"x","index":0},{"value":137,"tweenMethod":"linearNone","tween":true,"target":6,"key":"x","index":10}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":6,"key":"alpha","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":6,"key":"alpha","index":10}]}}],"name":"into","id":1,"frameRate":24,"action":0},{"nodes":[{"target":2,"keyframes":{"y":[{"value":331,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"y","index":0},{"value":331,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"y","index":5},{"value":266,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"y","index":10}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"x","index":5},{"value":646,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"x","index":10}]}},{"target":10,"keyframes":{"y":[{"value":315,"tweenMethod":"linearNone","tween":true,"target":10,"label":null,"key":"y","index":0},{"value":226,"tweenMethod":"linearNone","tween":true,"target":10,"label":null,"key":"y","index":5}],"x":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":10,"label":null,"key":"x","index":0},{"value":782,"tweenMethod":"linearNone","tween":true,"target":10,"key":"x","index":5}]}},{"target":6,"keyframes":{"x":[{"value":137,"tweenMethod":"linearNone","tween":true,"target":6,"key":"x","index":0},{"value":137,"tweenMethod":"linearNone","tween":true,"target":6,"key":"x","index":5}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":6,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":6,"key":"alpha","index":5}]}}],"name":"out","id":1,"frameRate":24,"action":0}]};
 	return TimeOverAniUI;
 })(View)
-
-
-//class ui.Boxlibs_shakeboxUI extends laya.display.EffectAnimation
-var Boxlibs_shakeboxUI=(function(_super){
-	function Boxlibs_shakeboxUI(){
-		Boxlibs_shakeboxUI.__super.call(this);
-		this.effectData=Boxlibs_shakeboxUI.uiView;;
-	}
-
-	__class(Boxlibs_shakeboxUI,'ui.Boxlibs_shakeboxUI',_super);
-	Boxlibs_shakeboxUI.uiView={"type":"View","props":{},"child":[{"type":"Image","props":{"y":50,"x":50,"width":100,"skin":"ui/boxlibs/di2.png","height":100,"anchorY":0.5,"anchorX":0.5},"compId":2}],"animations":[{"nodes":[{"target":2,"keyframes":{"rotation":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":1},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":5},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":7},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":9},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":11},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":13},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":23},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":25},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":27},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":29},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":31}],"height":[{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":0},{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":1},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":5},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":23},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":31}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
-	return Boxlibs_shakeboxUI;
-})(EffectAnimation)
 
 
 //class ui.TimeStartAniUI extends laya.ui.View
@@ -46199,6 +46374,7 @@ var Boxlibs=(function(_super){
 	Laya.imps(__proto,{"view.PanelVo":true})
 	__proto.openPanel=function(param){
 		this.closeBtn.on("mousedown",this,function(){
+			GameEventDispatch.instance.event("GameGuideNext");
 			UiManager.instance.closePanel("Boxlibs");
 		});
 		this.leftBtn.on("mousedown",this,this.setpageNum,["left"]);
@@ -46226,7 +46402,12 @@ var Boxlibs=(function(_super){
 		}
 		else if(action=="right"){
 			this._pageNum++;
-			if(this._pageNum>=this.boxlist.array.length)this._pageNum=this.boxlist.array.length-1;
+			if(this._pageNum==this.boxlist.array.length-1){
+				GameEventDispatch.instance.event("GameGuideNext");
+			}
+			if(this._pageNum>=this.boxlist.array.length-1){
+				this._pageNum=this.boxlist.array.length-1;
+			}
 			this.boxlist.tweenTo(this._pageNum,500);
 		}
 		else if(action=="reset"){
@@ -46277,10 +46458,10 @@ var Boxlibs=(function(_super){
 		this._tagetGift.dataSource=cfg;
 		this._tagetGift.anchorX=.5;
 		this._tagetGift.anchorY=.5;
-		this._tagetGift.startDrag();
 		this._tagetGift.zOrder=3000;
 		this._tagetGift.pos(Laya.stage.mouseX,Laya.stage.mouseY);
 		Laya.stage.addChild(this._tagetGift);
+		this._tagetGift.startDrag();
 		Laya.stage.once("mouseup",this,this.recoverGift);
 		Laya.stage.once("mouseout",this,this.recoverGift);
 	}
@@ -46299,6 +46480,7 @@ var Boxlibs=(function(_super){
 				_$this._tagetGift.removeSelf();
 				_$this.changeOpenAniState("ready");
 			}));
+			GameEventDispatch.instance.event("GameGuideNext");
 			}else{
 			var config=this._tagetGift.dataSource;
 			Tween.to(this._tagetGift,{x:config['startPos'].x,y:config['startPos'].y},300,Ease.sineIn,Handler.create(this,function(){
@@ -46355,9 +46537,17 @@ var Boxlibs=(function(_super){
 		var gainD=new GainnewD();
 		gainD.award_type=cfg.award_type;
 		gainD.award_num=cfg.award_num;
+		gainD.callback=new Handler(this,this.boxlibsAward);
 		GameEventDispatch.instance.event("GainNewPOP",[gainD]);
+		GameEventDispatch.instance.event("GameGuideNext");
 	}
 
+	//新手引导
+	__proto.boxlibsAward=function(){
+		GameEventDispatch.instance.event("GameGuideNext");
+	}
+
+	//新手引导
 	__proto.register=function(){}
 	__proto.unRegister=function(){}
 	__proto.clearAllNum=function(){}
@@ -47027,6 +47217,7 @@ var Gamemain=(function(_super){
 		var _$this=this;
 		this.luckwheelBtn.on("mousedown",this,function(){
 			if(!_$this.canDrop)return;
+			GameEventDispatch.instance.event("GameGuideNext");
 			UiManager.instance.loadView("Luckwheel",null,0,"UITYPE_NORMAL");
 		});
 		this.friendRankBtn.on("mousedown",this,function(){
@@ -47035,6 +47226,7 @@ var Gamemain=(function(_super){
 		});
 		this.shopBtn.on("mousedown",this,function(){
 			if(!_$this.canDrop)return;
+			GameEventDispatch.instance.event("GameGuideNext");
 			UiManager.instance.loadView("Gameshop",null,0,"UITYPE_NORMAL");
 		});
 		this.settingBtn.on("mousedown",this,function(){
@@ -47043,6 +47235,7 @@ var Gamemain=(function(_super){
 		});
 		this.boxlibsBtn.on("mousedown",this,function(){
 			if(!_$this.canDrop)return;
+			GameEventDispatch.instance.event("GameGuideNext");
 			UiManager.instance.loadView("Boxlibs",null,0,"UITYPE_NORMAL");
 		});
 		this.timegiftBtn.on("mousedown",this,function(){
@@ -47051,6 +47244,7 @@ var Gamemain=(function(_super){
 		});
 		this.gameStartBtn.on("mousedown",this,function(){
 			if(!_$this.canDrop)return;
+			GameEventDispatch.instance.event("GameGuideNext");
 			GameEventDispatch.instance.event("GameReady");
 		})
 	}
@@ -47157,8 +47351,10 @@ var Gamemain=(function(_super){
 				if(!_$this.canDrop)return;
 				e.stopPropagation();
 				_$this.changeDropFishBoxState("start");
+				GameEventDispatch.instance.event("GameGuideNext");
 				Laya.stage.offAll();
 				Laya.stage.once("mousedown",this,function(e){
+					GameEventDispatch.instance.event("GameGuideNext");
 					e.stopPropagation();
 					_$this.changeDropFishBoxState("stop");
 				})
@@ -47973,6 +48169,123 @@ var Gamemain=(function(_super){
 })(GameMainUI)
 
 
+//class view.gameguide.Gameguide extends ui.GuideUI
+var Gameguide$1=(function(_super){
+	function Gameguide(){
+		this._taskNum=1;
+		this._stepNum=1;
+		this._stepArr=[4,7,6,5,2];
+		this._stepBox=null;
+		Gameguide.__super.call(this);
+	}
+
+	__class(Gameguide,'view.gameguide.Gameguide',_super,'Gameguide$1');
+	var __proto=Gameguide.prototype;
+	Laya.imps(__proto,{"view.PanelVo":true})
+	__proto.openPanel=function(param){
+		var _$this=this;
+		this.zOrder=UiManager.instance.getUiBaseDepth("UITYPE_GUIDE");
+		var _guideComplete=PlayerInfoM.instance.getGuide();
+		if(_guideComplete){
+			UiManager.instance.closePanel("Gameguide");
+			return;
+		}
+		this.guideTip.visible=true;
+		this.cancelBtn.on("mousedown",this,function(){
+			UiManager.instance.closePanel("Gameguide");
+		});
+		this.confirmBtn.on("mousedown",this,function(){
+			_$this.guideTip.visible=false;
+			_$this.nextStep();
+		});
+	}
+
+	//Laya.stage.on(Event.MOUSE_DOWN,this,clickToNext);
+	__proto.clickToNext=function(){
+		var _guideComplete=PlayerInfoM.instance.getGuide();
+		if(_guideComplete)return;
+		this._stepNum++;
+		if(this._stepNum>this._stepArr[this._taskNum-1]){
+			this._stepNum=1;
+			this._taskNum++;
+			if(this._taskNum>this._stepArr.length){
+				console.log("--guide complete");
+				PlayerInfoM.instance.setGuide(true);
+				UiManager.instance.closePanel("Gameguide");
+				return;
+			}
+		}
+		this.nextStep();
+	}
+
+	__proto.nextStep=function(){
+		this.showTaskBox();
+		this.showStepBox();
+	}
+
+	//console.log("-task:",_taskNum,"-step:",_stepNum,"-zorder:",this.zOrder);
+	__proto.showTaskBox=function(){
+		for(var i=1;i<=this._stepArr.length;i++){
+			var taskBox=this.getChildByName("taskBox_"+i);
+			taskBox.visible=false;
+			if(i==this._taskNum){
+				taskBox.visible=true;
+			}
+		}
+	}
+
+	__proto.showStepBox=function(){
+		var _$this=this;
+		var taskBox=this.getChildByName("taskBox_"+this._taskNum);
+		var taskNum=this._stepArr[this._taskNum-1];
+		for (var i=1;i<=taskNum;i++){
+			this._stepBox=taskBox.getChildByName("stepbox_"+i);
+			this._stepBox.visible=false;
+			this._stepBox.offAll();
+			if(i==this._stepNum){
+				this._stepBox.visible=true;
+				this._stepBox.cacheAs="bitmap";
+				this._stepBox.mouseEnabled=true;
+				var area=this._stepBox.getChildByName("area");
+				area.visible=true;
+				area.blendMode="destination-out";
+				var nextBtn=this._stepBox.getChildByName("nextBtn");
+				if(nextBtn){
+					this._stepBox.mouseThrough=false;
+					nextBtn.offAll();
+					nextBtn.once("mousedown",this,function(){
+						_$this.clickToNext();
+					});
+					}else {
+					this._stepBox.mouseThrough=true;
+				}
+			}
+		}
+	}
+
+	__proto.closePanel=function(){
+		this.visible=false;
+	}
+
+	__proto.clearAllNum=function(){}
+	//关闭显示所有box
+	__proto.register=function(){
+		GameEventDispatch.instance.on("GameGuideNext",this,this.clickToNext);
+	}
+
+	__proto.unRegister=function(){
+		GameEventDispatch.instance.off("GameGuideNext",this,this.clickToNext);
+	}
+
+	__getset(1,Gameguide,'instance',function(){
+		return Gameguide._instance=Gameguide._instance||new Gameguide();
+	},ui.GuideUI._$SET_instance);
+
+	Gameguide._instance=null;
+	return Gameguide;
+})(GuideUI)
+
+
 //class view.gamemap.Gamemap extends ui.GameMapUI
 var Gamemap=(function(_super){
 	var GridMsg;
@@ -48580,6 +48893,7 @@ var Gameshop=(function(_super){
 	__proto.initListener=function(){
 		var _$this=this;
 		this.closeBtn.on("mousedown",this,function(){
+			GameEventDispatch.instance.event("GameGuideNext");
 			UiManager.instance.closePanel("Gameshop");
 		});
 		this.tab0.on("mousedown",this,function(){
@@ -48671,17 +48985,22 @@ var Gameshop=(function(_super){
 		ele_lvup_btn.offAll();
 		ele_lvup_btn.on("mousedown",this,function(e){
 			e.stopPropagation();
+			if(index==0||index==1){
+				GameEventDispatch.instance.event("GameGuideNext");
+			};
 			var info=new TipsD();
 			config['cost_num']=costNumArr;
 			info.content="是否购买此物品？";
 			info.conFirmArgs=config;
 			info.conFirmEvent="ShopBuy";
+			info.aotoClose=false;
 			info.buySucceedCallback=new Handler(this,_$this.lvupSucceed);
 			GameEventDispatch.instance.event("ShowTips",[info]);
 		});
 	}
 
 	__proto.lvupSucceed=function(param){
+		GameEventDispatch.instance.event("GameGuideNext");
 		var lv=ShopM.instance.getFishlvByName(param['name']);
 		ShopM.instance.setFishlvByName(param['name'],++lv);
 		this.shoplist.array=ShopM.instance.getShoplist(0);
@@ -48728,6 +49047,7 @@ var Luckwheel=(function(_super){
 		var _$this=this;
 		this.initNum();
 		this.closeBtn.on("mousedown",this,function(){
+			GameEventDispatch.instance.event("GameGuideNext");
 			UiManager.instance.closePanel("Luckwheel");
 		});
 		this.startBtn.offAll();
@@ -48740,6 +49060,7 @@ var Luckwheel=(function(_super){
 			_$this.changewheelNum("minus");
 			_$this.initNum();
 			_$this.changewheelState("start");
+			GameEventDispatch.instance.event("GameGuideNext");
 		});
 		this.shareBtn.offAll();
 		this.shareBtn.on("mousedown",this,function(){
@@ -48752,7 +49073,7 @@ var Luckwheel=(function(_super){
 		});
 		this.explainCloseBtn.on("mousedown",this,function(){
 			_$this.changeExplainState("close");
-		})
+		});
 	}
 
 	__proto.changeExplainState=function(action){
@@ -48760,12 +49081,15 @@ var Luckwheel=(function(_super){
 			this.explainBox.visible=true;
 			this.explainlist.array=ConfigManager.items("cfg_wheel");
 			this.explainlist.renderHandler=new Handler(this,this.updatelist);
+			GameEventDispatch.instance.event("GameGuideNext");
 		}
 		else if(action=="close"){
 			this.explainBox.visible=false;
+			GameEventDispatch.instance.event("GameGuideNext");
 		}
 	}
 
+	//新手引导
 	__proto.updatelist=function(cell,index){
 		var cfg=cell.dataSource;
 		var ele_pop_img=cell.getChildByName("popImg");
@@ -48963,9 +49287,17 @@ var Luckwheel=(function(_super){
 		var gainD=new GainnewD();
 		gainD.award_type=this._awardObj.award_type;
 		gainD.award_num=this._awardObj.award_num;
+		gainD.callback=new Handler(this,this.luckwheelAward);
 		GameEventDispatch.instance.event("GainNewPOP",[gainD]);
+		GameEventDispatch.instance.event("GameGuideNext");
 	}
 
+	//新手引导
+	__proto.luckwheelAward=function(){
+		GameEventDispatch.instance.event("GameGuideNext");
+	}
+
+	//新手引导
 	__proto.onTimer=function(){
 		var stopNum=0;
 		for(var i=0;i<this._popboxArr.length;i++){
