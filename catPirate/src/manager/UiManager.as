@@ -211,6 +211,8 @@ public class UiManager {
     private function showAni(panel:*):void
     {
         if(_uiType=="UITYPE_SCENE") return;
+        _panel.scale(1,1);
+        _panel.pos(0,0);
         Tween.from(panel,{
             x:Laya.stage.mouseX,
             y:Laya.stage.mouseY,

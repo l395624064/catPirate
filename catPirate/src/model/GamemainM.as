@@ -22,7 +22,7 @@ public class GamemainM {
     private var _colorImgDic:Object={
         blue:{lifenum:0,dx:600,addluck:0,baseluck:0.5},
         yellow:{lifenum:0,dx:600,addluck:0,baseluck:0.5},
-        colours:{lifenum:0,dx:600,addluck:0,baseluck:0.01}
+        colours:{lifenum:0,dx:600,addluck:0,baseluck:0.02}
     };
 
     private var _fishImgArr:Array=[];
@@ -33,6 +33,7 @@ public class GamemainM {
     private const _gameAllTime:int=30;
     private var _gameTime:int;
 
+    private var _guideIng:Boolean;
 
 
     public function GamemainM() {
@@ -42,6 +43,16 @@ public class GamemainM {
     {
         return _instance||=new GamemainM();
     }
+
+    public function setGuideIng(value:Boolean):void
+    {
+        _guideIng=value;
+    }
+    public function getGuideIng():Boolean
+    {
+        return _guideIng;
+    }
+
 
 
 
@@ -182,7 +193,7 @@ public class GamemainM {
                     dropObj={cfg:_fishImgArr[i]['dataSource'],num:1,type:typeName};
                     dropName=_fishImgArr[i]['dataSource']['name'];
 
-                    var num:int=checkCombo(dropName);
+                    var num:int=checkFishNum(dropName);
                     dropObj['num']=num;
                     dropObj['comboNum']=_lastDrop['combo'];
                     putInFishBox(dropName,num);
@@ -272,18 +283,21 @@ public class GamemainM {
                 clearLastDrop();
                 return;
             }
-            else if(FishM.instance.checkComboByName(cfg['name'])){
+            else{
                 _lastDrop['combo']+=1;
-                //combo增加能量
-                const maxCombo:int=10;
-                if(_lastDrop['combo']>=maxCombo) _lastDrop['combo']=1;
             }
+            //else if(FishM.instance.checkComboByName(cfg['name'])){
+                //_lastDrop['combo']+=1;
+                //combo增加能量
+                //const maxCombo:int=10;
+                //if(_lastDrop['combo']>=maxCombo) _lastDrop['combo']=1;
+            //}
         }
     }
-    private function checkCombo(name:String):int
+    private function checkFishNum(name:String):int
     {
         if(FishM.instance.checkComboByName(name)){
-            console.log("--checkCombo:",_lastDrop['combo']);
+            console.log("--checkFishNum:",_lastDrop['combo']);
             return _lastDrop['combo'];
         }
         else{
@@ -306,7 +320,7 @@ public class GamemainM {
 
         //get img Number
         var chooseNum:int=1;
-        (Math.random()>.3)? chooseNum=1:chooseNum=2;
+        (Math.random()>.2)? chooseNum=1:chooseNum=2;
         if(coloursImgAppear)chooseNum=1;
 
         //get imgObj in _colorImgDic
@@ -339,7 +353,7 @@ public class GamemainM {
         }
 
         //if get colours And Stay lifeTime
-        const lifeTime:int=2;
+        const lifeTime:int=1;
         if(closelist.indexOf("colours")!=-1){
             _colorImgDic['colours']['lifenum']=lifeTime;
         }
@@ -439,13 +453,16 @@ public class GamemainM {
         if(obj.name=="pearl"){
             obj.num = 1;
         }
-        else if(rangeNum<=5){
-            obj.num=50;
+        else if(rangeNum<=3){
+            if(obj.name=="gold")obj.num=20;
+            else if(obj.name=="plank")obj.num=10;
         }else if(rangeNum<45){
-            obj.num=Math.round((45-rangeNum)/2);
+            if(obj.name=="gold") obj.num=Math.round((45-rangeNum)/3);
+            else if(obj.name=="plank") obj.num=Math.round((45-rangeNum)/5);
         }else{
             obj.num = 1;
-            obj.name = (Math.random() > .5)? "plank":"gold";
+            //obj.name = (Math.random() > .5)? "plank":"gold";
+            obj.name = "gold";
         }
 
         return obj;

@@ -3,27 +3,27 @@ public class PlayerInfoM {
 
     public static var _instance:PlayerInfoM;
 
-    private var _goldNum:Number=1000;
-    private var _plankNum:Number=1000;
-    private var _pearlNum:Number=1000;
+    private var _goldNum:Number=100000;
+    private var _plankNum:Number=100000;
+    private var _pearlNum:Number=100000;
 
     private var _luckWheelNum:int=1;
     private var _todayADDWheelNumFromShare:int=1;
 
-    private var _giftDelay:int=10;
+    private var _giftDelay:int=100;//退出记录
     private var _quitUnix:int=1541845143000;
     private var _giftLv:int=1;
     private var _giftArr:Array=[
-        {id:1,num:1},
-        {id:2,num:1},
-        {id:3,num:1},
-        {id:4,num:1},
-        {id:5,num:1}
+        {id:1,num:0},
+        {id:2,num:0},
+        {id:3,num:0},
+        {id:4,num:0},
+        {id:5,num:0}
     ];
 
     private var _fishLvObj:Object={
         草莓鱼:1,
-        紫薯鱼:1,
+        紫薯鱼:0,
         金线鱼:0,
         小丑鱼:0,
         蓝雀鱼:0,
@@ -35,10 +35,14 @@ public class PlayerInfoM {
         孔雀鱼:0,
         彩虹鱼:0,
         红龙鱼:0,
-        黄龙鱼:0,
+        金龙鱼:0,
         翻车鱼:0,
         美人鱼:0
     };
+
+    private var _shipEquipDic:Object={body:401,sail:null,tower:null,cabin:null};//body sail tower cabin
+    private var _shopOwnArr:Array=[15];//已购买 shopId
+
 
     private var _gameSetting:Object={
         music:true,
@@ -62,6 +66,31 @@ public class PlayerInfoM {
     {
         return _instance || (_instance=new PlayerInfoM());
     }
+
+    public function getshipEquipIdByName(name:String):int
+    {
+        return _shipEquipDic[name];
+    }
+    public function setshipEquipIdByName(name:String,shopId:int):void
+    {
+        if(!_shipEquipDic.hasOwnProperty(name)){
+            throw new Error("cant set shipEquip!shipEquip name not fond!");
+        }
+        _shipEquipDic[name]=shopId;
+    }
+
+    public function getshopOwnArr():Array
+    {
+        return _shopOwnArr;
+    }
+    public function addshopOwn(shopid:int):void
+    {
+        _shopOwnArr.push(shopid);
+    }
+
+
+
+
 
     public function getGuide():Boolean
     {

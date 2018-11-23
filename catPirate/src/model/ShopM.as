@@ -36,22 +36,26 @@ public class ShopM {
     public function getShoplist(index:int):Array
     {
         var arr:Array=[];
+        var id:int;
         if(index==0){
             //fish
-            arr=ConfigManager.filter("cfg_shop",function (item) {
-                if(item['typeId']==1001) return true;
-            },function (a,b) {
-                return (a.id>b.id)?  1: -1;
-            });
+            id=1001;
         }
         else if(index==1){
             //pop
-
+            id=1002;
         }
         else if(index==2){
             //fishHook
-
+            id=1003;
         }
+
+        arr=ConfigManager.filter("cfg_shop",function (item) {
+            if(item['shopId']==id) return true;
+        },function (a,b) {
+            return (a.id>b.id)?  1: -1;
+        });
+
         return arr;
     }
 

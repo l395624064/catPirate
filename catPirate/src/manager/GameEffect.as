@@ -27,8 +27,8 @@ public class GameEffect {
     public static var _instance:GameEffect;
 
     private var _effectDic:Object={};
-    private var _effectImgArr:Array=[];
-    private var _moveMode:String="";
+    private var _bezierImgArr:Array=[];
+    private var _baseImgArr:Array=[];
     private var _bezierOverHandler:Handler;
     private var _baseOverHandler:Handler;
 
@@ -47,7 +47,7 @@ public class GameEffect {
         return _instance || (_instance=new GameEffect());
     }
 
-    public function changeEffectTimer(action:String):void
+    public function changeEffectTimer(action:String,moveMode:String):void
     {
         /*
         if(action=="start"){
@@ -55,10 +55,21 @@ public class GameEffect {
         }else if(action=="over"){
             Laya.timer.clear(this,checkEffectDie);
         }*/
+        //console.log(action,":--",moveMode);
         if(action=="move"){
-            Laya.timer.frameLoop(1,this,onEffectTime);
+            if(moveMode=="Bezier"){
+                Laya.timer.frameLoop(1,this,onBezierTime);
+            }
+            else if(moveMode=="Base"){
+                Laya.timer.frameLoop(1,this,onBaseTime);
+            }
         }else if(action=="stop"){
-            Laya.timer.clear(this,onEffectTime);
+            if(moveMode=="Bezier"){
+                Laya.timer.clear(this,onBezierTime);
+            }
+            else if(moveMode=="Base"){
+                Laya.timer.clear(this,onBaseTime);
+            }
         }
     }
     private function checkEffectDie():void
@@ -72,26 +83,27 @@ public class GameEffect {
         }
     }
 
-
-    private function onEffectTime():void
+    private function onBezierTime():void
     {
-        if(_moveMode=="Bezier"){
-            if(_effectImgArr.length>0){
-                bezierMove();
-            }else{
-                changeEffectTimer("stop");
-                if(_bezierOverHandler) _bezierOverHandler.run();
-            }
-        }
-        else if(_moveMode=="Base"){
-            if(_effectImgArr.length>0){
-                baseMove();
-            }else{
-                changeEffectTimer("stop");
-                if(_baseOverHandler) _baseOverHandler.run();
-            }
+        if(_bezierImgArr.length>0){
+            bezierMove();
+        }else{
+            changeEffectTimer("stop","Bezier");
+            if(_bezierOverHandler) _bezierOverHandler.run();
         }
     }
+
+    private function onBaseTime():void
+    {
+        if(_baseImgArr.length>0){
+            baseMove();
+        }else{
+            changeEffectTimer("stop","Base");
+            if(_baseOverHandler) _baseOverHandler.run();
+        }
+    }
+
+
 
 
 
@@ -256,12 +268,13 @@ public class GameEffect {
         for(var i:int=0;i<imgNum;i++){
             img=new Image(url);
             img.zOrder=effectD.zOrder;
-            min=effectD.startPoint.x-10;
-            max=effectD.startPoint.x+10;
-            maxY=effectD.startPoint.y+10;
-            img.pos(min+Math.random()*(max-min),maxY);
-            if(imgNum==1) img.pos(effectD.startPoint.x,maxY);
+            //min=effectD.startPoint.x-10;
+            //max=effectD.startPoint.x+10;
+            //maxY=effectD.startPoint.y+10;
+            //img.pos(min+Math.random()*(max-min),maxY);
+            //if(imgNum==1) img.pos(effectD.startPoint.x,maxY);
 
+            img.pos(effectD.startPoint.x,effectD.startPoint.y);
             img.scale(effectD.startScale,effectD.startScale);
 
             img['type']="fish";
@@ -269,22 +282,22 @@ public class GameEffect {
             img['endPoint']=effectD.endPoint;
 
             effectD.panelSp.addChild(img);
-            _effectImgArr.push(img);
+            _baseImgArr.push(img);
         }
-        _moveMode="Base";
-        changeEffectTimer("move");
+        changeEffectTimer("move","Base");
     }
 
 
     private function baseMove():void
     {
-        //console.log("-_effectImgArr:",_effectImgArr);
         var img:Image;
-        for(var i:int=_effectImgArr.length-1;i>=0;i--){
-            img=_effectImgArr[i];
+        var endPoint:Point;
+        for(var i:int=_baseImgArr.length-1;i>=0;i--){
+            img=_baseImgArr[i];
             img.y+=img['spd'];
-            if(img.y>=img['endPoint'].y){
-                _effectImgArr.splice(i,1);
+            endPoint=img['endPoint'];
+            if(endPoint.distance(img.x,img.y)<=10){
+                _baseImgArr.splice(i,1);
             }
         }
     }
@@ -310,10 +323,9 @@ public class GameEffect {
             img['t']=0;
 
             effectD.panelSp.addChild(img);
-            _effectImgArr.push(img);
+            _bezierImgArr.push(img);
         }
-        _moveMode="Bezier";
-        changeEffectTimer("move");
+        changeEffectTimer("move","Bezier");
     }
 
 
@@ -351,9 +363,9 @@ public class GameEffect {
         var img:Image;
         var potObj:Object;
         var t,spd:Number;
-        for(var i:int=_effectImgArr.length-1;i>=0;i--)
+        for(var i:int=_bezierImgArr.length-1;i>=0;i--)
         {
-            img=_effectImgArr[i];
+            img=_bezierImgArr[i];
             spd=img['spd'];
             t=img['t'];
             t+=spd;
@@ -364,7 +376,7 @@ public class GameEffect {
             }else{
                 img.removeSelf();
                 addEvent(img['type']);
-                _effectImgArr.splice(i,1);
+                _bezierImgArr.splice(i,1);
             }
         }
     }

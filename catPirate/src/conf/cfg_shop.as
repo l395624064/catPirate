@@ -13,21 +13,23 @@ package conf
             
             a.explain_content=sheet[0];
             
-            a.typeId=sheet[1];
+            a.cost1_num=sheet[1];
             
-            a.cost1_num=sheet[2];
+            a.name=sheet[2];
             
-            a.name=sheet[3];
+            a.res=sheet[3];
             
-            a.res=sheet[4];
+            a.shopId=sheet[4];
             
             a.cost_type=sheet[5];
             
-            a.buyshow=sheet[6];
+            a.buyshow=sheet[7];
             
-            a.cost2_num=sheet[7];
+            a.relationId=sheet[6];
             
-            a.id=sheet[8];
+            a.cost2_num=sheet[8];
+            
+            a.id=sheet[9];
             
 
 			return a;
@@ -41,17 +43,19 @@ package conf
         
         public var explain_content:String;
         
-        public var typeId:int;
-        
         public var cost1_num:Array;
         
         public var name:String;
         
         public var res:String;
         
+        public var shopId:int;
+        
         public var cost_type:Array;
         
         public var buyshow:int;
+        
+        public var relationId:int;
         
         public var cost2_num:Array;
         

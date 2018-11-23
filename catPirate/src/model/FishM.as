@@ -42,7 +42,8 @@ public class FishM {
     {
         var fishlv:int=getFishlvByName(name);
         var fishObj:Object=getFishObjByName(name);
-        return fishObj['weight_num'][fishlv];
+        if(fishlv<=0) return fishObj['weight_num'][fishlv];
+        return fishObj['weight_num'][fishlv-1];
     }
     public function getSortIdByName(name:String):int
     {
@@ -57,7 +58,7 @@ public class FishM {
         var arr:Array=ConfigManager.filter("cfg_fish",function (item) {
             if(item['name']==name) return true;
         })
-        return arr[0]['lucky_num'][getFishlvByName(name)];
+        return arr[0]['lucky_num'][getFishlvByName(name)-1];
     }
     public function getFishAppearMaxByName(name:String):Number
     {

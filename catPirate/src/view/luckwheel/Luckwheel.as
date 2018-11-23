@@ -19,6 +19,8 @@ import manager.GameEventDispatch;
 
 import manager.UiManager;
 
+import model.GamemainM;
+
 import model.PlayerInfoM;
 
 import ui.LuckwheelUI;
@@ -185,7 +187,18 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
 
     private function setPopArr():void
     {
-        popArr=[1,1,1];
+        console.log("------setPopArr-",GamemainM.instance.getGuideIng());
+        if(GamemainM.instance.getGuideIng()){
+            popArr=[1,1,1];
+        }else{
+            popArr=[];
+            var num:int;
+            for(var i:int=0;i<3;i++){
+                num=Math.floor(Math.random()*5);
+                popArr.push(num);
+            }
+        }
+
         if(popArr[1]<popArr[0]){
             popArr[1]+=_skinArr.length;
         }

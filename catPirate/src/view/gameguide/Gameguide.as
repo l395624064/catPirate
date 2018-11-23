@@ -39,17 +39,21 @@ public class Gameguide extends GuideUI implements PanelVo{
     {
         this.zOrder=UiManager.instance.getUiBaseDepth("UITYPE_GUIDE");
 
-        var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
+        var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();//获取设置
+
         if(_guideComplete){
             UiManager.instance.closePanel("Gameguide");
             return;
         }
 
+
         guideTip.visible=true;
         cancelBtn.on(Event.MOUSE_DOWN,this,function () {
+            GamemainM.instance.setGuideIng(false);
             UiManager.instance.closePanel("Gameguide");
         });
         confirmBtn.on(Event.MOUSE_DOWN,this,function () {
+            GamemainM.instance.setGuideIng(true);
             guideTip.visible=false;
 
             nextStep();
@@ -72,21 +76,22 @@ public class Gameguide extends GuideUI implements PanelVo{
 
     private function clickToNext():void
     {
-        var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
-        if(_guideComplete)return;
-        _stepNum++;
-        if(_stepNum>_stepArr[_taskNum-1]){
-            _stepNum=1;
-            _taskNum++;
-            if(_taskNum>_stepArr.length){
-                console.log("--guide complete");
-                //获得奖励
-                PlayerInfoM.instance.setGuide(true);
-                UiManager.instance.closePanel("Gameguide");
-                return;
+        if(GamemainM.instance.getGuideIng()){
+            _stepNum++;
+            if(_stepNum>_stepArr[_taskNum-1]){
+                _stepNum=1;
+                _taskNum++;
+                if(_taskNum>_stepArr.length){
+                    console.log("--guide complete");
+                    //获得奖励
+                    GamemainM.instance.setGuideIng(false);
+                    PlayerInfoM.instance.setGuide(true);
+                    UiManager.instance.closePanel("Gameguide");
+                    return;
+                }
             }
+            nextStep();
         }
-        nextStep();
     }
     private function nextStep():void
     {

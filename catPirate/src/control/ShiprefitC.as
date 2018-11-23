@@ -8,6 +8,8 @@ import laya.utils.Handler;
 import manager.GameEvent;
 import manager.GameEventDispatch;
 
+import model.PlayerInfoM;
+
 import model.ShiprefitM;
 
 public class ShiprefitC {
@@ -25,19 +27,36 @@ public class ShiprefitC {
 
     private function shipSlotInit():void
     {
-        var body:Object=cfg_module_ship.instance(401+"");
-        var sail:Object=cfg_module_ship.instance(103+"");
-        var tower:Object=cfg_module_ship.instance(201+"");
-        var cabin:Object=cfg_module_ship.instance(301+"");
+        var bodyId:int=PlayerInfoM.instance.getshipEquipIdByName("body");
+        var body:Object=cfg_module_ship.instance(bodyId+"");
+        var sailId:int=PlayerInfoM.instance.getshipEquipIdByName("sail");
+        var sail:Object=cfg_module_ship.instance(sailId+"");
+        var towerId:int=PlayerInfoM.instance.getshipEquipIdByName("tower");
+        var tower:Object=cfg_module_ship.instance(towerId+"");
+        var cabinId:int=PlayerInfoM.instance.getshipEquipIdByName("cabin");
+        var cabin:Object=cfg_module_ship.instance(cabinId+"");
 
         ShiprefitM.instance.setShipslotDic({body:body,sail:sail,tower:tower,cabin:cabin});
         GameEventDispatch.instance.event(GameEvent.UpdateShipslot);
     }
 
     private function shipSlotEquip(param:Object):void {
+
+        //正常安装
+        var typeName:String=param['typeName'];
+        var relationId:int=param.relationId;
+
+        var shiprefitParam:Object=cfg_module_ship.instance(relationId+"");
+        ShiprefitM.instance.setShipslotByName(shiprefitParam.typeName,shiprefitParam);
+
+        PlayerInfoM.instance.setshipEquipIdByName(shiprefitParam.typeName,relationId);
+
+        GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:5}]);
+        GameEventDispatch.instance.event(GameEvent.UpdateShipslot);
+
+        /*具备分类的组装
         //body sail tower cabin
         var name:String;
-        var typeName:String=param['typeName'];
         var bodyGroup:String=ShiprefitM.instance.getShipslotDic()['body']['slot_type'];
         if(typeName=="body"){
             //卸载不合法的插槽
@@ -57,6 +76,7 @@ public class ShiprefitC {
                 GameEventDispatch.instance.event(GameEvent.UpdateShipslot);
             }
         }
+        */
     }
 
     private function equipShipbody(param:Object):void

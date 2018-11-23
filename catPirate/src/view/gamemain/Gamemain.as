@@ -1,4 +1,6 @@
 package view.gamemain {
+import conf.cfg_currency;
+
 import data.AniD;
 import data.EffectD;
 import data.FontClipD;
@@ -803,7 +805,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
         fishhookPoint=fishhookMask.globalToLocal(dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y)));
         var getdropObj:Object=GamemainM.instance.getdropFish(fishhookPoint);
 
-        //console.log("-getdropObj:",getdropObj)
         if(!getdropObj){
             console.log("--miss");
             changeFishhookSpd("reset");//速度重置
@@ -837,10 +838,15 @@ public class Gamemain extends GameMainUI implements PanelVo {
             GameEffect.instance.creatSignPopMove(effectName,efData,Handler.create(this,function () {
                 efData.panelSp=fishboxsp;
                 efData.startPoint=fishboxsp.globalToLocal(efData.endPoint);
-                efData.endPoint=new Point(0,GamemainM.instance.getFishpileEndY(fishboxsp.height));
+                efData.endPoint=new Point(efData.startPoint.x,GamemainM.instance.getFishpileEndY(fishboxsp.height));
                 efData.startScale=efData.endScale;
                 GameEffect.instance.creatBaseMove(effectName,efData,getdropObj.num);
-            }))
+            }));
+
+
+
+
+
 
 
 
@@ -851,6 +857,15 @@ public class Gamemain extends GameMainUI implements PanelVo {
             }
 
             if(getdropObj.comboNum>0){
+                //鱼附属奖励
+                var config:Object=getdropObj.cfg;
+                if(Math.random()<0.5+0.1*getdropObj.comboNum && config.getAward){
+                    var index:int=Math.floor(Math.random()*config.award_type.length);
+                    var awardName:String=cfg_currency.instance(config.award_type[index]+"").property;
+                    var maxNum:int=config.award_num[index];
+                    getMoneyEffect({name:awardName,num:Math.ceil(Math.random()*maxNum)},false);
+                }
+
                 //effect
                 var aniData:AniD=new AniD();
                 aniData.startPoint=dropFishBox.localToGlobal(new Point(fishhookImg.x,fishhookImg.y));
@@ -917,6 +932,11 @@ public class Gamemain extends GameMainUI implements PanelVo {
         Tween.to(getScoreClip,{y:-80,alpha:0},900,null,null,0,true);
 
         //over effect
+        getMoneyEffect(popObject,true);
+    }
+
+    private function getMoneyEffect(popObject:Object,refreshFish:Boolean):void
+    {
         var efData:EffectD=new EffectD();
         efData.startPoint=fishhookMask.localToGlobal(fishhookPoint);
         efData.endPoint=new Point(GameConfig.width/2,GameConfig.height/2);
@@ -927,13 +947,15 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 p=new Point(plankScoreImg.x,plankScoreImg.y);
             }else if(popObject.name=="gold"){
                 p=new Point(goldScoreImg.x,goldScoreImg.y);
-            }else{
-                p=new Point(plankScoreImg.x,plankScoreImg.y);
+            }else if(popObject.name=="pearl"){
+                p=new Point(pearlScoreImg.x,pearlScoreImg.y);
             }
             efData.endPoint=scoreBox.localToGlobal(p);
             GameEffect.instance.creatBezierMove(popObject.name,efData,popObject.num,Handler.create(this,function () {
-                changeDropFishBoxState("over");
-                canDrop=true;
+                if(refreshFish){
+                    changeDropFishBoxState("over");
+                    canDrop=true;
+                }
             }));
         }));
     }

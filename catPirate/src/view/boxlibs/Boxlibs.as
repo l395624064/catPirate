@@ -22,6 +22,8 @@ import manager.GameEventDispatch;
 
 import manager.UiManager;
 
+import model.GamemainM;
+
 import model.PlayerInfoM;
 
 import ui.BoxlibsUI;
@@ -230,7 +232,21 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
 
         var gainD:GainnewD=new GainnewD();
         gainD.award_type=cfg.award_type;
-        gainD.award_num=cfg.award_num;
+
+        if(GamemainM.instance.getGuideIng()){
+            gainD.award_num=cfg.award_num;
+        }else{
+            var numArr:Array=[];
+            var num:int;
+            const randomNum:int=50;
+            for(var i:int=0;i<cfg.award_num.length;i++){
+                num=cfg.award_num[i];
+                num-=Math.floor(Math.random()*randomNum);
+                numArr.push(num);
+            }
+            gainD.award_num=numArr;
+        }
+
         gainD.callback=new Handler(this,boxlibsAward);
 
         GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);

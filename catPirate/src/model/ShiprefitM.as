@@ -70,11 +70,10 @@ public class ShiprefitM {
     {
         if(_shipslotDic.hasOwnProperty(name)){
             _shipslotDic[name]=slot;
-        }
-        else{
+        }else{
             throw new Error("Game Error shipSlot undefind");
         }
-        updateShipProperty();
+        //updateShipProperty();
     }
 
     private function updateShipProperty():void
