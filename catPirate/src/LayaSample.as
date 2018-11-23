@@ -48,9 +48,9 @@ public class LayaSample {
 
             //打开调试面板（IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
             //if (GameConfig.debug || Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
-            if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
-            if (GameConfig.stat) Stat.show();
-            Laya.alertGlobalError = true;
+            //if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
+            //if (GameConfig.stat) Stat.show();
+            //Laya.alertGlobalError = true;
 		}
 		private function gameinit():void
 		{

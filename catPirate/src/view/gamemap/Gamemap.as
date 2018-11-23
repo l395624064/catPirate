@@ -93,8 +93,7 @@ import laya.utils.Handler;
 			//layer._childs[0].addChild(ship);
 			myship = tilemap.getLayerObject("objlayer", "myship");
 			myship.addChild(ship);
-			//console.log("--ship:",ship);
-			
+
 			tilemap.setViewPortPivotByScale(0, 0);
 			tilemap.scale = 1;
 			tilemap.moveViewPort(mapX, mapY);
@@ -193,8 +192,8 @@ import laya.utils.Handler;
 			endGrid = new GridMsg(endPos);//endPos
 			
 			//console.log("-getIdFromPos:", getGridIdFromPos("landlayer", pos.x, pos.y));
-			console.log("-startPos:", startPos);
-			console.log("-endPos:", endPos,getGridId("landlayer"));
+			//console.log("-startPos:", startPos);
+			//console.log("-endPos:", endPos,getGridId("landlayer"));
 
             //findoutEndPoint();
             findoutEndway();
@@ -274,7 +273,7 @@ import laya.utils.Handler;
                     getStartPos=true;
 				}
             }
-            console.log("--find out best way",openList.length,closeList.length,waylist.length,testgridArr.length);
+            //console.log("--find out best way",openList.length,closeList.length,waylist.length,testgridArr.length);
             //console.log("-waylist:",waylist);
 		}
 
@@ -638,7 +637,7 @@ class GridMsg
             stepPos.y = nextPos.y;
             nextPos = Gamemap.instance.gridPointer(stepPos.x, stepPos.y);
             if (!nextPos){
-                console.log("-can not fond pointer form openlist");
+                //console.log("-can not fond pointer form openlist");
                 break;
             }
 			if(stepPos.x == startPos.x && stepPos.y == startPos.y){

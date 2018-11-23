@@ -74,7 +74,6 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
         modelist.array=ShiprefitM.instance.getTablistArray(index);
         modelist.refresh();
         setpageNum("goTo");
-        console.log("--tabBtn",pageNumArr,modelist.array.length);
     }
     private function setpageNum(str:String=""):void
     {
@@ -192,7 +191,6 @@ public class Shiprefit extends ShipRefitUI implements PanelVo{
     //will be repair
     private function buySucceed(param:Object):void
     {
-        //console.log("-onbuy succeed",param);
         ShiprefitM.instance.setshipmoduleBuy(tabType,pageNumArr[tabType]);
         var cell:Box=modelist.getCell(pageNumArr[tabType]);
         updatelist(cell,pageNumArr[tabType]);

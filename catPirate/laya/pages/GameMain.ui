@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":72,
-    "selecteID":4,
+    "selecteID":76,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -323,7 +323,7 @@
                 {
                     "x":30,
                     "type":"Box",
-                    "props":{"y":0,"x":492,"width":158,"var":"scoreBox","height":136},
+                    "props":{"y":22,"x":492,"width":158,"var":"scoreBox","height":136},
                     "nodeParent":72,
                     "label":"Box(scoreBox)",
                     "isOpen":false,
@@ -411,7 +411,7 @@
                 {
                     "x":30,
                     "type":"Box",
-                    "props":{"y":181,"x":511,"var":"rightbtnBox"},
+                    "props":{"y":209,"x":511,"var":"rightbtnBox"},
                     "nodeParent":72,
                     "label":"Box(rightbtnBox)",
                     "isOpen":false,
@@ -421,7 +421,6 @@
                     "compId":75,
                     "child":[
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":73},
                             "nodeParent":75,
@@ -434,7 +433,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":77},
                             "nodeParent":75,
@@ -451,7 +449,7 @@
                 {
                     "x":30,
                     "type":"Box",
-                    "props":{"y":4,"x":2,"var":"leftbtnBox"},
+                    "props":{"y":30,"x":2,"var":"leftbtnBox"},
                     "nodeParent":72,
                     "label":"Box(leftbtnBox)",
                     "isOpen":false,
@@ -461,7 +459,6 @@
                     "compId":76,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74},
                             "nodeParent":76,
@@ -475,7 +472,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":-4,"x":102,"width":89,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63},
                             "nodeParent":76,
@@ -489,7 +485,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65},
                             "nodeParent":76,
@@ -503,7 +498,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":"1","skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74},
                             "nodeParent":76,
@@ -938,7 +932,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":4,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78},
+                    "props":{"y":30,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78},
                     "nodeParent":72,
                     "label":"Image(settingBtn)",
                     "isDirectory":false,

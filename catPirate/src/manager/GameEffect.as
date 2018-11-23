@@ -55,7 +55,6 @@ public class GameEffect {
         }else if(action=="over"){
             Laya.timer.clear(this,checkEffectDie);
         }*/
-        //console.log(action,":--",moveMode);
         if(action=="move"){
             if(moveMode=="Bezier"){
                 Laya.timer.frameLoop(1,this,onBezierTime);

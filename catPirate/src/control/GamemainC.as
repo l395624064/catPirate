@@ -30,7 +30,6 @@ public class GamemainC {
     private function openGame():void
     {
         UiManager.instance.loadView("Gamemain",null,2);
-        console.log("--GameMainPanelOpen");
 
         //init local obj
 
@@ -38,7 +37,6 @@ public class GamemainC {
         GameEventDispatch.instance.event(GameEvent.StartLoopTime);
 
         var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
-        console.log("--_guideComplete:",_guideComplete);
         if(!_guideComplete){
             //新手引导
             Laya.timer.once(200,this,function () {

@@ -187,7 +187,6 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
 
     private function setPopArr():void
     {
-        console.log("------setPopArr-",GamemainM.instance.getGuideIng());
         if(GamemainM.instance.getGuideIng()){
             popArr=[1,1,1];
         }else{

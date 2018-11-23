@@ -180,7 +180,7 @@ public class Gameshop extends GameShopUI implements PanelVo{
             ele_free_btn.offAll();
             ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
                 e.stopPropagation();
-                console.log("-get AD video");
+                //console.log("-get AD video");
             });
 
             ele_lvup_btn.visible=true;

@@ -201,7 +201,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
         }
         dropSp.offAll();
         Laya.stage.offAll();
-        console.log("-clear All ClickEvent-");
     }
 
     private function matchClick(e:Event):void
@@ -306,7 +305,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
             dropSp.on(Event.MOUSE_DOWN,this,matchClick);
         }
         else if(_gamemode=="boss"){
-            console.log("--boss mode",_gamemode);
 
             //页面effect 侦听
             bgImg.skin="ui/gamemain/gamemain_1.png";
@@ -609,7 +607,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
         var getdropObj:Object=GamemainM.instance.getdropFish(fishhookPoint);
 
         if(!getdropObj){
-            console.log("--miss boss");
             //Miss 特效
             getMissImgEffect();
 
@@ -617,7 +614,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
             changeBossMarkState("over");
             return;
         }
-        console.log("---get Boss");
         changeBossMarkState("close");
 
         //点击提示
@@ -643,7 +639,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 creatClickImg();
                 if(powermask.width>=maxNum){
                     changeBossPowerState("stop");
-                    console.log("--over click");
                 }
             })
         }
@@ -685,7 +680,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
             //changeDropFishBoxState("over");
         }
         else if(action=="over"){
-            console.log("-out boss mode");
             //退出boss模式
             powermask.width=0;
             Laya.stage.offAll(Event.MOUSE_DOWN);
@@ -806,7 +800,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
         var getdropObj:Object=GamemainM.instance.getdropFish(fishhookPoint);
 
         if(!getdropObj){
-            console.log("--miss");
             changeFishhookSpd("reset");//速度重置
             getMissImgEffect();//miss
             return;
@@ -1034,7 +1027,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     public function updateShipslot():void
     {
-        //console.log("--updateShipslot",ShiprefitM.instance.getShipslotDic());
         //body sail tower cabin
         var bodyImg:Image=shipBox.getChildByName("body") as Image;
         var bodyConfig:Object=ShiprefitM.instance.getShipslotByName("body");

@@ -34,7 +34,7 @@ public class SimpleRole {
 
     private function onRoleClick():void
     {
-         console.log(_name,":get click--");
+         //console.log(_name,":get click--");
     }
 
 

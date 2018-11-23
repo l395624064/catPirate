@@ -169,7 +169,6 @@ public class UiManager {
             _panel['uiZorder']=_panel.zOrder;
         }
 
-        //console.log(_name,"zorder:",_panel.zOrder);
         _panel.visible=true;
         _panel['uiType']=_uiType;
         _panel['name']=_name;
@@ -200,8 +199,6 @@ public class UiManager {
             scaleWidth=scaleWidth.toFixed(2) as Number;
             scaleHeight=scaleHeight.toFixed(2) as Number;
             panel.scale(scaleWidth,scaleHeight);
-            console.log("-",Browser.width,Browser.height,scaleWidth,scaleHeight);
-            console.log("-",Browser.clientWidth,Browser.clientHeight,Browser.pixelRatio);
             panel.centerX=0;
             panel.centerY=0;
         }
