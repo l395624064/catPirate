@@ -180,6 +180,8 @@ public class Gameshop extends GameShopUI implements PanelVo{
             ele_free_btn.offAll();
             ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
                 e.stopPropagation();
+                UiManager.instance.closePanel("Gameshop");
+                UiManager.instance.loadView("Timegift",null,0,"UITYPE_NORMAL");
                 //console.log("-get AD video");
             });
 

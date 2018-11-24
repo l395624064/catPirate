@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":6,
+    "selectedBox":2,
+    "selecteID":3,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -54,7 +54,7 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":432,"var":"tips_Bg","skin":"ui/common_ex/d.png","sizeGrid":"27,24,38,22","height":90},
+                            "props":{"y":0,"x":0,"width":432,"var":"tips_Bg","skin":"ui/common_ex/d.png","sizeGrid":"18,15,18,15","height":90},
                             "nodeParent":2,
                             "label":"Image(tips_Bg)",
                             "isDirectory":false,

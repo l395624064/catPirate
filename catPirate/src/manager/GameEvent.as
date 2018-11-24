@@ -2,6 +2,14 @@ package manager
 {
     public class GameEvent
     {
+        //game save
+        public static const StartSaveTime:String="StartSaveTime";
+        public static const GameSaveInit:String="GameSaveInit";
+        public static const GameSaveRefresh:String="GameSaveRefresh";
+
+        //loadview
+        public static const StartLoad:String="StartLoad";
+
         //wait tip view
         public static const OpenWait:String="OpenWait";
         public static const CloseWait:String="CloseWait";
@@ -25,6 +33,7 @@ package manager
 
         public static const UpdateShipslot:String="UpdateShipslot";
 
+        public static const GameLoad:String="GameLoad";
         public static const GameLoadOver:String="GameLoadOver";
         public static const GameReady:String="GameReady";
         public static const GameStart:String="GameStart";
@@ -50,6 +59,7 @@ package manager
 
         public static const StopGiftBoxTime:String="CheckGiftBoxLVUP";
         public static const CheckGiftBoxTime:String="CheckGiftBoxTime";
+        public static const MinusBoxTime:String="MinusBoxTime";
 
 
         //GameTimeC

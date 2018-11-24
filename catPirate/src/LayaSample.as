@@ -2,6 +2,7 @@
 import laya.display.Sprite;
 import laya.display.Stage;
 import laya.utils.Browser;
+import laya.utils.Browser;
 import laya.utils.ClassUtils;
 import laya.utils.Stat;
 import laya.utils.Utils;
@@ -10,6 +11,8 @@ import manager.GameEvent;
 import manager.GameEventDispatch;
 import manager.GameInit;
 import manager.UiManager;
+import manager.WxManager;
+
 import view.gamemap.Gamemap;
 import laya.wx.mini.MiniAdpter;
 
@@ -22,9 +25,8 @@ public class LayaSample {
 		}
 		private function gameBrowser():void
 		{
-            MiniAdpter.init();
-			return;
-			if(Browser.onWeiXin){
+            //MiniAdpter.init();
+			if(GameConfig.onWeiXin){
 				MiniAdpter.init();
 			}
 		}
@@ -41,8 +43,6 @@ public class LayaSample {
             Laya.stage.alignV = GameConfig.alignV;
             Laya.stage.alignH = GameConfig.alignH;
 
-            Laya.stage.scaleMode = Stage.SCALE_EXACTFIT;//拉伸适配
-            Laya.stage.screenMode = "vertical";//强制竖屏
             //兼容微信不支持加载scene后缀场景
             //URL.exportSceneToJson = GameConfig.exportSceneToJson;
 
@@ -55,7 +55,7 @@ public class LayaSample {
 		private function gameinit():void
 		{
             GameInit.instance.init();
-            UiManager.instance.loadView("Loadview", null, 1);
+            GameEventDispatch.instance.event(GameEvent.GameLoad);
 		}
 	}
 }

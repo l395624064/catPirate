@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":12,
+    "selectedBox":11,
+    "selecteID":3,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -32,26 +32,28 @@
             "props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},
             "nodeParent":1,
             "label":"Box(panelbox)",
-            "isOpen":null,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":12,
             "child":[
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":350,"x":71,"centerY":0,"centerX":0},
                     "nodeParent":12,
                     "label":"Box",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":11,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":36,"x":30,"width":428,"skin":"ui/common_ex/bei.png","sizeGrid":"32,24,44,24","height":401},
+                            "props":{"y":36,"x":30,"width":428,"skin":"ui/common_ex/word-di.png","sizeGrid":"32,24,44,24","height":401},
                             "nodeParent":11,
                             "label":"Image",
                             "isDirectory":false,
@@ -62,8 +64,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":0,"x":391,"width":107,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","height":107},
+                            "props":{"y":12,"x":417,"width":75,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","height":75},
                             "nodeParent":11,
                             "label":"Image(closeBtn)",
                             "isDirectory":false,
@@ -75,6 +78,7 @@
                             "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Button",
                             "props":{"y":331,"x":81,"width":127,"var":"confirmBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","height":86},
                             "nodeParent":11,
@@ -99,6 +103,7 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Button",
                             "props":{"y":330,"x":285,"width":130,"var":"cancelBtn","stateNum":"1","skin":"ui/common_ex/btn_s_g.png","height":87},
                             "nodeParent":11,
@@ -123,8 +128,9 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Label",
-                            "props":{"y":109,"x":88,"wordWrap":true,"width":324,"var":"contenttxt","text":"是否接受此任务","strokeColor":"#000000","stroke":1,"height":156,"fontSize":30,"font":"Microsoft YaHei","color":"#5fb0ea","bold":true,"align":"center"},
+                            "props":{"y":109,"x":88,"wordWrap":true,"width":324,"var":"contenttxt","text":"是否接受此任务","strokeColor":"#313131","stroke":5,"height":156,"fontSize":30,"font":"Microsoft YaHei","color":"#eada2b","bold":true,"align":"center"},
                             "nodeParent":11,
                             "label":"Label(contenttxt)",
                             "isDirectory":false,
@@ -135,8 +141,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Label",
-                            "props":{"y":284,"x":142,"width":220,"var":"timetxt","text":"(剩余X秒)","strokeColor":"#000000","stroke":1,"height":33,"fontSize":25,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"},
+                            "props":{"y":284,"x":135,"width":220,"var":"timetxt","text":"(剩余X秒)","strokeColor":"#2b2d2f","stroke":1,"height":33,"fontSize":25,"font":"Microsoft YaHei","color":"#e2221f","bold":true,"align":"center"},
                             "nodeParent":11,
                             "label":"Label(timetxt)",
                             "isDirectory":false,

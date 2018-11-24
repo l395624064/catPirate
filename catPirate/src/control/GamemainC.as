@@ -2,6 +2,7 @@ package control {
 
 import manager.GameEvent;
 import manager.GameEventDispatch;
+import manager.GameInit;
 import manager.UiManager;
 
 import model.GamemainM;
@@ -12,6 +13,7 @@ public class GamemainC {
     public static var _instance:GamemainC;
 
     public function GamemainC() {
+        GameEventDispatch.instance.on(GameEvent.GameLoad,this,Gameload);
         GameEventDispatch.instance.on(GameEvent.GameLoadOver,this,openGame);
         GameEventDispatch.instance.on(GameEvent.GameReady,this,GameReady);
         GameEventDispatch.instance.on(GameEvent.GameStart,this,GameStart);
@@ -27,14 +29,18 @@ public class GamemainC {
         return _instance || (_instance=new GamemainC());
     }
 
+    private function Gameload():void
+    {
+        GameEventDispatch.instance.event(GameEvent.GameSaveInit);//获得存档
+        UiManager.instance.loadView("Loadview", null, 1);
+    }
+
     private function openGame():void
     {
         UiManager.instance.loadView("Gamemain",null,2);
 
-        //init local obj
-
-        //init local time
-        GameEventDispatch.instance.event(GameEvent.StartLoopTime);
+        GameEventDispatch.instance.event(GameEvent.StartLoopTime);// gift time
+        GameEventDispatch.instance.event(GameEvent.StartSaveTime);// save time
 
         var _guideComplete:Boolean=PlayerInfoM.instance.getGuide();
         if(!_guideComplete){
@@ -78,7 +84,7 @@ public class GamemainC {
     private function GameEndAward(_param:Object):void
     {
         var param:Object={
-            img:"ui/common_ex/ico1.png",
+            img:PlayerInfoM.instance.getavatarUrl(),
             maxweight:_param['maxweight'],
             weight:_param['weight']
         };

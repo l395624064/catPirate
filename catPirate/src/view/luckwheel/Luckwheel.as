@@ -18,6 +18,7 @@ import manager.GameEvent;
 import manager.GameEventDispatch;
 
 import manager.UiManager;
+import manager.WxManager;
 
 import model.GamemainM;
 
@@ -72,8 +73,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
 
         shareBtn.offAll();
         shareBtn.on(Event.MOUSE_DOWN,this,function () {
-            GameEventDispatch.instance.event(GameEvent.ADDwheelNumFromShare);
-            changewheelNum("update");
+            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
         });
 
         explainBtn.offAll();
@@ -84,6 +84,13 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
         explainCloseBtn.on(Event.MOUSE_DOWN,this,function () {
             changeExplainState("close");
         });
+    }
+
+    private function shareOverAward():void
+    {
+        GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:13}]);
+        GameEventDispatch.instance.event(GameEvent.ADDwheelNumFromShare);
+        changewheelNum("update");
     }
 
     private function changeExplainState(action:String):void

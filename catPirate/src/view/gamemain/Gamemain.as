@@ -17,6 +17,7 @@ import laya.ui.Image;
 import laya.utils.Handler;
 
 import manager.GameAdaptive;
+import manager.WxManager;
 
 import model.FishM;
 
@@ -133,6 +134,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
             if(!canDrop) return;
             GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.loadView("Gameshop",null,0,"UITYPE_NORMAL");
+        });
+        shareBtn.on(Event.MOUSE_DOWN,this,function () {
+            if(!canDrop) return;
+            WxManager.instance.shareApp();
         });
         settingBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;

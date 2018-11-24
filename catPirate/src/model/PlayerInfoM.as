@@ -1,17 +1,18 @@
 package model {
+import data.SaveD;
+
 public class PlayerInfoM {
 
     public static var _instance:PlayerInfoM;
 
-    private var _goldNum:Number=100000;
-    private var _plankNum:Number=100000;
-    private var _pearlNum:Number=100000;
+    private var _goldNum:int=0;
+    private var _plankNum:int=0;
+    private var _pearlNum:int=0;
 
-    private var _luckWheelNum:int=1;
-    private var _todayADDWheelNumFromShare:int=1;
+    private var _luckwheelObj:Object={day:0,luckWheelNum:0,todayADDWheelNumFromShare:0,getGiftFromShare:0};
 
     private var _giftDelay:int=100;//退出记录
-    private var _quitUnix:int=1541845143000;
+    private var _quitUnix:int;
     private var _giftLv:int=1;
     private var _giftArr:Array=[
         {id:1,num:0},
@@ -59,12 +60,83 @@ public class PlayerInfoM {
 
     private var _guideComplete:Boolean=false;
 
+
+    private var _nickName:String;
+    private var _gender:int;
+    private var _avatarUrl:String;
+    private var _province:String;
+
+
+
     public function PlayerInfoM() {
     }
 
     public static function get instance():PlayerInfoM
     {
         return _instance || (_instance=new PlayerInfoM());
+    }
+
+
+
+    public function initConfig(data:Object):void
+    {
+        _nickName=data.nickName;
+        _gender=data.gender;
+        _avatarUrl=data.avatarUrl;
+        _province=data.province;
+    }
+
+
+
+
+
+
+
+
+
+    public function setgender(value:int):void
+    {
+        _gender=value;
+    }
+    public function getgender():int
+    {
+        return _gender;
+    }
+
+    public function setavatarUrl(value:String):void
+    {
+        _avatarUrl=value;
+    }
+    public function getavatarUrl():String
+    {
+        return _avatarUrl;
+    }
+
+    public function setprovince(value:String):void
+    {
+        _province=value;
+    }
+    public function getprovince():String
+    {
+        return _province;
+    }
+
+    public function setnickName(value:String):void
+    {
+        _nickName=value;
+    }
+    public function getnickName():String
+    {
+        return _nickName;
+    }
+
+    public function getshipEquipDic():Object
+    {
+        return _shipEquipDic;
+    }
+    public function setshipEquipDic(value:Object):void
+    {
+        _shipEquipDic=value;
     }
 
     public function getshipEquipIdByName(name:String):int
@@ -79,6 +151,10 @@ public class PlayerInfoM {
         _shipEquipDic[name]=shopId;
     }
 
+    public function setshopOwnArr(value:Array):void
+    {
+        _shopOwnArr=value;
+    }
     public function getshopOwnArr():Array
     {
         return _shopOwnArr;
@@ -101,6 +177,15 @@ public class PlayerInfoM {
         _guideComplete=value;
     }
 
+
+    public function setRedPointObj(value:Object):void
+    {
+        _redPointObj=value;
+    }
+    public function getRedPointObj():Object
+    {
+        return _redPointObj;
+    }
     public function getRedPointByName(name:String):Boolean
     {
         return _redPointObj[name];
@@ -113,11 +198,15 @@ public class PlayerInfoM {
     {
         return _gameSetting;
     }
-    public function setGameSetting(value:Object):Object
+    public function setGameSetting(value:Object):void
     {
         _gameSetting=value;
     }
 
+    public function setGiftArr(value:Array):void
+    {
+        _giftArr=value;
+    }
     public function getGiftArr():Array
     {
         return _giftArr;
@@ -158,16 +247,38 @@ public class PlayerInfoM {
         _quitUnix=value;
     }
 
+
+    public function setluckwheelObj(value:Object):void
+    {
+        _luckwheelObj=value;
+    }
+    public function getluckwheelObj():Object
+    {
+        return _luckwheelObj;
+    }
     public function getTodayADDWheelNumFromShare():int
     {
-        return _todayADDWheelNumFromShare;
+        return _luckwheelObj['todayADDWheelNumFromShare'];
     }
     public function setTodayADDWheelNumFromShare(value:int):int
     {
-        _todayADDWheelNumFromShare=value;
+        _luckwheelObj['todayADDWheelNumFromShare']=value;
+    }
+    public function getGiftFromShare():int
+    {
+        return _luckwheelObj['getGiftFromShare'];
+    }
+    public function setGiftFromShare(value:int):void
+    {
+        _luckwheelObj['getGiftFromShare']=value;
     }
 
 
+
+    public function setFishLvObj(value:Object):void
+    {
+        _fishLvObj=value;
+    }
     public function getFishLvObj():Object
     {
         return _fishLvObj;
@@ -175,37 +286,37 @@ public class PlayerInfoM {
 
     public function getLuckWheelNum():int
     {
-        return _luckWheelNum;
+        return _luckwheelObj['luckWheelNum'];
     }
-    public function setLuckWheelNum(value:int):int
+    public function setLuckWheelNum(value:int):void
     {
-        _luckWheelNum=value;
+        _luckwheelObj['luckWheelNum']=value;
     }
 
 
-    public function getPearlNum():Number
+    public function getPearlNum():int
     {
         return _pearlNum;
     }
-    public function setPearlNum(value:Number):void
+    public function setPearlNum(value:int):void
     {
         _pearlNum=value;
     }
 
-    public function getGoldNum():Number
+    public function getGoldNum():int
     {
         return _goldNum;
     }
-    public function setGoldNum(value:Number):void
+    public function setGoldNum(value:int):void
     {
         _goldNum=value;
     }
 
-    public function getPlankNum():Number
+    public function getPlankNum():int
     {
         return _plankNum;
     }
-    public function setPlankNum(value:Number):void
+    public function setPlankNum(value:int):void
     {
         _plankNum=value;
     }

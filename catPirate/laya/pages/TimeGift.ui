@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":3,
+    "selectedBox":3,
+    "selecteID":43,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -95,7 +95,7 @@
                 {
                     "x":30,
                     "type":"Text",
-                    "props":{"y":353,"x":232,"wordWrap":true,"width":266,"text":"每次升级将永久提高礼包等级(最高LV5)","strokeColor":"#224882","stroke":5,"height":23,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
+                    "props":{"y":353,"x":232,"wordWrap":true,"width":266,"text":"<升级礼包>将有概率永久提升礼包等级(最高LV5)","strokeColor":"#224882","stroke":5,"height":23,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                     "nodeParent":3,
                     "label":"Text",
                     "isDirectory":false,
@@ -104,12 +104,12 @@
                     "compId":34,
                     "child":[
                         ],
-                    "$LOCKED":true
+                    "$LOCKED":false
                 },
                 {
                     "x":30,
                     "type":"Text",
-                    "props":{"y":614,"x":386,"wordWrap":true,"width":160,"text":"获得的礼包会自动放入宝箱库中","strokeColor":"#224882","stroke":5,"height":39,"fontSize":22,"font":"SimHei","color":"#ffffff","bold":true},
+                    "props":{"y":570,"x":107,"wordWrap":true,"width":268,"text":"获得的礼包会自动放入宝箱库中","strokeColor":"#224882","stroke":5,"height":16,"fontSize":15,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                     "nodeParent":3,
                     "label":"Text",
                     "isDirectory":false,
@@ -118,7 +118,8 @@
                     "compId":39,
                     "child":[
                         ],
-                    "$LOCKED":true
+                    "$LOCKED":false,
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
@@ -151,7 +152,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":452,"x":387,"var":"lvupBtn","skin":"ui/timegift/btn0.png"},
+                    "props":{"y":452,"x":387,"visible":false,"var":"lvupBtn","skin":"ui/timegift/btn0.png"},
                     "nodeParent":3,
                     "label":"Image(lvupBtn)",
                     "isDirectory":false,
@@ -159,18 +160,20 @@
                     "hasChild":false,
                     "compId":41,
                     "child":[
-                        ]
+                        ],
+                    "$LOCKED":false,
+                    "$HIDDEN":true
                 },
                 {
                     "x":30,
-                    "type":"Image",
-                    "props":{"y":518,"x":388,"var":"getBtn","skin":"ui/timegift/btn2.png"},
+                    "type":"Button",
+                    "props":{"y":502,"x":381,"width":125,"var":"getBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":22,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享/减时","height":84},
                     "nodeParent":3,
-                    "label":"Image(getBtn)",
+                    "label":"Button(getBtn)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":42,
+                    "compId":43,
                     "child":[
                         ]
                 }]

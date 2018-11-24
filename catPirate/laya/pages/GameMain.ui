@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":72,
-    "selecteID":76,
+    "selectedBox":75,
+    "selecteID":121,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -414,13 +414,14 @@
                     "props":{"y":209,"x":511,"var":"rightbtnBox"},
                     "nodeParent":72,
                     "label":"Box(rightbtnBox)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":75,
                     "child":[
                         {
+                            "x":45,
                             "type":"Button",
                             "props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":73},
                             "nodeParent":75,
@@ -433,6 +434,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Button",
                             "props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":77},
                             "nodeParent":75,
@@ -441,6 +443,19 @@
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":59,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":83,"x":59,"width":68,"var":"shareBtn","skin":"ui/common_ex/shareBtn.png","height":72},
+                            "nodeParent":75,
+                            "label":"Image(shareBtn)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":121,
                             "child":[
                                 ]
                         }],

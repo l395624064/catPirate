@@ -3,6 +3,7 @@ package manager
 import control.GainnewpopC;
 import control.GamemainC;
 import control.PlayerInfoC;
+import control.SaveC;
 import control.ShipRoleC;
 import control.ShiprefitC;
 import control.ShopbuyC;
@@ -55,6 +56,7 @@ public class GameInit
             ShiprefitC.instance;
             ShipRoleC.instance;
             PlayerInfoC.instance;
+            SaveC.instance;
         }
 
         public function init():void

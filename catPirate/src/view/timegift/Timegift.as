@@ -1,5 +1,6 @@
 package view.timegift {
 import conf.cfg_giftbox;
+import conf.cfg_tip;
 
 import control.GameTimeC;
 
@@ -16,6 +17,7 @@ import manager.GameEventDispatch;
 import manager.TimeManager;
 
 import manager.UiManager;
+import manager.WxManager;
 
 import model.PlayerInfoM;
 
@@ -60,8 +62,11 @@ public class Timegift extends TimeGiftUI implements PanelVo{
 
     private function giftGet():void
     {
+        WxManager.instance.shareApp(Handler.create(this,function () {
+            GameEventDispatch.instance.event(GameEvent.MinusBoxTime);
+            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:12}]);
+        }))
         //观看视频-完成后
-        checkGiftResetTime();
     }
 
     private function checkGiftResetTime():void

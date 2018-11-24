@@ -1,10 +1,10 @@
 {
   "deviceOrientation": "portrait",
-  "showStatusBar": "false",
+  "showStatusBar": false,
   "networkTimeout": {
-    "request": 1000,
-    "connectSocket": 2000,
-    "uploadFile": 6000,
-    "downloadFile": 6000
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
   }
 }

@@ -47,9 +47,15 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
+
+    }
+
+    private function startLoadRes():void
+    {
         Laya.loader.load(loadRes,Handler.create(this, loadComplete),Handler.create(this,onProgress));
         setloadBar(0);
     }
+
     private function loadComplete():void
     {
         setloadBar(1);
@@ -75,11 +81,11 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public function register():void
     {
-
+        GameEventDispatch.instance.on(GameEvent.StartLoad,this,startLoadRes);
     }
     public function unRegister():void
     {
-
+        GameEventDispatch.instance.off(GameEvent.StartLoad,this,startLoadRes);
     }
 
     public function clearAllNum():void

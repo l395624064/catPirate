@@ -21,6 +21,7 @@ import manager.GameEvent;
 import manager.GameEventDispatch;
 
 import manager.UiManager;
+import manager.WxManager;
 
 import model.GamemainM;
 
@@ -53,6 +54,15 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         leftBtn.on(Event.MOUSE_DOWN,this,setpageNum,["left"]);
         rightBtn.on(Event.MOUSE_DOWN,this,setpageNum,["right"]);
 
+        gameBoxBtn.offAll();
+        gameBoxBtn.on(Event.MOUSE_DOWN,this,function () {
+            
+        });
+        moreGiftBtn.offAll();
+        moreGiftBtn.on(Event.MOUSE_DOWN,this,function () {
+            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
+        })
+
 
         initBoxlist();
         boxlist.mouseHandler=new Handler(this,function (e:Event) {
@@ -61,6 +71,20 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         boxlist.renderHandler=new Handler(this,updateList);
 
         setpageNum("reset");
+    }
+
+    private function shareOverAward():void
+    {
+        if(PlayerInfoM.instance.getGiftFromShare()){
+            PlayerInfoM.instance.setGiftFromShare(0);
+
+            var gainD:GainnewD=new GainnewD();
+            gainD.award_type=[11];
+            gainD.award_num=[1];
+            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+        }else{
+            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:17}]);
+        }
     }
 
     private function initBoxlist():void

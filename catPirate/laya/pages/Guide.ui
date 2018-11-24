@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":105,
-    "selecteID":107,
+    "selectedBox":360,
+    "selecteID":371,
     "props":{"width":640,"sceneColor":"#999999","mouseThrough":true,"height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -619,26 +619,24 @@
             "props":{"y":0,"x":0,"visible":false,"name":"taskBox_2","mouseThrough":true,"mouseEnabled":true},
             "nodeParent":1,
             "label":"Box(taskBox_2)",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":104,
             "child":[
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
                     "label":"Box(stepbox_1)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":105,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136},
                             "nodeParent":105,
@@ -654,9 +652,8 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
-                            "props":{"y":258,"x":-3,"width":100,"name":"area","height":100},
+                            "props":{"y":285,"x":-3,"width":100,"name":"area","height":100},
                             "nodeParent":105,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -680,7 +677,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":0,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":267,"alpha":0},
                             "nodeParent":105,
@@ -696,7 +692,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":370,"x":0,"width":644,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":612,"alpha":0},
                             "nodeParent":105,
@@ -712,7 +707,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":259,"x":110,"width":531,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":148,"alpha":0},
                             "nodeParent":105,
@@ -728,7 +722,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":296,"x":159,"width":374,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":168},
                             "nodeParent":105,
@@ -741,7 +734,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Text",
                             "props":{"y":341,"x":197,"wordWrap":true,"width":184,"text":"让我们在转转乐里获得更多金币吧！","strokeColor":"#a43c6d","stroke":6,"height":93,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":105,
@@ -755,7 +747,6 @@
                             "$LOCKED":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":351,"x":379,"skin":"ui/common_img/role4.png"},
                             "nodeParent":105,
@@ -768,10 +759,9 @@
                                 ]
                         }],
                     "$LOCKED":true,
-                    "$HIDDEN":false
+                    "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
@@ -907,7 +897,6 @@
                     "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_3","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
@@ -1043,7 +1032,6 @@
                     "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_4","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
@@ -1179,7 +1167,6 @@
                     "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_5","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
@@ -1285,7 +1272,6 @@
                     "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_6","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
@@ -1407,7 +1393,6 @@
                     "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_7","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":104,
@@ -1543,7 +1528,7 @@
                     "$HIDDEN":true
                 }],
             "$LOCKED":true,
-            "$HIDDEN":false
+            "$HIDDEN":true
         },
         {
             "x":15,
@@ -1585,7 +1570,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":177,"x":2,"width":90,"name":"area","height":90},
+                            "props":{"y":204,"x":2,"width":90,"name":"area","height":90},
                             "nodeParent":197,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -2353,7 +2338,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":180,"x":556,"width":90,"name":"area","height":90},
+                            "props":{"y":207,"x":556,"width":90,"name":"area","height":90},
                             "nodeParent":268,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -2979,13 +2964,14 @@
             "props":{"y":0,"x":0,"visible":false,"name":"taskBox_5","mouseThrough":true,"mouseEnabled":true},
             "nodeParent":1,
             "label":"Box(taskBox_5)",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":360,
             "child":[
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":360,
@@ -3159,6 +3145,7 @@
                     "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":360,
@@ -3279,7 +3266,7 @@
                     "$HIDDEN":true
                 }],
             "$LOCKED":true,
-            "$HIDDEN":true
+            "$HIDDEN":false
         }],
     "animations":[
         {
