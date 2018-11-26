@@ -56,13 +56,17 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
 
         gameBoxBtn.offAll();
         gameBoxBtn.on(Event.MOUSE_DOWN,this,function () {
-            
+            WxManager.instance.navigateToMiniProgram();
         });
         moreGiftBtn.offAll();
         moreGiftBtn.on(Event.MOUSE_DOWN,this,function () {
             WxManager.instance.shareApp(Handler.create(this,shareOverAward));
         })
 
+        gameBoxPanel.offAll();
+        gameBoxPanel.on(Event.MOUSE_DOWN,this,function () {
+            WxManager.instance.navigateToMiniProgram();
+        })
 
         initBoxlist();
         boxlist.mouseHandler=new Handler(this,function (e:Event) {

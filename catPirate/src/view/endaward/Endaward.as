@@ -41,6 +41,7 @@ public class Endaward extends EndawardUI implements PanelVo{
         })
 
         playerImg.skin = param['img'];
+        playerImg.size(105,105);
         _maxWeight=param['maxweight'];
         playertitle.text=Gamefame.instance.getPlayerTitle(param['weight'],_maxWeight);
         weightTxt.text=param['weight']+"kg";

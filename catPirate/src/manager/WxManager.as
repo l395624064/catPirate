@@ -16,6 +16,8 @@ public class WxManager {
     private var _loginClickFunc:Handler;
     private var userInfoButton:Object;
 
+    private var _layaAppId:String="wx24c7a0688503db70";
+
     public function WxManager() {
         init();
     }
@@ -271,6 +273,14 @@ public class WxManager {
                 }
             }
         })
+    }
+
+    public function navigateToMiniProgram(appId:String=""):void
+    {
+        if(appId=="") appId=_layaAppId;
+        wx.navigateToMiniProgram({
+            appId:appId
+        });
     }
 
 

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":33,
+    "selectedBox":29,
+    "selecteID":27,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -93,7 +93,7 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":154,"x":263,"var":"playerImg","skin":"ui/common_ex/ico1.png","rotation":-7},
+                            "props":{"y":154,"x":261,"width":110,"var":"playerImg","skin":"ui/common_ex/ico1.png","skewX":0,"rotation":-8,"height":110},
                             "nodeParent":29,
                             "label":"Image(playerImg)",
                             "isDirectory":false,

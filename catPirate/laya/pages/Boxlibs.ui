@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":66,
+    "selectedBox":68,
+    "selecteID":87,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -300,12 +300,13 @@
                     "compId":64,
                     "child":[
                         ],
-                    "$LOCKED":true
+                    "$LOCKED":true,
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":877,"x":153,"width":149,"var":"gameBoxBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":25,"labelFont":"SimHei","labelColors":"#ffffff","label":"更多游戏","height":100},
+                    "props":{"y":877,"x":153,"width":149,"var":"gameBoxBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":25,"labelFont":"SimHei","labelColors":"#ffffff","label":"精选好游","height":100},
                     "nodeParent":3,
                     "label":"Button(gameBoxBtn)",
                     "isDirectory":false,
@@ -327,6 +328,97 @@
                     "compId":66,
                     "child":[
                         ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "props":{"y":987,"x":102,"width":455,"var":"gameBoxPanel","skin":"ui/common_ex/di7.png","sizeGrid":"29,49,32,45","height":112},
+                    "nodeParent":3,
+                    "label":"Image(gameBoxPanel)",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":68,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":26,"x":29,"width":60,"skin":"https://img.catqu.com/images/2018/11/26/a6cf34996f4fd32efe89e8c8bc3b97a0.png","name":"item0","height":60},
+                            "nodeParent":68,
+                            "label":"Image(item0)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":78,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":26,"x":97,"width":60,"skin":"https://img.catqu.com/images/2018/11/26/d2851f1f4738edc842eb25bf88edd515.png","name":"item1","height":60},
+                            "nodeParent":68,
+                            "label":"Image(item1)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":83,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":26,"x":165,"width":60,"skin":"https://img.catqu.com/images/2018/11/26/d84b0f5ed323916efe3ccde667a2a7d2.png","name":"item2","height":60},
+                            "nodeParent":68,
+                            "label":"Image(item2)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":84,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":26,"x":233,"width":60,"skin":"https://img.catqu.com/images/2018/11/26/841b508fce8f4afcd877c383d7ae496f.png","name":"item3","height":60},
+                            "nodeParent":68,
+                            "label":"Image(item3)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":85,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":26,"x":301,"width":60,"skin":"https://img.catqu.com/images/2018/11/26/5b6435c4be62ad323236a8105246411f.png","name":"item4","height":60},
+                            "nodeParent":68,
+                            "label":"Image(item4)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":86,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":26,"x":369,"width":60,"skin":"https://img.catqu.com/images/2018/11/26/732a21a5aa3f91a4c33e2dfda766f83c.png","name":"item5","height":60},
+                            "nodeParent":68,
+                            "label":"Image(item5)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":87,
+                            "child":[
+                                ]
+                        }]
                 }],
             "$LOCKED":true
         }],
