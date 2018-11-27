@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":79,
+    "selectedBox":3,
+    "selecteID":71,
     "searchKey":"View",
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
@@ -20,7 +20,7 @@
             "searchKey":"Image,bmask",
             "props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0},
             "nodeParent":1,
-            "label":"bmask",
+            "label":"Image(bmask)",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
@@ -35,14 +35,15 @@
             "searchKey":"Box,panelbox",
             "props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},
             "nodeParent":1,
-            "label":"panelbox",
-            "isOpen":false,
+            "label":"Box(panelbox)",
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":3,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
                     "props":{"y":281,"x":102,"width":447,"skin":"ui/friendrank/di3.png","sizeGrid":"10,10,10,10","height":715},
@@ -57,18 +58,20 @@
                     "$LOCKED":true
                 },
                 {
+                    "x":30,
                     "type":"List",
                     "searchKey":"List,friendlist",
-                    "props":{"y":303,"x":124,"width":420,"var":"friendlist","spaceY":0,"repeatY":7,"repeatX":1,"height":665},
+                    "props":{"y":303,"x":124,"width":420,"visible":false,"var":"friendlist","spaceY":0,"repeatY":7,"repeatX":1,"height":665},
                     "nodeParent":3,
-                    "label":"friendlist",
-                    "isOpen":true,
+                    "label":"List(friendlist)",
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":71,
                     "child":[
                         {
+                            "x":45,
                             "type":"Box",
                             "searchKey":"Box",
                             "props":{"y":0,"x":-7,"width":423,"renderType":"render","height":105},
@@ -81,11 +84,12 @@
                             "compId":27,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,floorImg",
                                     "props":{"y":0,"x":1,"width":421,"skin":"ui/friendrank/di2.png","sizeGrid":"29,29,30,30","name":"floorImg","height":106},
                                     "nodeParent":27,
-                                    "label":"floorImg",
+                                    "label":"Image(floorImg)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -94,6 +98,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":2,"x":74,"width":99,"visible":false,"skin":"ui/common_ex/ptdk.png","height":99},
@@ -110,11 +115,12 @@
                                     "$HIDDEN":true
                                 },
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,rankimg",
                                     "props":{"y":9,"x":15,"width":56,"skin":"ui/friendrank/ico1.png","name":"rankimg","height":76},
                                     "nodeParent":27,
-                                    "label":"rankimg",
+                                    "label":"Image(rankimg)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -123,6 +129,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":59,"x":285,"width":116,"skin":"ui/common_ex/p11.png","sizeGrid":"11,18,10,14","height":36},
@@ -137,11 +144,12 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "searchKey":"Text,ranktxt",
                                     "props":{"y":38,"x":23,"width":38,"text":"1","strokeColor":"#ffffff","stroke":3,"name":"ranktxt","height":40,"fontSize":40,"font":"SimHei","color":"#0099ff","bold":true,"align":"center"},
                                     "nodeParent":27,
-                                    "label":"ranktxt",
+                                    "label":"Text(ranktxt)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -150,11 +158,12 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "searchKey":"Text,scoretxt",
                                     "props":{"y":65,"x":294,"width":100,"text":"100000","strokeColor":"#224882","stroke":5,"name":"scoretxt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                                     "nodeParent":27,
-                                    "label":"scoretxt",
+                                    "label":"Text(scoretxt)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -163,11 +172,12 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "searchKey":"Text,nametxt",
                                     "props":{"y":16,"x":178,"width":222,"text":"很长的微信名字XXXX","strokeColor":"#ffffff","stroke":3,"name":"nametxt","height":23,"fontSize":20,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"},
                                     "nodeParent":27,
-                                    "label":"nametxt",
+                                    "label":"Text(nametxt)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -176,11 +186,12 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Text",
                                     "searchKey":"Text,titletxt",
                                     "props":{"y":65,"x":177,"width":101,"text":"钓鱼大师","strokeColor":"#224882","stroke":5,"name":"titletxt","height":26,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true},
                                     "nodeParent":27,
-                                    "label":"titletxt",
+                                    "label":"Text(titletxt)",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
@@ -189,11 +200,12 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Box",
                                     "searchKey":"Box,headBox",
                                     "props":{"y":15,"x":87,"name":"headBox"},
                                     "nodeParent":27,
-                                    "label":"headBox",
+                                    "label":"Box(headBox)",
                                     "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":false,
@@ -201,11 +213,12 @@
                                     "compId":78,
                                     "child":[
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image,headimg",
                                             "props":{"width":74,"sizeGrid":"0,0,0,0","name":"headimg","height":74},
                                             "nodeParent":78,
-                                            "label":"headimg",
+                                            "label":"Image(headimg)",
                                             "isOpen":true,
                                             "isDirectory":false,
                                             "isAniNode":false,
@@ -216,6 +229,7 @@
                                             "$HIDDEN":false
                                         },
                                         {
+                                            "x":75,
                                             "type":"Sprite",
                                             "searchKey":"Sprite",
                                             "props":{"y":1,"x":1,"renderType":"mask"},
@@ -242,9 +256,11 @@
                                                 }]
                                         }]
                                 }]
-                        }]
+                        }],
+                    "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
                     "props":{"x":52,"width":533,"visible":false,"skin":"ui/common_ex/blank.png","height":155,"centerY":490},
@@ -273,6 +289,7 @@
                     "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
                     "props":{"y":-2,"x":0,"width":642,"skin":"ui/friendrank/dibg.png","height":1041},
@@ -286,11 +303,12 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,closeBtn",
                     "props":{"width":107,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":22,"height":107,"bottom":966},
                     "nodeParent":3,
-                    "label":"closeBtn",
+                    "label":"Image(closeBtn)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,

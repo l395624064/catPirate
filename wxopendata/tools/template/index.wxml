@@ -1,0 +1,11 @@
+<!--index.wxml-->
+<audio  id="musicAudio"  bindended="onAudioEnd"></audio>
+<audio  id="soundAudio"  bindended="onAudioEnd"></audio>
+<canvas canvas-id="myCanvas" bindtouchstart="onTouchStart" bindtouchmove="onTouchStart" bindtouchend="onTouchStart" bindtouchcancel="onTouchStart" disable-scroll="true" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;"/>
+<view style="position:absolute;left:{{inputContainerStyle.left}}px;top:{{inputContainerStyle.top}}px;display:{{inputContainerStyle.display}}">
+<input placeholder="{{inputContainerStyle.placeholder}}" focus="{{inputContainerStyle.focus}}" bindinput="inputHandler" value="{{inputContainerStyle.value}}" style="text-align:left;color:{{inputContainerStyle.color}};transform-origin:0 0;transform:scale({{inputContainerStyle.scaleX}},{{inputContainerStyle.scaleY}});font-size:{{inputContainerStyle.fontSize}}px;width:{{inputContainerStyle.width}}px;height:{{inputContainerStyle.height}}px;"/>
+</view>
+<view style="position:absolute;left:{{textAreaContainerStyle.left}}px;top:{{textAreaContainerStyle.top}}px;display:{{textAreaContainerStyle.display}}">
+<input placeholder="{{textAreaContainerStyle.placeholder}}" focus="{{textAreaContainerStyle.focus}}" bindinput="areaHandler" value="{{textAreaContainerStyle.value}}" style="color:{{textAreaContainerStyle.color}};transform-origin:0 0;transform:scale({{textAreaContainerStyle.scaleX}},{{textAreaContainerStyle.scaleY}});font-size:{{textAreaContainerStyle.fontSize}}px;width:{{textAreaContainerStyle.width}}px;height:{{textAreaContainerStyle.height}}px;"/>
+</view>
+

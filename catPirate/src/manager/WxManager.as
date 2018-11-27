@@ -1,9 +1,15 @@
 package manager {
+import laya.debug.tools.JsonTool;
+import laya.display.Sprite;
+import laya.resource.Texture;
 import laya.ui.Button;
 import laya.utils.Browser;
 import laya.utils.Handler;
+import laya.wx.mini.MiniLoader;
 
 import manager.WxManager;
+
+import src.GameConfig;
 
 public class WxManager {
     public static var _instance:WxManager;
@@ -34,8 +40,6 @@ public class WxManager {
         _db=database();
         _form=getform("todos");
 
-        console.log("-db ready");
-
         showshareMenu();
         onshareMenu();
     }
@@ -59,11 +63,9 @@ public class WxManager {
             name: funcName,
             data:data,
             complete:function (res) {
-                console.log;
                 if(handler) _cloudHandler.runWith(res);
             },
             fail:function (res) {
-                console.log;
                 clodfunc("add",null,_cloudHandler);
             }
         })
@@ -244,7 +246,6 @@ public class WxManager {
     public function onshareMenu():void
     {
         wx.onShareAppMessage(function () {
-            console.log("-a3")
             return {
                 title: '来跟柴柴一起钓鱼吧',
                 imageUrl:"https://img.catqu.com/images/2018/11/25/a7c848e4709f1d8edddc41fcaea5d6e9.png",
@@ -260,7 +261,7 @@ public class WxManager {
     {
         wx.shareAppMessage({
             title: '来跟柴柴一起钓鱼吧',
-            imageUrl:"https://img.catqu.com/images/2018/11/25/35216f04b77b3b188044c5a8abfec904.png",
+            imageUrl:"https://img.catqu.com/images/2018/11/27/7ffd2f18e62eac39f153ea6c9478aaf2.png",
             complete:function (res) {
                 //真机可用
                 //GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:3}]);
@@ -282,6 +283,85 @@ public class WxManager {
             appId:appId
         });
     }
+
+    public  function setUserCloudStorage(_score:int):void
+    {
+        //{ key: 'score', value: score }
+        /*
+        var kvdata:Object={
+            "wxgame":
+                    {
+                        "score":_score,
+                        "update_time":Math.floor(new Date().getTime()/1000)
+                    }
+        };*/
+        var _keyArr:Array=[{ key: 'score', value: _score+"" }];
+        wx.setUserCloudStorage({
+            KVDataList:_keyArr,
+            success:function(res){
+                console.log("setUserCloudStorage success");
+            },
+            fail:function(res){
+                console.log("setUserCloudStorage fail");
+            }
+        });
+    }
+
+
+
+    public function resizeShared():void
+    {
+        //设置共享画布大小
+        __JS__('sharedCanvas').width = GameConfig.width;
+        __JS__('sharedCanvas').height = GameConfig.height;
+        //主域往子域透传消息
+        wx.postMessage(
+                {type:"resizeShared",
+                    url:"",
+                    data:{
+                        width:GameConfig.width,
+                        height:GameConfig.height,
+                        matrix:Laya.stage._canvasTransform
+                    },
+                    isLoad:false
+                }
+        );
+    }
+    public function openWXFriendRank():void
+    {
+        creatshareCanvas();
+        var kvArr:Array=["score"];
+        wx.postMessage({
+            type:"openWXFriendRank",
+            kvArr:kvArr
+        });
+    }
+    public function closeWXFriendRank():void
+    {
+        removeshareCanvas();
+        wx.postMessage({type:"closeWXFriendRank"});
+    }
+
+    private var _canvasSp:Sprite;
+    private var _canvasTexture:Texture;
+    public function creatshareCanvas():void
+    {
+        _canvasSp = new Sprite();
+        _canvasSp.pos(0, 0);
+        _canvasTexture = new Texture(Browser.window.sharedCanvas);
+        _canvasTexture.bitmap.alwaysChange = true;//小程序使用，非常费，这个参数可以根据自己的需求适当调整，如果内容不变可以不用设置成true
+
+        _canvasSp.graphics.drawTexture(_canvasTexture, 0, 0, _canvasTexture.width, _canvasTexture.height);
+        _canvasSp.zOrder=UiManager.instance.getUiBaseDepth("UITYPE_WX_SHARECANVAS");
+        //console.log("--_canvasTexture:",_canvasTexture.width, _canvasTexture.height);
+        Laya.stage.addChild(_canvasSp);
+    }
+    public function removeshareCanvas():void
+    {
+        _canvasTexture.bitmap.alwaysChange=false;
+        Laya.stage.removeChild(_canvasSp);
+    }
+
 
 
 

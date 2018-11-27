@@ -10,6 +10,8 @@ import manager.GameEventDispatch;
 import manager.Gamefame;
 import manager.WxManager;
 
+import model.PlayerInfoM;
+
 import ui.EndawardUI;
 
 import view.PanelVo;
@@ -45,6 +47,16 @@ public class Endaward extends EndawardUI implements PanelVo{
         _maxWeight=param['maxweight'];
         playertitle.text=Gamefame.instance.getPlayerTitle(param['weight'],_maxWeight);
         weightTxt.text=param['weight']+"kg";
+
+        updatescore(Math.floor(param['weight']));
+    }
+
+    private function updatescore(score:int):void
+    {
+        if(PlayerInfoM.instance.getscore()<score){
+            PlayerInfoM.instance.setscore(score);
+            WxManager.instance.setUserCloudStorage(score);
+        }
     }
 
     private function shareOverAward():void

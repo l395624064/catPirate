@@ -297,7 +297,7 @@ public class GamemainM {
     private function checkFishNum(name:String):int
     {
         if(FishM.instance.checkComboByName(name)){
-            console.log("--checkFishNum:",_lastDrop['combo']);
+            //console.log("--checkFishNum:",_lastDrop['combo']);
             return _lastDrop['combo'];
         }
         else{

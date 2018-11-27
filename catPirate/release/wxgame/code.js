@@ -937,22 +937,38 @@ var SaveC=(function(){
 	__proto.getloginInfo=function(res){
 		this._openid=res.result.OPENID;
 		this._appid=res.result.APPID;
-		console.log("-get openid:",this._openid);
-		WxManager.instance.getStorage(this._openid,Handler.create(this,this.getlocalInfo));
-		WxManager.instance.getformData(this._openid,Handler.create(this,this.getnetInof));
+		this.checksaveInfo("local");
+	}
+
+	__proto.checksaveInfo=function(state){
+		if(state=="local"){
+			WxManager.instance.getStorage(this._openid,Handler.create(this,this.getlocalInfo));
+		}
+		else if(state=="net"){
+			WxManager.instance.getformData(this._openid,Handler.create(this,this.getnetInof));
+		}
 	}
 
 	//检测网络存档
-	__proto.getnetInof=function(data){
-		this._netSaveData=data;
-		this._localComplete=true;
-		this.saveDataSync();
-	}
-
 	__proto.getlocalInfo=function(data){
 		this._localSaveData=data;
-		this._netComplete=true;
-		this.saveDataSync();
+		if(this._localSaveData==-1){
+			this.checksaveInfo("net");
+			}else{
+			this._localComplete=true;
+			this.saveDataSync();
+		}
+	}
+
+	__proto.getnetInof=function(data){
+		this._netSaveData=data;
+		if(this._netSaveData==-1){
+			console.log("-创建新存档");
+			WxManager.instance.login(Handler.create(this,this.clickLoginBtn));
+			}else{
+			this._netComplete=true;
+			this.saveDataSync();
+		}
 	}
 
 	__proto.saveDataSync=function(){
@@ -960,22 +976,20 @@ var SaveC=(function(){
 			if(this._localSaveData!=-1){
 				delete this._localSaveData._id;
 				delete this._localSaveData._openid;
-				console.log("-本地存档存在,同步云端",this._localSaveData);
+				console.log("-本地存档存在,同步云端");
 				WxManager.instance.setformData(this._openid,this._localSaveData);
 				this.initGameData(this._localSaveData);
 			}
-			else if(this._netSaveData!=-1 && this._localSaveData==-1){
-				console.log("-云端存档存在,同步本地",this._netSaveData);
+			else if(this._netSaveData!=-1){
+				console.log("-云端存档存在,同步本地");
 				WxManager.instance.setStorage(this._openid,this._netSaveData);
 				this.initGameData(this._netSaveData);
-				}else{
-				WxManager.instance.login(Handler.create(this,this.clickLoginBtn));
-			}
+			}else{}
 		}
 	}
 
+	//WxManager.instance.login(Handler.create(this,clickLoginBtn));
 	__proto.clickLoginBtn=function(data){
-		console.log("-userInfo:",data);
 		this._nickName=data.userInfo.nickName;
 		this._gender=data.userInfo.gender;
 		this._avatarUrl=data.userInfo.avatarUrl;
@@ -984,7 +998,7 @@ var SaveC=(function(){
 	}
 
 	__proto.creatNewData=function(){
-		console.log("-creat new savedata");
+		console.log("-creat new savedata over");
 		this._localSaveData=new SaveD();
 		if(this._nickName){
 			this._localSaveData.nickName=this._nickName;
@@ -1004,12 +1018,9 @@ var SaveC=(function(){
 		PlayerInfoM.instance.setPearlNum(data.pearlNum);
 		var localDate=new Date();
 		var quitDate=data.quitUnix;
-		console.log("-localDate------",localDate);
-		console.log("-quitDate------",quitDate);
 		var luckDay=data.luckwheelObj['day'];
 		if(Math.abs(localDate.getDate()-luckDay)>0){
 			data.luckwheelObj={day:localDate.getDate(),luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
-			console.log("-new.luckwheelObj------",localDate.getDate(),luckDay,data.luckwheelObj);
 			PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
 			}else{
 			PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
@@ -1039,6 +1050,7 @@ var SaveC=(function(){
 		PlayerInfoM.instance.setgender(data.gender);
 		PlayerInfoM.instance.setavatarUrl(data.avatarUrl);
 		PlayerInfoM.instance.setprovince(data.province);
+		PlayerInfoM.instance.setscore(data.score);
 		GameEventDispatch.instance.event("StartLoad");
 	}
 
@@ -1062,6 +1074,7 @@ var SaveC=(function(){
 		data.avatarUrl=PlayerInfoM.instance.getavatarUrl();
 		data.gender=PlayerInfoM.instance.getgender();
 		data.nickName=PlayerInfoM.instance.getnickName();
+		data.score=PlayerInfoM.instance.getscore();
 		WxManager.instance.setStorage(this._openid,data);
 	}
 
@@ -1434,6 +1447,7 @@ var SaveD=(function(){
 		this.goldNum=0;
 		this.plankNum=0;
 		this.pearlNum=0;
+		this.score=0;
 		this.luckwheelObj={day:0,luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
 		this.giftDelay=100;
 		this.giftLv=1;
@@ -1568,7 +1582,7 @@ var LayaSample=(function(){
 	var __proto=LayaSample.prototype;
 	__proto.gameBrowser=function(){
 		if(GameConfig.onWeiXin){
-			MiniAdpter.init();
+			MiniAdpter.init(true,false);
 		}
 	}
 
@@ -1578,9 +1592,11 @@ var LayaSample=(function(){
 		Laya.stage.screenMode=GameConfig.screenMode;
 		Laya.stage.alignV=GameConfig.alignV;
 		Laya.stage.alignH=GameConfig.alignH;
+		if(GameConfig.onWeiXin){
+			WxManager.instance.resizeShared();
+		}
 	}
 
-	//Laya.alertGlobalError=true;
 	__proto.gameinit=function(){
 		GameInit.instance.init();
 		GameEventDispatch.instance.event("GameLoad");
@@ -2086,7 +2102,6 @@ var GameEvent=(function(){
 	GameEvent.ShipSlotEquip="ShipSlotEquip";
 	GameEvent.ShipSlotInit="ShipSlotInit";
 	GameEvent.CreatShipRole="CreatShipRole";
-	GameEvent.GetFriendRank="GetFriendRank";
 	GameEvent.GameGuideNext="GameGuideNext";
 	return GameEvent;
 })()
@@ -2617,6 +2632,7 @@ var UiManager=(function(){
 		this._UITYPE_EFFECT=2004;
 		this._UITYPE_GAINNEW=2005;
 		this._UITYPE_GUIDE=3000;
+		this._UITYPE_WX_SHARECANVAS=5000;
 		this._taskArr=[];
 		this._taskState="Empty";
 		//Empty Busy
@@ -2799,6 +2815,10 @@ var UiManager=(function(){
 					deep=this._UITYPE_GUIDE;
 					break ;
 				}
+			case "UITYPE_WX_SHARECANVAS":{
+					deep=this._UITYPE_WX_SHARECANVAS;
+					break ;
+				}
 			default :{
 					throw new Error(this._name+"UITYPE zorder undefind");
 					break ;
@@ -2875,6 +2895,8 @@ var WxManager=(function(){
 		this._loginClickFunc=null;
 		this.userInfoButton=null;
 		this._layaAppId="wx24c7a0688503db70";
+		this._canvasSp=null;
+		this._canvasTexture=null;
 		this.wx=wx;
 		this.init();
 	}
@@ -2885,7 +2907,6 @@ var WxManager=(function(){
 		this.wx.cloud.init();
 		this._db=this.database();
 		this._form=this.getform("todos");
-		console.log("-db ready");
 		this.showshareMenu();
 		this.onshareMenu();
 	}
@@ -2906,11 +2927,9 @@ var WxManager=(function(){
 			name:funcName,
 			data:data,
 			complete:function (res){
-				console.log;
 				if(handler)_$this._cloudHandler.runWith(res);
 			},
 			fail:function (res){
-				console.log;
 				_$this.clodfunc("add",null,_$this._cloudHandler);
 			}
 		})
@@ -3061,7 +3080,6 @@ var WxManager=(function(){
 
 	__proto.onshareMenu=function(){
 		this.wx.onShareAppMessage(function(){
-			console.log("-a3")
 			return {
 				title:'来跟柴柴一起钓鱼吧',
 				imageUrl:"https://img.catqu.com/images/2018/11/25/a7c848e4709f1d8edddc41fcaea5d6e9.png",
@@ -3074,7 +3092,7 @@ var WxManager=(function(){
 	__proto.shareApp=function(handler,msg){
 		this.wx.shareAppMessage({
 			title:'来跟柴柴一起钓鱼吧',
-			imageUrl:"https://img.catqu.com/images/2018/11/25/35216f04b77b3b188044c5a8abfec904.png",
+			imageUrl:"https://img.catqu.com/images/2018/11/27/7ffd2f18e62eac39f153ea6c9478aaf2.png",
 			complete:function (res){
 				if(handler){
 					if(msg){
@@ -3093,6 +3111,63 @@ var WxManager=(function(){
 		this.wx.navigateToMiniProgram({
 			appId:appId
 		});
+	}
+
+	__proto.setUserCloudStorage=function(_score){
+		var _keyArr=[{key:'score',value:_score+"" }];
+		this.wx.setUserCloudStorage({
+			KVDataList:_keyArr,
+			success:function (res){
+				console.log("setUserCloudStorage success");
+			},
+			fail:function (res){
+				console.log("setUserCloudStorage fail");
+			}
+		});
+	}
+
+	__proto.resizeShared=function(){
+		sharedCanvas.width=GameConfig.width;
+		sharedCanvas.height=GameConfig.height;
+		this.wx.postMessage(
+		{type:"resizeShared",
+			url:"",
+			data:{
+				width:GameConfig.width,
+				height:GameConfig.height,
+				matrix:Laya.stage._canvasTransform
+			},
+			isLoad:false
+		});
+	}
+
+	__proto.openWXFriendRank=function(){
+		this.creatshareCanvas();
+		var kvArr=["score"];
+		this.wx.postMessage({
+			type:"openWXFriendRank",
+			kvArr:kvArr
+		});
+	}
+
+	__proto.closeWXFriendRank=function(){
+		this.removeshareCanvas();
+		this.wx.postMessage({type:"closeWXFriendRank"});
+	}
+
+	__proto.creatshareCanvas=function(){
+		this._canvasSp=new Sprite();
+		this._canvasSp.pos(0,0);
+		this._canvasTexture=new Texture(Browser.window.sharedCanvas);
+		this._canvasTexture.bitmap.alwaysChange=true;
+		this._canvasSp.graphics.drawTexture(this._canvasTexture,0,0,this._canvasTexture.width,this._canvasTexture.height);
+		this._canvasSp.zOrder=UiManager.instance.getUiBaseDepth("UITYPE_WX_SHARECANVAS");
+		Laya.stage.addChild(this._canvasSp);
+	}
+
+	__proto.removeshareCanvas=function(){
+		this._canvasTexture.bitmap.alwaysChange=false;
+		Laya.stage.removeChild(this._canvasSp);
 	}
 
 	__getset(0,__proto,'serverDate',function(){
@@ -3449,7 +3524,6 @@ var GamemainM=(function(){
 	//}
 	__proto.checkFishNum=function(name){
 		if(FishM.instance.checkComboByName(name)){
-			console.log("--checkFishNum:",this._lastDrop['combo']);
 			return this._lastDrop['combo'];
 		}
 		else{
@@ -3657,6 +3731,7 @@ var PlayerInfoM=(function(){
 		this._gender=0;
 		this._avatarUrl=null;
 		this._province=null;
+		this._score=0;
 	}
 
 	__class(PlayerInfoM,'model.PlayerInfoM');
@@ -3666,6 +3741,14 @@ var PlayerInfoM=(function(){
 		this._gender=data.gender;
 		this._avatarUrl=data.avatarUrl;
 		this._province=data.province;
+	}
+
+	__proto.getscore=function(){
+		return this._score;
+	}
+
+	__proto.setscore=function(value){
+		this._score=value;
 	}
 
 	__proto.setgender=function(value){
@@ -5569,6 +5652,156 @@ var ShaderCompile=(function(){
 	}
 
 	return ShaderCompile;
+})()
+
+
+/**
+*
+*@author ww
+*@version 1.0
+*
+*@created 2015-11-27 上午9:58:59
+*/
+//class laya.debug.tools.JsonTool
+var JsonTool=(function(){
+	function JsonTool(){}
+	__class(JsonTool,'laya.debug.tools.JsonTool');
+	JsonTool.getJsonString=function(obj,singleLine,split,depth,Width){
+		(singleLine===void 0)&& (singleLine=true);
+		(split===void 0)&& (split="\n");
+		(depth===void 0)&& (depth=0);
+		(Width===void 0)&& (Width=4);
+		var preStr="";
+		preStr=JsonTool.getEmptyStr(depth*Width);
+		var rst;
+		var keyValues;
+		keyValues={};
+		var tKey;
+		var tValue;
+		var type;
+		var keys;
+		keys=[];
+		for(tKey in obj){
+			keys.push(tKey);
+			tValue=obj[tKey];
+			if(JsonTool.singleLineKey[tKey]){
+				keyValues[tKey]=JsonTool.getValueStr(tValue,true,split,depth+1,Width);
+				}else{
+				keyValues[tKey]=JsonTool.getValueStr(tValue,singleLine,split,depth+1,Width);
+			}
+		};
+		var i=0,len=0;
+		len=keys.length;
+		keys.sort();
+		keys=keys.reverse();
+		var keyPreStr;
+		keyPreStr=JsonTool.getEmptyStr((depth+1)*Width);
+		if(singleLine){
+			split="";
+			preStr="";
+			keyPreStr="";
+		};
+		var keyValueStrArr;
+		keyValueStrArr=[];
+		for(i=0;i<len;i++){
+			tKey=keys[i];
+			keyValueStrArr.push(keyPreStr+JsonTool.wrapValue(tKey)+":"+keyValues[tKey]);
+		}
+		rst="{"+split+keyValueStrArr.join(","+split)+split+preStr+"}";
+		return rst;
+	}
+
+	JsonTool.wrapValue=function(value,wraper){
+		(wraper===void 0)&& (wraper="\"");
+		return wraper+value+wraper;
+	}
+
+	JsonTool.getArrStr=function(arr,singleLine,split,depth,Width){
+		(singleLine===void 0)&& (singleLine=true);
+		(split===void 0)&& (split="\n");
+		(depth===void 0)&& (depth=0);
+		(Width===void 0)&& (Width=4);
+		var rst;
+		var i=0,len=0;
+		len=arr.length;
+		var valueStrArr;
+		valueStrArr=[];
+		for(i=0;i<len;i++){
+			valueStrArr.push(JsonTool.getValueStr(arr[i],singleLine,split,depth+1,Width));
+		};
+		var preStr="";
+		preStr=JsonTool.getEmptyStr((depth+1)*Width);
+		if(singleLine){
+			split="";
+			preStr="";
+		}
+		rst="["+split+preStr+valueStrArr.join(","+split+preStr)+"]";
+		return rst;
+	}
+
+	JsonTool.quote=function(string){
+		JsonTool.escapable.lastIndex=0;
+		return JsonTool.escapable.test(string)? '"'+string.replace(JsonTool.escapable,function(a){
+			var c=JsonTool.meta[a];
+			return typeof c==='string' ? c :
+			'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4);
+		})+'"' :'"'+string+'"';
+	}
+
+	JsonTool.getValueStr=function(tValue,singleLine,split,depth,Width){
+		(singleLine===void 0)&& (singleLine=true);
+		(split===void 0)&& (split="\n");
+		(depth===void 0)&& (depth=0);
+		(Width===void 0)&& (Width=0);
+		var rst;
+		if((typeof tValue=='string')){
+			rst=JsonTool.quote(tValue);
+			}else if(tValue==null){
+			rst="null";
+			}else if((typeof tValue=='number')|| ((typeof tValue=='number')&& Math.floor(tValue)==tValue)|| (typeof tValue=='boolean')){
+			rst=tValue;
+			}else if((tValue instanceof Array)){
+			rst=JsonTool.getArrStr(tValue,singleLine,split,depth,Width);
+			}else if((typeof tValue=='object')){
+			rst=JsonTool.getJsonString(tValue,singleLine,split,depth,Width);
+			}else{
+			rst=tValue;
+		}
+		return rst;
+	}
+
+	JsonTool.getEmptyStr=function(width){
+		if(!JsonTool.emptyDic.hasOwnProperty(width)){
+			var i=0;
+			var len=0;
+			len=width;
+			var rst;
+			rst="";
+			for(i=0;i<len;i++){
+				rst+=" ";
+			}
+			JsonTool.emptyDic[width]=rst;
+		}
+		return JsonTool.emptyDic[width];
+	}
+
+	JsonTool.emptyDic={};
+	__static(JsonTool,
+	['singleLineKey',function(){return this.singleLineKey={
+			"props":true
+		};},'escapable',function(){return this.escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;},'meta',function(){return this.meta = {   
+		'\b':'\\b',
+		'\t':'\\t',
+		'\n':'\\n',
+		'\f':'\\f',
+		'\r':'\\r',
+		'"' :'\\"',
+		'\\':'\\\\'
+};}
+
+
+]);
+return JsonTool;
 })()
 
 
@@ -46198,7 +46431,7 @@ var FriendRankUI=(function(_super){
 		this.createView(FriendRankUI.uiView);
 	}
 
-	FriendRankUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":281,"x":102,"width":447,"skin":"ui/friendrank/di3.png","sizeGrid":"10,10,10,10","height":715}},{"type":"List","props":{"y":303,"x":124,"width":420,"var":"friendlist","spaceY":0,"repeatY":7,"repeatX":1,"height":665},"child":[{"type":"Box","props":{"y":0,"x":-7,"width":423,"renderType":"render","height":105},"child":[{"type":"Image","props":{"y":0,"x":1,"width":421,"skin":"ui/friendrank/di2.png","sizeGrid":"29,29,30,30","name":"floorImg","height":106}},{"type":"Image","props":{"y":2,"x":74,"width":99,"visible":false,"skin":"ui/common_ex/ptdk.png","height":99}},{"type":"Image","props":{"y":9,"x":15,"width":56,"skin":"ui/friendrank/ico1.png","name":"rankimg","height":76}},{"type":"Image","props":{"y":59,"x":285,"width":116,"skin":"ui/common_ex/p11.png","sizeGrid":"11,18,10,14","height":36}},{"type":"Text","props":{"y":38,"x":23,"width":38,"text":"1","strokeColor":"#ffffff","stroke":3,"name":"ranktxt","height":40,"fontSize":40,"font":"SimHei","color":"#0099ff","bold":true,"align":"center"}},{"type":"Text","props":{"y":65,"x":294,"width":100,"text":"100000","strokeColor":"#224882","stroke":5,"name":"scoretxt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Text","props":{"y":16,"x":178,"width":222,"text":"很长的微信名字XXXX","strokeColor":"#ffffff","stroke":3,"name":"nametxt","height":23,"fontSize":20,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"}},{"type":"Text","props":{"y":65,"x":177,"width":101,"text":"钓鱼大师","strokeColor":"#224882","stroke":5,"name":"titletxt","height":26,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Box","props":{"y":15,"x":87,"name":"headBox"},"child":[{"type":"Image","props":{"width":74,"sizeGrid":"0,0,0,0","name":"headimg","height":74}},{"type":"Sprite","props":{"y":1,"x":1,"renderType":"mask"},"child":[{"type":"Circle","props":{"y":36,"x":36,"radius":36,"lineWidth":1,"fillColor":"#ff0000"}}]}]}]}]},{"type":"Image","props":{"x":52,"width":533,"visible":false,"skin":"ui/common_ex/blank.png","height":155,"centerY":490},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":-2,"x":0,"width":642,"skin":"ui/friendrank/dibg.png","height":1041}},{"type":"Image","props":{"width":107,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":22,"height":107,"bottom":966}}]}]};
+	FriendRankUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":281,"x":102,"width":447,"skin":"ui/friendrank/di3.png","sizeGrid":"10,10,10,10","height":715}},{"type":"List","props":{"y":303,"x":124,"width":420,"visible":false,"var":"friendlist","spaceY":0,"repeatY":7,"repeatX":1,"height":665},"child":[{"type":"Box","props":{"y":0,"x":-7,"width":423,"renderType":"render","height":105},"child":[{"type":"Image","props":{"y":0,"x":1,"width":421,"skin":"ui/friendrank/di2.png","sizeGrid":"29,29,30,30","name":"floorImg","height":106}},{"type":"Image","props":{"y":2,"x":74,"width":99,"visible":false,"skin":"ui/common_ex/ptdk.png","height":99}},{"type":"Image","props":{"y":9,"x":15,"width":56,"skin":"ui/friendrank/ico1.png","name":"rankimg","height":76}},{"type":"Image","props":{"y":59,"x":285,"width":116,"skin":"ui/common_ex/p11.png","sizeGrid":"11,18,10,14","height":36}},{"type":"Text","props":{"y":38,"x":23,"width":38,"text":"1","strokeColor":"#ffffff","stroke":3,"name":"ranktxt","height":40,"fontSize":40,"font":"SimHei","color":"#0099ff","bold":true,"align":"center"}},{"type":"Text","props":{"y":65,"x":294,"width":100,"text":"100000","strokeColor":"#224882","stroke":5,"name":"scoretxt","height":24,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Text","props":{"y":16,"x":178,"width":222,"text":"很长的微信名字XXXX","strokeColor":"#ffffff","stroke":3,"name":"nametxt","height":23,"fontSize":20,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"}},{"type":"Text","props":{"y":65,"x":177,"width":101,"text":"钓鱼大师","strokeColor":"#224882","stroke":5,"name":"titletxt","height":26,"fontSize":25,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Box","props":{"y":15,"x":87,"name":"headBox"},"child":[{"type":"Image","props":{"width":74,"sizeGrid":"0,0,0,0","name":"headimg","height":74}},{"type":"Sprite","props":{"y":1,"x":1,"renderType":"mask"},"child":[{"type":"Circle","props":{"y":36,"x":36,"radius":36,"lineWidth":1,"fillColor":"#ff0000"}}]}]}]}]},{"type":"Image","props":{"x":52,"width":533,"visible":false,"skin":"ui/common_ex/blank.png","height":155,"centerY":490},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":-2,"x":0,"width":642,"skin":"ui/friendrank/dibg.png","height":1041}},{"type":"Image","props":{"width":107,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":22,"height":107,"bottom":966}}]}]};
 	return FriendRankUI;
 })(View)
 
@@ -46350,7 +46583,7 @@ var GameMainUI=(function(_super){
 		this.createView(GameMainUI.uiView);
 	}
 
-	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}}]},{"type":"Button","props":{"y":298,"x":195,"width":217,"var":"gameStartBtn","stateNum":2,"skin":"ui/common_ex/btn_blue.png","labelSize":50,"label":"计时赛","height":135}}]},{"type":"Image","props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":22,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":209,"x":511,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":73}},{"type":"Button","props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":77}},{"type":"Image","props":{"y":90,"x":58,"width":70,"var":"shareBtn","skin":"ui/common_ex/shareBtn.png","height":74}},{"type":"AdvImage","props":{"y":91,"x":-29,"width":71,"iconSign":"ADSprite","height":71}}]},{"type":"Box","props":{"y":30,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"visible":false,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65}},{"type":"Button","props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":857,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5}},{"type":"Image","props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226}},{"type":"Image","props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":30,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
+	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}}]},{"type":"Button","props":{"y":311,"x":229,"width":133,"var":"gameStartBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,16,25,27","labelSize":50,"labelFont":"Microsoft YaHei","height":105},"child":[{"type":"Image","props":{"y":10,"x":41,"width":53,"skin":"ui/gamemain/btn1.png","height":82}}]}]},{"type":"Image","props":{"y":703,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":22,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":209,"x":511,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":73}},{"type":"Button","props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":77}},{"type":"Image","props":{"y":90,"x":58,"width":70,"var":"shareBtn","skin":"ui/common_ex/shareBtn.png","height":74}},{"type":"AdvImage","props":{"y":91,"x":-29,"width":71,"iconSign":"ADSprite","height":71}}]},{"type":"Box","props":{"y":30,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"visible":false,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65}},{"type":"Button","props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":857,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5}},{"type":"Image","props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":739,"x":0,"width":632,"var":"dropSp","height":226}},{"type":"Image","props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":30,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
 	return GameMainUI;
 })(View)
 
@@ -47498,6 +47731,14 @@ var Endaward=(function(_super){
 		Endaward._maxWeight=param['maxweight'];
 		this.playertitle.text=Gamefame.instance.getPlayerTitle(param['weight'],Endaward._maxWeight);
 		this.weightTxt.text=param['weight']+"kg";
+		this.updatescore(Math.floor(param['weight']));
+	}
+
+	__proto.updatescore=function(score){
+		if(PlayerInfoM.instance.getscore()<score){
+			PlayerInfoM.instance.setscore(score);
+			WxManager.instance.setUserCloudStorage(score);
+		}
 	}
 
 	__proto.shareOverAward=function(){
@@ -47544,9 +47785,22 @@ var Friendrank=(function(_super){
 	__proto.openPanel=function(param){
 		this.closeBtn.on("mousedown",this,function(){
 			UiManager.instance.closePanel("Friendrank");
+			if(GameConfig.onWeiXin){
+				WxManager.instance.closeWXFriendRank();
+			}
 		});
-		this.friendlist.vScrollBarSkin="";
-		this.friendlist.renderHandler=new Handler(this,this.updatelist);
+		if(GameConfig.onWeiXin){
+			Laya.timer.once(200,this,function(){
+				WxManager.instance.openWXFriendRank();
+			})
+			}else{
+			this.friendlist.vScrollBarSkin="";
+			this.friendlist.renderHandler=new Handler(this,this.updatelist);
+			this.initFriendlist();
+		}
+	}
+
+	__proto.initFriendlist=function(){
 		var rankObj=[
 		{name:"的潜伏期",score:852,url:"http://images.liqucn.com/img/h1/h988/img201711250928440_info400X400.jpg"},
 		{name:"人3",score:785,url:"http://images.liqucn.com/img/h1/h991/img201712091118050_info400X400.jpg"},
@@ -47555,13 +47809,9 @@ var Friendrank=(function(_super){
 		{name:"妇女干部发挥",score:521,url:"https://img.52z.com/upload/news/image/20180222/20180222054805_74858.jpg"},
 		{name:"纳入法庭火热",score:412,url:"http://img.besoo.com/file/201705/07/0829006945908.png"},
 		{name:"跟3",score:218,url:"http://image.biaobaiju.com/uploads/20180802/00/1533142762-DMfxhnYpmZ.jpg"},
-		{name:"规范岁的法国",score:211,url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3419746188,1692388766&fm=26&gp=0.jpg"}];
-		GameEventDispatch.instance.event("GetFriendRank",[rankObj]);
-	}
-
-	__proto.initFriendlist=function(arr){
-		arr.push({name:"无名氏",score:0,url:"https://www.easyicon.net/api/resizeApi.php?id=1203084&size=72"});
-		this.friendlist.array=arr;
+		{name:"规范岁的法国",score:211,url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3419746188,1692388766&fm=26&gp=0.jpg"},
+		{name:"无名氏",score:0,url:"https://www.easyicon.net/api/resizeApi.php?id=1203084&size=72"}];
+		this.friendlist.array=rankObj;
 	}
 
 	__proto.updatelist=function(cell,index){
@@ -47590,14 +47840,8 @@ var Friendrank=(function(_super){
 		ele_score_txt.text=score+"";
 	}
 
-	__proto.register=function(){
-		GameEventDispatch.instance.on("GetFriendRank",this,this.initFriendlist);
-	}
-
-	__proto.unRegister=function(){
-		GameEventDispatch.instance.off("GetFriendRank",this,this.initFriendlist);
-	}
-
+	__proto.register=function(){}
+	__proto.unRegister=function(){}
 	__proto.closePanel=function(){
 		this.visible=false;
 		GameEventDispatch.instance.event("RemoveRedPoint","Friendrank");
@@ -49752,6 +49996,7 @@ var Gamemap=(function(_super){
 var Loadview=(function(_super){
 	function Loadview(){
 		this.loadRes=[
+		{url:"res/atlas/ui/wxrank.atlas",type:"atlas"},
 		{url:"res/atlas/comp.atlas",type:"atlas"},
 		{url:"res/atlas/ui/common.atlas",type:"atlas"},
 		{url:"res/atlas/ui/common_ex.atlas",type:"atlas"},
@@ -49768,10 +50013,20 @@ var Loadview=(function(_super){
 	__class(Loadview,'view.loadview.Loadview',_super);
 	var __proto=Loadview.prototype;
 	Laya.imps(__proto,{"view.PanelVo":true})
-	__proto.openPanel=function(param){}
+	__proto.openPanel=function(param){
+		if(GameConfig.onWeiXin){
+			Laya.loader.load(this.loadRes,null,Handler.create(this,this.onProgress));
+			this.setloadBar(0);
+		}
+	}
+
 	__proto.startLoadRes=function(){
-		Laya.loader.load(this.loadRes,Handler.create(this,this.loadComplete),Handler.create(this,this.onProgress));
-		this.setloadBar(0);
+		if(GameConfig.onWeiXin){
+			this.loadComplete();
+			}else {
+			Laya.loader.load(this.loadRes,Handler.create(this,this.loadComplete),Handler.create(this,this.onProgress));
+			this.setloadBar(0);
+		}
 	}
 
 	__proto.loadComplete=function(){
@@ -51165,7 +51420,7 @@ var Wait=(function(_super){
 })(WaitUI)
 
 
-	Laya.__init([EventDispatcher,LoaderManager,GameConfig,Browser,Gamemap,TiledMap,Render,DrawText,View,WebGLContext2D,ShaderCompile,Timer,GraphicAnimation,LocalStorage,AtlasGrid]);
+	Laya.__init([EventDispatcher,LoaderManager,GameConfig,Browser,Gamemap,DrawText,TiledMap,Render,View,WebGLContext2D,ShaderCompile,Timer,GraphicAnimation,LocalStorage,AtlasGrid]);
 	/**LayaGameStart**/
 	new src.LayaSample();
 

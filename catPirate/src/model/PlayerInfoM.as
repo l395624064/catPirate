@@ -45,6 +45,7 @@ public class PlayerInfoM {
     private var _shopOwnArr:Array=[15];//已购买 shopId
 
 
+
     private var _gameSetting:Object={
         music:true,
         sound:true,
@@ -66,7 +67,7 @@ public class PlayerInfoM {
     private var _avatarUrl:String;
     private var _province:String;
 
-
+    private var _score:int=0;
 
     public function PlayerInfoM() {
     }
@@ -93,7 +94,14 @@ public class PlayerInfoM {
 
 
 
-
+    public function getscore():int
+    {
+        return _score;
+    }
+    public function setscore(value:int):int
+    {
+        _score=value;
+    }
     public function setgender(value:int):void
     {
         _gender=value;

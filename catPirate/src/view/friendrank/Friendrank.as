@@ -12,6 +12,9 @@ import manager.GameEventDispatch;
 import manager.Gamefame;
 
 import manager.UiManager;
+import manager.WxManager;
+
+import src.GameConfig;
 
 import ui.FriendRankUI;
 
@@ -31,11 +34,25 @@ public class Friendrank extends FriendRankUI implements PanelVo{
     {
         closeBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.closePanel("Friendrank");
+            if(GameConfig.onWeiXin){
+                WxManager.instance.closeWXFriendRank();
+            }
         });
 
-        friendlist.vScrollBarSkin="";
-        friendlist.renderHandler=new Handler(this,updatelist);
+        if(GameConfig.onWeiXin){
+            Laya.timer.once(200,this,function () {
+                WxManager.instance.openWXFriendRank();
+            })
+        }else{
+            friendlist.vScrollBarSkin="";
+            friendlist.renderHandler=new Handler(this,updatelist);
+            initFriendlist();
+        }
+    }
 
+
+    private function initFriendlist():void
+    {
         var rankObj:Array=[
             {name:"的潜伏期",score:852,url:"http://images.liqucn.com/img/h1/h988/img201711250928440_info400X400.jpg"},
             {name:"人3",score:785,url:"http://images.liqucn.com/img/h1/h991/img201712091118050_info400X400.jpg"},
@@ -44,15 +61,10 @@ public class Friendrank extends FriendRankUI implements PanelVo{
             {name:"妇女干部发挥",score:521,url:"https://img.52z.com/upload/news/image/20180222/20180222054805_74858.jpg"},
             {name:"纳入法庭火热",score:412,url:"http://img.besoo.com/file/201705/07/0829006945908.png"},
             {name:"跟3",score:218,url:"http://image.biaobaiju.com/uploads/20180802/00/1533142762-DMfxhnYpmZ.jpg"},
-            {name:"规范岁的法国",score:211,url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3419746188,1692388766&fm=26&gp=0.jpg"}
+            {name:"规范岁的法国",score:211,url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3419746188,1692388766&fm=26&gp=0.jpg"},
+            {name:"无名氏",score:0,url:"https://www.easyicon.net/api/resizeApi.php?id=1203084&size=72"}
         ];
-        GameEventDispatch.instance.event(GameEvent.GetFriendRank,[rankObj]);
-    }
-
-    private function initFriendlist(arr:Array):void
-    {
-        arr.push({name:"无名氏",score:0,url:"https://www.easyicon.net/api/resizeApi.php?id=1203084&size=72"});
-        friendlist.array=arr;
+        friendlist.array=rankObj;
     }
 
     private function updatelist(cell:Box,index:int):void
@@ -98,11 +110,9 @@ public class Friendrank extends FriendRankUI implements PanelVo{
 
     public function register():void
     {
-        GameEventDispatch.instance.on(GameEvent.GetFriendRank,this,initFriendlist);
     }
     public function unRegister():void
     {
-        GameEventDispatch.instance.off(GameEvent.GetFriendRank,this,initFriendlist);
     }
 
     public function closePanel():void

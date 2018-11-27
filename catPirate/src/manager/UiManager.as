@@ -57,6 +57,7 @@ public class UiManager {
     private const _UITYPE_EFFECT:int=2004;
     private const _UITYPE_GAINNEW:int=2005;
     private const _UITYPE_GUIDE:int=3000;
+    private const _UITYPE_WX_SHARECANVAS:int=5000;
 
     private var _taskArr:Array=[];
     private var _taskState:String="Empty";//Empty Busy
@@ -276,6 +277,11 @@ public class UiManager {
             case "UITYPE_GUIDE":
             {
                 deep=_UITYPE_GUIDE;
+                break;
+            }
+            case "UITYPE_WX_SHARECANVAS":
+            {
+                deep=_UITYPE_WX_SHARECANVAS;
                 break;
             }
             default:

@@ -66,24 +66,50 @@ public class SaveC {
     {
         _openid=res.result.OPENID;
         _appid=res.result.APPID;
-        console.log("-get openid:",_openid);
 
-        WxManager.instance.getStorage(_openid,Handler.create(this,getlocalInfo));//检测本地存档
-        WxManager.instance.getformData(_openid,Handler.create(this,getnetInof));//检测网络存档
+
+        /*存档检测顺序
+        *先检测本地存档
+        * -本地存档不存在-检测网络存档-如果能获取到则覆盖本地存档-无法获取则创建新得存档
+        * -本地存档存在-覆盖网络存档
+        *
+        * */
+        checksaveInfo("local");
+    }
+
+    private function checksaveInfo(state:String):void
+    {
+        if(state=="local"){
+            WxManager.instance.getStorage(_openid,Handler.create(this,getlocalInfo));//检测本地存档
+        }
+        else if(state=="net"){
+            WxManager.instance.getformData(_openid,Handler.create(this,getnetInof));//检测网络存档
+        }
+    }
+    private function getlocalInfo(data:*):void
+    {
+        _localSaveData=data;
+        if(_localSaveData==-1){
+            checksaveInfo("net");
+        }else{
+            _localComplete=true;
+            saveDataSync();
+        }
     }
 
     private function getnetInof(data:*):void
     {
         _netSaveData=data;
-        _localComplete=true;
-        saveDataSync();
+        if(_netSaveData==-1){
+            console.log("-创建新存档");
+            //创建用户信息按钮 获取vi等信息
+            WxManager.instance.login(Handler.create(this,clickLoginBtn));
+        }else{
+            _netComplete=true;
+            saveDataSync();
+        }
     }
-    private function getlocalInfo(data:*):void
-    {
-        _localSaveData=data;
-        _netComplete=true;
-        saveDataSync();
-    }
+
     private function saveDataSync():void
     {
         //code=0 存在  code=1不存在
@@ -91,30 +117,29 @@ public class SaveC {
             if(_localSaveData!=-1) {
                 delete _localSaveData._id;//云端索引
                 delete _localSaveData._openid;//云端保留字段
-                console.log("-本地存档存在,同步云端",_localSaveData);
+                console.log("-本地存档存在,同步云端");
                 WxManager.instance.setformData(_openid,_localSaveData);//同步至数据库
                 initGameData(_localSaveData);
             }
-            else if(_netSaveData!=-1 && _localSaveData==-1) {
-                console.log("-云端存档存在,同步本地",_netSaveData);
+            else if(_netSaveData!=-1) {
+                console.log("-云端存档存在,同步本地");
                 WxManager.instance.setStorage(_openid,_netSaveData);//同步本地
                 initGameData(_netSaveData);
             }else{
+                //console.log("-创建新存档");
                 //创建用户信息按钮 获取vi等信息
-                WxManager.instance.login(Handler.create(this,clickLoginBtn));
+                //WxManager.instance.login(Handler.create(this,clickLoginBtn));
             }
         }
     }
 
     private function clickLoginBtn(data:Object):void
     {
-        console.log("-userInfo:",data);
+        //console.log("-userInfo:",data);
         _nickName=data.userInfo.nickName;
         _gender=data.userInfo.gender;
         _avatarUrl=data.userInfo.avatarUrl;
         _province=data.userInfo.province;
-
-
 
         creatNewData();
     }
@@ -122,7 +147,7 @@ public class SaveC {
 
     private function creatNewData():void
     {
-        console.log("-creat new savedata");
+        console.log("-creat new savedata over");
         _localSaveData=new SaveD();
 
         if(_nickName){
@@ -153,13 +178,10 @@ public class SaveC {
         //wheelDate:11,wheelNum:1,addshare:2
         var localDate:Date=new Date();
         var quitDate=data.quitUnix;
-        console.log("-localDate------",localDate);
-        console.log("-quitDate------",quitDate);
 
         var luckDay:int=data.luckwheelObj['day'];
         if(Math.abs(localDate.getDate()-luckDay)>0){
             data.luckwheelObj={day:localDate.getDate(),luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
-            console.log("-new.luckwheelObj------",localDate.getDate(),luckDay,data.luckwheelObj);
             PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
         }else{
             PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
@@ -198,6 +220,8 @@ public class SaveC {
         PlayerInfoM.instance.setavatarUrl(data.avatarUrl);
         PlayerInfoM.instance.setprovince(data.province);
 
+        PlayerInfoM.instance.setscore(data.score);
+
         GameEventDispatch.instance.event(GameEvent.StartLoad);
     }
 
@@ -230,6 +254,8 @@ public class SaveC {
         data.avatarUrl=PlayerInfoM.instance.getavatarUrl();
         data.gender=PlayerInfoM.instance.getgender();
         data.nickName=PlayerInfoM.instance.getnickName();
+
+        data.score=PlayerInfoM.instance.getscore();
 
         WxManager.instance.setStorage(_openid,data);//同步本地
     }

@@ -1,0 +1,13 @@
+1,0.00,,0,Project command:C:/Users/Administrator/Desktop/lan/as3/main2/main2.as3proj;iflash=false;chromerun=false;
+Project configuration:C:/Users/Administrator/Desktop/lan/as3/main2/main2.as3proj.
+1,0.00,,0,output file:main2
+1,0.00,,0,output path:C:/Users/Administrator/Desktop/lan/as3/main2/bin/h5/
+1,0.00,,0,Main Class:C:/Users/Administrator/Desktop/lan/as3/main2/src/LayaUISample.as
+1,0.00,C:/Users/Administrator/Desktop/lan/as3/main2/src,0,Collect
+1,0.00,F:/crazysonowball/engine/libs/src3,0,Collect
+1,2.00,,0,read class message
+1,89.68,,0,Disable Flash3D C:/Users/Administrator/Desktop/lan/as3/main2/src/LayaUISample.as
+12,89.68,C:/Users/Administrator/Desktop/lan/as3/main2/bin/h5/main2.max.js,1134184,
+11,89.68,C:/Users/Administrator/Desktop/lan/as3/main2/bin/h5/main2.max.html,888,
+******************************************************************************
+14,89.68,,0,

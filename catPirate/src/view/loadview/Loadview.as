@@ -8,6 +8,8 @@ import manager.GameEventDispatch;
 
 import manager.UiManager;
 
+import src.GameConfig;
+
 
 import ui.GameloadUI;
 
@@ -17,12 +19,14 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public static var _instance:Loadview;
     private var loadRes:Array=[
+        {url:"res/atlas/ui/wxrank.atlas",            type:Loader.ATLAS},
+
         {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS},
         {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS},
         {url:"res/atlas/ui/common_img.atlas",        type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ef.atlas",         type:Loader.ATLAS},
-        {url:"res/atlas/ui/shipskin.atlas",         type:Loader.ATLAS},
+        {url:"res/atlas/ui/shipskin.atlas",          type:Loader.ATLAS},
 
         {url:"res/atlas/font.atlas",                 type:Loader.ATLAS},
 
@@ -47,13 +51,20 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
-
+        if(GameConfig.onWeiXin){
+            Laya.loader.load(loadRes,null,Handler.create(this,onProgress));
+            setloadBar(0);
+        }
     }
 
     private function startLoadRes():void
     {
-        Laya.loader.load(loadRes,Handler.create(this, loadComplete),Handler.create(this,onProgress));
-        setloadBar(0);
+        if(GameConfig.onWeiXin){
+            loadComplete();
+        }else {
+            Laya.loader.load(loadRes,Handler.create(this, loadComplete),Handler.create(this,onProgress));
+            setloadBar(0);
+        }
     }
 
     private function loadComplete():void

@@ -80,8 +80,6 @@ package manager
         public static const ShipSlotInit:String="ShipSlotInit";
         //ShipRoleC
         public static const CreatShipRole:String="CreatShipRole";
-        //friendRank
-        public static const GetFriendRank:String="GetFriendRank";
 
         //guide
         public static const GameGuideNext:String="GameGuideNext";

@@ -22,12 +22,13 @@ public class LayaSample {
 			gameBrowser();//运行环境
 			gameconfig();//初始化引擎
 			gameinit();
+
 		}
 		private function gameBrowser():void
 		{
             //MiniAdpter.init();
 			if(GameConfig.onWeiXin){
-				MiniAdpter.init();
+				MiniAdpter.init(true,false);
 			}
 		}
 		private function gameconfig():void
@@ -51,6 +52,11 @@ public class LayaSample {
             //if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
             //if (GameConfig.stat) Stat.show();
             //Laya.alertGlobalError = true;
+
+			//微信 shareCanvas
+            if(GameConfig.onWeiXin){
+                WxManager.instance.resizeShared();
+			}
 		}
 		private function gameinit():void
 		{
