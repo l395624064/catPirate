@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":6,
-    "selecteID":5,
+    "selecteID":7,
     "props":{"x":0,"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -100,7 +100,7 @@
                         {
                             "x":45,
                             "type":"Text",
-                            "props":{"y":99,"x":138,"width":399,"text":"游戏版本号","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
+                            "props":{"y":99,"x":138,"width":399,"text":"游戏版本号:1.0.50","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                             "nodeParent":6,
                             "label":"Text(proname_txt0)",
                             "isDirectory":false,

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":26,
-    "selecteID":56,
+    "selectedBox":72,
+    "selecteID":68,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -90,7 +90,7 @@
                     "props":{"y":790,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},
                     "nodeParent":72,
                     "label":"Box(shipBox)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
@@ -955,7 +955,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":974,"x":66,"width":533,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},
+                    "props":{"y":974,"x":66,"width":533,"visible":false,"skin":"ui/common_ex/blank.png","height":155,"centerY":486},
                     "nodeParent":72,
                     "label":"Image",
                     "isOpen":false,
@@ -975,7 +975,8 @@
                             "compId":69,
                             "child":[
                                 ]
-                        }]
+                        }],
+                    "$HIDDEN":true
                 },
                 {
                     "x":30,

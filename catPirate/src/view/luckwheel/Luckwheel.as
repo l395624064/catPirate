@@ -52,7 +52,16 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
+        //guideIng And get once chance
+        if(GamemainM.instance.getGuideIng()){
+            var luckNum:int=PlayerInfoM.instance.getLuckWheelNum();
+            if(luckNum<=0){
+                PlayerInfoM.instance.setLuckWheelNum(1);
+            }
+        }
+
         initNum();
+
         this.closeBtn.on(Event.MOUSE_DOWN,this,function () {
             GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.closePanel("Luckwheel");

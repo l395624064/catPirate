@@ -330,6 +330,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
             dropSp.offAll();
             dropSp.once(Event.MOUSE_DOWN,this,matchClick);
+
+            GameSoundManager.onPlayMusic("boss");
         }
     }
 
@@ -710,6 +712,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
             clearAllclickImg();
 
             changeDropFishBoxState("over");
+
+            GameSoundManager.onPlayMusic("fight");
         }
     }
     private function bossPowerTime():void
@@ -821,7 +825,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
             changeFishhookSpd("reset");//速度重置
             getMissImgEffect();//miss
             if(PlayerInfoM.instance.getGameSetting().shake){
-                WxManager.instance.shakeShort();
+                WxManager.instance.shakeLong();
             }
             return;
         }

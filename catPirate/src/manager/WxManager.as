@@ -9,6 +9,8 @@ import laya.wx.mini.MiniLoader;
 
 import manager.WxManager;
 
+import model.PlayerInfoM;
+
 import src.GameConfig;
 
 public class WxManager {
@@ -42,6 +44,15 @@ public class WxManager {
 
         showshareMenu();
         onshareMenu();
+        onshow();
+    }
+
+    private function onshow():void
+    {
+        wx.onShow(function () {
+            //console.log("-onshow");
+            GameSoundManager.onPlayMusic("");
+        });
     }
 
     private function database(env:String=null):Object
