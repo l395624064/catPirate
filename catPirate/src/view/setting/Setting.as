@@ -1,5 +1,6 @@
 package view.setting {
 import laya.events.Event;
+import laya.media.SoundManager;
 
 import manager.UiManager;
 
@@ -24,6 +25,7 @@ public class Setting extends SettingUI implements PanelVo{
     public function openPanel(param:Object=null):void
     {
         closeBtn.on(Event.MOUSE_DOWN,this,function () {
+            changeBtnState("save");
             UiManager.instance.closePanel("Setting");
         });
         musicBtn.on(Event.MOUSE_DOWN,this,changeBtnState,["setMusic"]);
@@ -46,10 +48,14 @@ public class Setting extends SettingUI implements PanelVo{
         else if(action=="setMusic"){
             _settingObj.music=!_settingObj.music;
             musicBtn.selected=!_settingObj.music;
+            if(_settingObj.music)SoundManager.musicMuted=false;
+            else SoundManager.musicMuted=true;
         }
         else if(action=="setSound"){
             _settingObj.sound=!_settingObj.sound;
             soundBtn.selected=!_settingObj.sound;
+            if(_settingObj.sound) SoundManager.soundMuted=false;
+            else SoundManager.soundMuted=true;
         }
         else if(action=="setShake"){
             _settingObj.shake=!_settingObj.shake;

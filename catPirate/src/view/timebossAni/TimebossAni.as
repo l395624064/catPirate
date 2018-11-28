@@ -3,6 +3,7 @@ import laya.events.Event;
 
 import manager.GameEvent;
 import manager.GameEventDispatch;
+import manager.GameSoundManager;
 import manager.UiManager;
 
 import ui.TimeBossAniUI;
@@ -19,6 +20,8 @@ public class TimebossAni extends TimeBossAniUI implements PanelVo{
     }
 
     public function openPanel(param:Object=null):void {
+        GameSoundManager.onPlaySound("get4");
+
         into.play(0, false);
         into.offAll();
         into.once(Event.COMPLETE, this, function () {

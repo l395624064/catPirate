@@ -7,7 +7,12 @@ public class SaveD {
 
     public var score:int=0;
 
-    public var luckwheelObj:Object={day:0,luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
+    public var luckwheelObj:Object={
+        day:0,
+        luckWheelNum:1,
+        todayADDWheelNumFromShare:3,
+        getGiftFromShare:1
+    };
 
     public var giftDelay:int=100;//退出记录
     public var quitUnix:int=Math.floor(new Date().getTime()/1000);

@@ -19,19 +19,15 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public static var _instance:Loadview;
     private var loadRes:Array=[
-        {url:"res/atlas/ui/wxrank.atlas",            type:Loader.ATLAS},
-
         {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS},
         {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS},
         {url:"res/atlas/ui/common_img.atlas",        type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ef.atlas",         type:Loader.ATLAS},
         {url:"res/atlas/ui/shipskin.atlas",          type:Loader.ATLAS},
+        {url:"res/atlas/ui/wxrank.atlas",            type:Loader.ATLAS},
 
         {url:"res/atlas/font.atlas",                 type:Loader.ATLAS},
-
-        {url:"sound/destroy.wav",                    type:Loader.SOUND},
-        {url:"sound/hit.wav",                        type:Loader.SOUND},
 
         {url:ConfigManager.getConfigPath(),           type:Loader.JSON}
     ];
@@ -69,6 +65,7 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     private function loadComplete():void
     {
+        console.log("-res load complete");
         setloadBar(1);
         ConfigManager.init();
         UiManager.instance.baseTipInit();

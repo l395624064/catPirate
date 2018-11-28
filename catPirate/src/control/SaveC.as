@@ -80,16 +80,17 @@ public class SaveC {
     private function checksaveInfo(state:String):void
     {
         if(state=="local"){
-            WxManager.instance.getStorage(_openid,Handler.create(this,getlocalInfo));//检测本地存档
+            WxManager.instance.getStorage(_openid,new Handler(this,getlocalInfo));//检测本地存档
         }
         else if(state=="net"){
-            WxManager.instance.getformData(_openid,Handler.create(this,getnetInof));//检测网络存档
+            WxManager.instance.getformData(_openid,new Handler(this,getnetInof));//检测网络存档
         }
     }
     private function getlocalInfo(data:*):void
     {
         _localSaveData=data;
-        if(_localSaveData==-1){
+        if(_localSaveData=="fail"){
+            console.log("-本地存档不存在,检测网络存档");
             checksaveInfo("net");
         }else{
             _localComplete=true;
@@ -100,8 +101,8 @@ public class SaveC {
     private function getnetInof(data:*):void
     {
         _netSaveData=data;
-        if(_netSaveData==-1){
-            console.log("-创建新存档");
+        if(_netSaveData=="fail"){
+            console.log("-网络存档不存在,创建新存档");
             //创建用户信息按钮 获取vi等信息
             WxManager.instance.login(Handler.create(this,clickLoginBtn));
         }else{
@@ -113,16 +114,16 @@ public class SaveC {
     private function saveDataSync():void
     {
         //code=0 存在  code=1不存在
-        if(_localComplete || _netSaveData){
-            if(_localSaveData!=-1) {
+        if(_localComplete || _netComplete){
+            if(_localSaveData!="fail") {
                 delete _localSaveData._id;//云端索引
                 delete _localSaveData._openid;//云端保留字段
-                console.log("-本地存档存在,同步云端");
+                console.log("-本地存档存在,同步云端",_localSaveData);
                 WxManager.instance.setformData(_openid,_localSaveData);//同步至数据库
                 initGameData(_localSaveData);
             }
-            else if(_netSaveData!=-1) {
-                console.log("-云端存档存在,同步本地");
+            else if(_netSaveData!="fail") {
+                console.log("-云端存档存在,同步本地",_netSaveData);
                 WxManager.instance.setStorage(_openid,_netSaveData);//同步本地
                 initGameData(_netSaveData);
             }else{
@@ -171,6 +172,7 @@ public class SaveC {
 
     private function initGameData(data:Object):void
     {
+        if(!(data is Object)) return;
         PlayerInfoM.instance.setGoldNum(data.goldNum);
         PlayerInfoM.instance.setPlankNum(data.plankNum);
         PlayerInfoM.instance.setPearlNum(data.pearlNum);
@@ -179,11 +181,13 @@ public class SaveC {
         var localDate:Date=new Date();
         var quitDate=data.quitUnix;
 
+        //warn:data.luckwheelObj['day'];
         var luckDay:int=data.luckwheelObj['day'];
         if(Math.abs(localDate.getDate()-luckDay)>0){
             data.luckwheelObj={day:localDate.getDate(),luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
             PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
         }else{
+            data.luckwheelObj.day=localDate.getDate();
             PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
         }
 
@@ -222,6 +226,7 @@ public class SaveC {
 
         PlayerInfoM.instance.setscore(data.score);
 
+        console.log("-save date load complete");
         GameEventDispatch.instance.event(GameEvent.StartLoad);
     }
 

@@ -17,6 +17,7 @@ import laya.ui.Image;
 import laya.utils.Handler;
 
 import manager.GameAdaptive;
+import manager.GameSoundManager;
 import manager.WxManager;
 
 import model.FishM;
@@ -125,15 +126,21 @@ public class Gamemain extends GameMainUI implements PanelVo {
             if(!canDrop) return;
             GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.loadView("Luckwheel",null,0,"UITYPE_NORMAL");
+
+            GameSoundManager.onPlaySound("btn");//音效
         });
         this.friendRankBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;
             UiManager.instance.loadView("Friendrank",null,0,"UITYPE_NORMAL");
+
+            GameSoundManager.onPlaySound("btn");//音效
         });
         this.shopBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;
             GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.loadView("Gameshop",null,0,"UITYPE_NORMAL");
+
+            GameSoundManager.onPlaySound("btn");//音效
         });
         shareBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;
@@ -142,16 +149,22 @@ public class Gamemain extends GameMainUI implements PanelVo {
         settingBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;
             UiManager.instance.loadView("Setting",null,0,"UITYPE_NORMAL");
+
+            GameSoundManager.onPlaySound("btn");//音效
         });
 
         this.boxlibsBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;
             GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             UiManager.instance.loadView("Boxlibs",null,0,"UITYPE_NORMAL");
+
+            GameSoundManager.onPlaySound("btn");//音效
         });
         this.timegiftBtn.on(Event.MOUSE_DOWN,this,function () {
             if(!canDrop) return;
             UiManager.instance.loadView("Timegift",null,0,"UITYPE_NORMAL");
+
+            GameSoundManager.onPlaySound("btn");//音效
         });
 
         gameStartBtn.on(Event.MOUSE_DOWN,this,function () {
@@ -807,6 +820,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
         if(!getdropObj){
             changeFishhookSpd("reset");//速度重置
             getMissImgEffect();//miss
+            if(PlayerInfoM.instance.getGameSetting().shake){
+                WxManager.instance.shakeShort();
+            }
             return;
         }
 
@@ -855,6 +871,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
             }
 
             if(getdropObj.comboNum>0){
+                GameSoundManager.onPlaySound("combo2");
+
                 //鱼附属奖励
                 var config:Object=getdropObj.cfg;
                 if(Math.random()<0.5+0.1*getdropObj.comboNum && config.getAward){
@@ -929,6 +947,9 @@ public class Gamemain extends GameMainUI implements PanelVo {
         getScoreClip.value="+"+popObject.num+"";
         Tween.to(getScoreClip,{y:-80,alpha:0},900,null,null,0,true);
 
+        if(popObject.num>1){
+            GameSoundManager.onPlaySound("combo");
+        }
         //over effect
         getMoneyEffect(popObject,true);
     }

@@ -45,11 +45,11 @@ package manager
                 var cfg:Object = getClazzBySheetName(sheetName);
                 for (var key:String in sheetDicRes)
                 {
-
                     a[key] = cfg.init(sheetDicRes[key])
                 }
                 sheet_cache[sheetName] = a
             }
+            console.log("-config json load complete");
         }
 
         public static function getConfObject(sheetName:String, id:*):Object

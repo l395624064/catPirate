@@ -11,6 +11,7 @@ import laya.utils.Handler;
 import manager.GameAdaptive;
 import manager.GameEvent;
 import manager.GameEventDispatch;
+import manager.GameSoundManager;
 
 import manager.UiManager;
 
@@ -233,6 +234,8 @@ public class Gameshop extends GameShopUI implements PanelVo{
 
     private function fishBuySucceed(param:Object):void
     {
+        GameSoundManager.onPlaySound("get1");//音效
+
         GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         //console.log("-lvupSucceed:",param);
         var lv:int=ShopM.instance.getFishlvByName(param['name']);
@@ -244,6 +247,7 @@ public class Gameshop extends GameShopUI implements PanelVo{
 
     private function shiprefitBuySucceed(param:Object):void
     {
+        //GameSoundManager.onPlaySound("get1");//音效
         PlayerInfoM.instance.addshopOwn(param.id);
         shoplist.array=ShopM.instance.getShoplist(1);
         shoplist.refresh();

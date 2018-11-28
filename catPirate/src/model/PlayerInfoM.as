@@ -9,7 +9,12 @@ public class PlayerInfoM {
     private var _plankNum:int=0;
     private var _pearlNum:int=0;
 
-    private var _luckwheelObj:Object={day:0,luckWheelNum:0,todayADDWheelNumFromShare:0,getGiftFromShare:0};
+    private var _luckwheelObj:Object={
+        day:0,
+        luckWheelNum:0,
+        todayADDWheelNumFromShare:0,
+        getGiftFromShare:0
+    };
 
     private var _giftDelay:int=100;//退出记录
     private var _quitUnix:int;

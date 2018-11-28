@@ -95,10 +95,12 @@ public class WxManager {
     {
         _form.doc(userId).get({
             success:function (res) {
+                console.log("-getformData success:",res);
                 handler.runWith(res.data);
             },
             fail:function (res) {
-                handler.runWith(-1);
+                console.log("-getformData fail");
+                handler.runWith("fail");
             }
         });
     }
@@ -144,10 +146,12 @@ public class WxManager {
         wx.getStorage({
             key:_storageKey,
             success:function(res){
+                console.log("-getStorage success");
                 handler.runWith(res.data);
             },
-            fail:function(){
-                handler.runWith(-1);
+            fail:function(res){
+                console.log("-getStorage fail");
+                handler.runWith("fail");
             }
         });
     }
@@ -307,6 +311,41 @@ public class WxManager {
         });
     }
 
+    /**
+     * 长震动400 ms
+     */
+    public  function shakeLong():void
+    {
+        wx.vibrateLong({
+            success:function(){
+                //onSuccess()
+            },
+            fail:function(){
+                //onFail()
+            },
+            complete:function(){
+                //onComplete()
+            }
+        });
+    }
+
+    /**
+     * 短震动15 ms
+     */
+    public  function shakeShort():void
+    {
+        wx.vibrateShort({
+            success:function(){
+                //onSuccess()
+            },
+            fail:function(){
+                //onFail()
+            },
+            complete:function(){
+                //onComplete()
+            }
+        });
+    }
 
 
     public function resizeShared():void

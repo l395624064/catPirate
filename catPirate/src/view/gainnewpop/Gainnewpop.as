@@ -11,6 +11,7 @@ import laya.utils.Handler;
 import manager.GameAdaptive;
 import manager.GameEvent;
 import manager.GameEventDispatch;
+import manager.GameSoundManager;
 
 import manager.UiManager;
 
@@ -46,6 +47,8 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
     public function openPanel(param:Object=null):void
     {
         this.ani1.play();
+        GameSoundManager.onPlaySound("get3");//音效
+
         _awardType=param.award_type;
         _awardNum=param.award_num;
         _name=param.name;

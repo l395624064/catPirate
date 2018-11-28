@@ -745,6 +745,7 @@ var GamemainC=(function(){
 	}
 
 	__proto.openGame=function(){
+		GameSoundManager.onPlayMusic();
 		UiManager.instance.loadView("Gamemain",null,2);
 		GameEventDispatch.instance.event("StartLoopTime");
 		GameEventDispatch.instance.event("StartSaveTime");
@@ -942,17 +943,18 @@ var SaveC=(function(){
 
 	__proto.checksaveInfo=function(state){
 		if(state=="local"){
-			WxManager.instance.getStorage(this._openid,Handler.create(this,this.getlocalInfo));
+			WxManager.instance.getStorage(this._openid,new Handler(this,this.getlocalInfo));
 		}
 		else if(state=="net"){
-			WxManager.instance.getformData(this._openid,Handler.create(this,this.getnetInof));
+			WxManager.instance.getformData(this._openid,new Handler(this,this.getnetInof));
 		}
 	}
 
 	//检测网络存档
 	__proto.getlocalInfo=function(data){
 		this._localSaveData=data;
-		if(this._localSaveData==-1){
+		if(this._localSaveData=="fail"){
+			console.log("-本地存档不存在,检测网络存档");
 			this.checksaveInfo("net");
 			}else{
 			this._localComplete=true;
@@ -962,8 +964,8 @@ var SaveC=(function(){
 
 	__proto.getnetInof=function(data){
 		this._netSaveData=data;
-		if(this._netSaveData==-1){
-			console.log("-创建新存档");
+		if(this._netSaveData=="fail"){
+			console.log("-网络存档不存在,创建新存档");
 			WxManager.instance.login(Handler.create(this,this.clickLoginBtn));
 			}else{
 			this._netComplete=true;
@@ -972,16 +974,16 @@ var SaveC=(function(){
 	}
 
 	__proto.saveDataSync=function(){
-		if(this._localComplete || this._netSaveData){
-			if(this._localSaveData!=-1){
+		if(this._localComplete || this._netComplete){
+			if(this._localSaveData!="fail"){
 				delete this._localSaveData._id;
 				delete this._localSaveData._openid;
-				console.log("-本地存档存在,同步云端");
+				console.log("-本地存档存在,同步云端",this._localSaveData);
 				WxManager.instance.setformData(this._openid,this._localSaveData);
 				this.initGameData(this._localSaveData);
 			}
-			else if(this._netSaveData!=-1){
-				console.log("-云端存档存在,同步本地");
+			else if(this._netSaveData!="fail"){
+				console.log("-云端存档存在,同步本地",this._netSaveData);
 				WxManager.instance.setStorage(this._openid,this._netSaveData);
 				this.initGameData(this._netSaveData);
 			}else{}
@@ -1013,6 +1015,7 @@ var SaveC=(function(){
 
 	//更新playerInfoM
 	__proto.initGameData=function(data){
+		if(!((typeof data=='object')))return;
 		PlayerInfoM.instance.setGoldNum(data.goldNum);
 		PlayerInfoM.instance.setPlankNum(data.plankNum);
 		PlayerInfoM.instance.setPearlNum(data.pearlNum);
@@ -1023,6 +1026,7 @@ var SaveC=(function(){
 			data.luckwheelObj={day:localDate.getDate(),luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
 			PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
 			}else{
+			data.luckwheelObj.day=localDate.getDate();
 			PlayerInfoM.instance.setluckwheelObj(data.luckwheelObj);
 		};
 		var delay=Math.floor((localDate.getTime()/1000)-quitDate);
@@ -1051,6 +1055,7 @@ var SaveC=(function(){
 		PlayerInfoM.instance.setavatarUrl(data.avatarUrl);
 		PlayerInfoM.instance.setprovince(data.province);
 		PlayerInfoM.instance.setscore(data.score);
+		console.log("-save date load complete");
 		GameEventDispatch.instance.event("StartLoad");
 	}
 
@@ -1448,7 +1453,12 @@ var SaveD=(function(){
 		this.plankNum=0;
 		this.pearlNum=0;
 		this.score=0;
-		this.luckwheelObj={day:0,luckWheelNum:1,todayADDWheelNumFromShare:3,getGiftFromShare:1};
+		this.luckwheelObj={
+			day:0,
+			luckWheelNum:1,
+			todayADDWheelNumFromShare:3,
+			getGiftFromShare:1
+		};
 		this.giftDelay=100;
 		this.giftLv=1;
 		this.giftArr=[
@@ -1592,6 +1602,7 @@ var LayaSample=(function(){
 		Laya.stage.screenMode=GameConfig.screenMode;
 		Laya.stage.alignV=GameConfig.alignV;
 		Laya.stage.alignH=GameConfig.alignH;
+		if (GameConfig.stat)Stat.show();
 		if(GameConfig.onWeiXin){
 			WxManager.instance.resizeShared();
 		}
@@ -1633,6 +1644,7 @@ var ConfigManager=(function(){
 			}
 			ConfigManager.sheet_cache[sheetName]=a
 		}
+		console.log("-config json load complete");
 	}
 
 	ConfigManager.getConfObject=function(sheetName,id){
@@ -2502,6 +2514,22 @@ var GameInit=(function(){
 })()
 
 
+//class manager.GameSoundManager
+var GameSoundManager=(function(){
+	function GameSoundManager(){}
+	__class(GameSoundManager,'manager.GameSoundManager');
+	GameSoundManager.onPlaySound=function(){
+		SoundManager.playSound("../../../../res/sounds/btn.mp3",1);
+	}
+
+	GameSoundManager.onPlayMusic=function(){
+		SoundManager.playMusic("https://6361-catpirate-data-a98557-1258046007.tcb.qcloud.la/Av6372309.mp3?sign=3c35cfa989c887a2dd142e0e6f68a25d&t=1543333612");
+	}
+
+	return GameSoundManager;
+})()
+
+
 //class manager.ShipAniManager
 var ShipAniManager=(function(){
 	function ShipAniManager(){
@@ -2951,10 +2979,12 @@ var WxManager=(function(){
 	__proto.getformData=function(userId,handler){
 		this._form.doc(userId).get({
 			success:function (res){
+				console.log("-getformData success:",res);
 				handler.runWith(res.data);
 			},
 			fail:function (res){
-				handler.runWith(-1);
+				console.log("-getformData fail");
+				handler.runWith("fail");
 			}
 		});
 	}
@@ -2995,10 +3025,12 @@ var WxManager=(function(){
 		this.wx.getStorage({
 			key:_storageKey,
 			success:function (res){
+				console.log("-getStorage success");
 				handler.runWith(res.data);
 			},
-			fail:function (){
-				handler.runWith(-1);
+			fail:function (res){
+				console.log("-getStorage fail");
+				handler.runWith("fail");
 			}
 		});
 	}
@@ -3682,7 +3714,12 @@ var PlayerInfoM=(function(){
 		this._goldNum=0;
 		this._plankNum=0;
 		this._pearlNum=0;
-		this._luckwheelObj={day:0,luckWheelNum:0,todayADDWheelNumFromShare:0,getGiftFromShare:0};
+		this._luckwheelObj={
+			day:0,
+			luckWheelNum:0,
+			todayADDWheelNumFromShare:0,
+			getGiftFromShare:0
+		};
 		this._giftDelay=100;
 		//退出记录
 		this._quitUnix=0;
@@ -46788,19 +46825,6 @@ var TimeBossAniUI=(function(_super){
 })(View)
 
 
-//class ui.Boxlibs_shakeboxUI extends laya.display.EffectAnimation
-var Boxlibs_shakeboxUI=(function(_super){
-	function Boxlibs_shakeboxUI(){
-		Boxlibs_shakeboxUI.__super.call(this);
-		this.effectData=Boxlibs_shakeboxUI.uiView;;
-	}
-
-	__class(Boxlibs_shakeboxUI,'ui.Boxlibs_shakeboxUI',_super);
-	Boxlibs_shakeboxUI.uiView={"type":"View","props":{},"child":[{"type":"Image","props":{"y":50,"x":50,"width":100,"skin":"ui/boxlibs/di2.png","height":100,"anchorY":0.5,"anchorX":0.5},"compId":2}],"animations":[{"nodes":[{"target":2,"keyframes":{"rotation":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":1},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":5},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":7},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":9},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":11},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":13},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":23},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":25},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":27},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":29},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":31}],"height":[{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":0},{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":1},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":5},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":23},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":31}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
-	return Boxlibs_shakeboxUI;
-})(EffectAnimation)
-
-
 //class ui.TimeGiftUI extends laya.ui.View
 var TimeGiftUI=(function(_super){
 	function TimeGiftUI(){
@@ -46825,6 +46849,19 @@ var TimeGiftUI=(function(_super){
 	TimeGiftUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":339,"x":94,"skin":"ui/timegift/bg1.png"}},{"type":"Image","props":{"width":77,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":58,"height":77,"bottom":783}},{"type":"Image","props":{"y":262,"x":100,"width":80,"skin":"ui/common_ex/giftBtn.png","height":80}},{"type":"Text","props":{"y":470,"x":137,"width":141,"text":"剩余时间:","strokeColor":"#224882","stroke":5,"height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":353,"x":232,"wordWrap":true,"width":266,"text":"<升级礼包>将有概率永久提升礼包等级(最高LV5)","strokeColor":"#224882","stroke":5,"height":23,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":570,"x":107,"wordWrap":true,"width":268,"text":"获得的礼包会自动放入宝箱库中","strokeColor":"#224882","stroke":5,"height":16,"fontSize":15,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Text","props":{"y":355,"x":128,"width":79,"var":"boxlv","text":"LV.1","strokeColor":"#224882","stroke":5,"height":36,"fontSize":35,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Text","props":{"y":530,"x":136,"width":204,"var":"timetxt","text":"00:00:00","strokeColor":"#224882","stroke":5,"height":30,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Image","props":{"y":452,"x":387,"visible":false,"var":"lvupBtn","skin":"ui/timegift/btn0.png"}},{"type":"Button","props":{"y":502,"x":381,"width":125,"var":"getBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":22,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享/减时","height":84}}]}]};
 	return TimeGiftUI;
 })(View)
+
+
+//class ui.Boxlibs_shakeboxUI extends laya.display.EffectAnimation
+var Boxlibs_shakeboxUI=(function(_super){
+	function Boxlibs_shakeboxUI(){
+		Boxlibs_shakeboxUI.__super.call(this);
+		this.effectData=Boxlibs_shakeboxUI.uiView;;
+	}
+
+	__class(Boxlibs_shakeboxUI,'ui.Boxlibs_shakeboxUI',_super);
+	Boxlibs_shakeboxUI.uiView={"type":"View","props":{},"child":[{"type":"Image","props":{"y":50,"x":50,"width":100,"skin":"ui/boxlibs/di2.png","height":100,"anchorY":0.5,"anchorX":0.5},"compId":2}],"animations":[{"nodes":[{"target":2,"keyframes":{"rotation":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":1},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":5},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":7},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"key":"rotation","index":9},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":11},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":13},{"value":0,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":23},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":25},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":27},{"value":-5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":29},{"value":5,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"rotation","index":31}],"height":[{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":0},{"value":100,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":1},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"key":"height","index":5},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":23},{"value":86,"tweenMethod":"linearNone","tween":true,"target":2,"label":null,"key":"height","index":31}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
+	return Boxlibs_shakeboxUI;
+})(EffectAnimation)
 
 
 //class ui.TimeOverAniUI extends laya.ui.View
@@ -49996,16 +50033,14 @@ var Gamemap=(function(_super){
 var Loadview=(function(_super){
 	function Loadview(){
 		this.loadRes=[
-		{url:"res/atlas/ui/wxrank.atlas",type:"atlas"},
 		{url:"res/atlas/comp.atlas",type:"atlas"},
 		{url:"res/atlas/ui/common.atlas",type:"atlas"},
 		{url:"res/atlas/ui/common_ex.atlas",type:"atlas"},
 		{url:"res/atlas/ui/common_img.atlas",type:"atlas"},
 		{url:"res/atlas/ui/common_ef.atlas",type:"atlas"},
 		{url:"res/atlas/ui/shipskin.atlas",type:"atlas"},
+		{url:"res/atlas/ui/wxrank.atlas",type:"atlas"},
 		{url:"res/atlas/font.atlas",type:"atlas"},
-		{url:"sound/destroy.wav",type:"sound"},
-		{url:"sound/hit.wav",type:"sound"},
 		{url:ConfigManager.getConfigPath(),type:"json"}];
 		Loadview.__super.call(this);
 	}
@@ -50030,6 +50065,7 @@ var Loadview=(function(_super){
 	}
 
 	__proto.loadComplete=function(){
+		console.log("-res load complete");
 		this.setloadBar(1);
 		ConfigManager.init();
 		UiManager.instance.baseTipInit();

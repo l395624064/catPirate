@@ -4,6 +4,7 @@ import laya.events.Event;
 import manager.GameEvent;
 
 import manager.GameEventDispatch;
+import manager.GameSoundManager;
 
 import manager.UiManager;
 
@@ -26,6 +27,8 @@ public class TimestartAni extends TimeStartAniUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
+        GameSoundManager.onPlaySound("gamestart");
+
         into.play(0,false);
         into.offAll();
         into.once(Event.COMPLETE,this,function () {

@@ -3,6 +3,7 @@ package control {
 import manager.GameEvent;
 import manager.GameEventDispatch;
 import manager.GameInit;
+import manager.GameSoundManager;
 import manager.UiManager;
 
 import model.GamemainM;
@@ -37,6 +38,7 @@ public class GamemainC {
 
     private function openGame():void
     {
+        GameSoundManager.onPlayMusic("normal");
         UiManager.instance.loadView("Gamemain",null,2);
 
         GameEventDispatch.instance.event(GameEvent.StartLoopTime);// gift time
@@ -58,6 +60,7 @@ public class GamemainC {
     }
     private function GameStart():void
     {
+        GameSoundManager.onPlayMusic("fight");
         GamemainM.instance.clearLastDrop();
         GamemainM.instance.clearFishBox();//gameEnd页会使用
         UiManager.instance.closePanel("TimestartAni");
@@ -83,6 +86,7 @@ public class GamemainC {
 
     private function GameEndAward(_param:Object):void
     {
+        GameSoundManager.onPlayMusic("end");
         var param:Object={
             img:PlayerInfoM.instance.getavatarUrl(),
             maxweight:_param['maxweight'],
