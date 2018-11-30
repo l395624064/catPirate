@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":6,
-    "selecteID":50,
+    "selectedBox":5,
+    "selecteID":6,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -227,7 +227,7 @@
                                 {
                                     "x":60,
                                     "type":"Button",
-                                    "props":{"y":-7,"x":431,"width":93,"stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"freeBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"免费金币","hitTestPrior":true,"height":63},
+                                    "props":{"y":-7,"x":431,"width":93,"visible":false,"stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"freeBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"免费金币","hitTestPrior":true,"height":63},
                                     "nodeParent":6,
                                     "label":"Button(freeBtn)",
                                     "isOpen":false,
@@ -236,7 +236,9 @@
                                     "hasChild":false,
                                     "compId":50,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$LOCKED":true,
+                                    "$HIDDEN":true
                                 },
                                 {
                                     "x":60,

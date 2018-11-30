@@ -392,7 +392,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":745,"x":354,"width":149,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":25,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享加次数","height":100},
+                    "props":{"y":745,"x":354,"width":149,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":28,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","height":100},
                     "nodeParent":3,
                     "label":"Button(shareBtn)",
                     "isDirectory":false,

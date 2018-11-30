@@ -95,7 +95,7 @@
                 {
                     "x":30,
                     "type":"Text",
-                    "props":{"y":353,"x":232,"wordWrap":true,"width":266,"text":"<升级礼包>将有概率永久提升礼包等级(最高LV5)","strokeColor":"#224882","stroke":5,"height":23,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
+                    "props":{"y":353,"x":232,"wordWrap":true,"width":266,"text":"升级礼包后,将有概率永久提升礼包等级(最高LV5)","strokeColor":"#224882","stroke":5,"height":23,"fontSize":20,"font":"SimHei","color":"#ffffff","bold":true},
                     "nodeParent":3,
                     "label":"Text",
                     "isDirectory":false,
@@ -167,7 +167,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":502,"x":381,"width":125,"var":"getBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":22,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享/减时","height":84},
+                    "props":{"y":502,"x":381,"width":125,"var":"getBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":22,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","height":84},
                     "nodeParent":3,
                     "label":"Button(getBtn)",
                     "isDirectory":false,

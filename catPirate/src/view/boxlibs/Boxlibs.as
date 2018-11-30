@@ -60,7 +60,8 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         });
         moreGiftBtn.offAll();
         moreGiftBtn.on(Event.MOUSE_DOWN,this,function () {
-            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
+            WxManager.instance.shareApp();
+//            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
         })
 
         gameBoxPanel.offAll();

@@ -39,7 +39,8 @@ public class Endaward extends EndawardUI implements PanelVo{
         });
         shareBtn.offAll();
         shareBtn.on(Event.MOUSE_DOWN,this,function () {
-            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
+            WxManager.instance.shareApp();
+            //WxManager.instance.shareApp(Handler.create(this,shareOverAward));
         })
 
         playerImg.skin = param['img'];

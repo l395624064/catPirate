@@ -62,10 +62,13 @@ public class Timegift extends TimeGiftUI implements PanelVo{
 
     private function giftGet():void
     {
+        WxManager.instance.shareApp();
+        /*
         WxManager.instance.shareApp(Handler.create(this,function () {
             GameEventDispatch.instance.event(GameEvent.MinusBoxTime);
             GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:12}]);
         }))
+        */
         //观看视频-完成后
     }
 

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":68,
-    "selecteID":87,
+    "selectedBox":3,
+    "selecteID":66,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -319,7 +319,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":877,"x":354,"width":149,"var":"moreGiftBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":25,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好礼","height":100},
+                    "props":{"y":877,"x":354,"width":149,"var":"moreGiftBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":25,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","height":100},
                     "nodeParent":3,
                     "label":"Button(moreGiftBtn)",
                     "isDirectory":false,
@@ -335,7 +335,7 @@
                     "props":{"y":987,"x":102,"width":455,"var":"gameBoxPanel","skin":"ui/common_ex/di7.png","sizeGrid":"29,49,32,45","height":112},
                     "nodeParent":3,
                     "label":"Image(gameBoxPanel)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":72,
-    "selecteID":68,
+    "selectedBox":121,
+    "selecteID":126,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -97,7 +97,6 @@
                     "compId":26,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105},
                             "nodeParent":26,
@@ -112,7 +111,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155},
                             "nodeParent":26,
@@ -128,7 +126,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113},
                             "nodeParent":26,
@@ -143,7 +140,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376},
                             "nodeParent":26,
@@ -158,7 +154,6 @@
                             "$LOCKED":true
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117},
                             "nodeParent":26,
@@ -173,7 +168,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50},
                             "nodeParent":26,
@@ -188,7 +182,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260},
                             "nodeParent":26,
@@ -204,7 +197,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296},
                             "nodeParent":26,
@@ -220,7 +212,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},
                             "nodeParent":26,
@@ -247,7 +238,6 @@
                             "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Button",
                             "props":{"y":311,"x":229,"width":133,"var":"gameStartBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,16,25,27","labelSize":50,"labelFont":"Microsoft YaHei","height":105},
                             "nodeParent":26,
@@ -259,7 +249,6 @@
                             "compId":56,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "props":{"y":10,"x":41,"width":53,"skin":"ui/gamemain/btn1.png","height":82},
                                     "nodeParent":56,
@@ -437,13 +426,14 @@
                     "props":{"y":209,"x":511,"var":"rightbtnBox"},
                     "nodeParent":72,
                     "label":"Box(rightbtnBox)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":75,
                     "child":[
                         {
+                            "x":45,
                             "type":"Button",
                             "props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":"1","skin":"ui/gamemain/btn9.png","labelSize":35,"height":73},
                             "nodeParent":75,
@@ -456,6 +446,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Button",
                             "props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":"1","skin":"ui/gamemain/btn4.png","labelSize":35,"height":77},
                             "nodeParent":75,
@@ -468,18 +459,36 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"y":90,"x":58,"width":70,"var":"shareBtn","skin":"ui/common_ex/shareBtn.png","height":74},
                             "nodeParent":75,
                             "label":"Image(shareBtn)",
-                            "isDirectory":false,
+                            "isOpen":true,
+                            "isDirectory":true,
                             "isAniNode":true,
-                            "hasChild":false,
+                            "hasChild":true,
                             "compId":121,
                             "child":[
-                                ]
+                                {
+                                    "x":60,
+                                    "type":"Text",
+                                    "props":{"y":47,"x":9,"width":43,"text":"分享","strokeColor":"#224882","stroke":5,"name":"giftnum","height":20,"fontSize":18,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
+                                    "nodeParent":121,
+                                    "label":"Text(giftnum)",
+                                    "isOpen":true,
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":126,
+                                    "child":[
+                                        ],
+                                    "$LOCKED":false,
+                                    "$HIDDEN":false
+                                }]
                         },
                         {
+                            "x":45,
                             "type":"AdvImage",
                             "props":{"y":91,"x":-29,"width":71,"iconSign":"ADSprite","height":71},
                             "nodeParent":75,

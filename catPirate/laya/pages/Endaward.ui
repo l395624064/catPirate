@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":29,
-    "selecteID":27,
+    "selectedBox":3,
+    "selecteID":33,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -176,7 +176,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":847,"x":336,"width":178,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#ffffff","labelStroke":2,"labelSize":32,"labelFont":"SimHei","label":"分享抽好礼","hitTestPrior":true,"height":72,"alpha":1},
+                    "props":{"y":847,"x":336,"width":178,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#ffffff","labelStroke":2,"labelSize":32,"labelFont":"SimHei","label":"分享给好友","hitTestPrior":true,"height":72,"alpha":1},
                     "nodeParent":3,
                     "label":"Button(shareBtn)",
                     "isDirectory":false,

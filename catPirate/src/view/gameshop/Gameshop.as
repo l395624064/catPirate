@@ -172,11 +172,12 @@ public class Gameshop extends GameShopUI implements PanelVo{
         //btn
         if(config.shopId==1001){
             if(lv>=config['cost1_num'].length){
-                ele_free_btn.visible=false;
+                //ele_free_btn.visible=false;
                 ele_lvup_btn.visible=false;
                 return;
             }
 
+            /*
             ele_free_btn.visible=true;
             ele_free_btn.offAll();
             ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
@@ -185,12 +186,13 @@ public class Gameshop extends GameShopUI implements PanelVo{
                 UiManager.instance.loadView("Timegift",null,0,"UITYPE_NORMAL");
                 //console.log("-get AD video");
             });
+            */
 
             ele_lvup_btn.visible=true;
             ele_lvup_btn.label="升级";
         }
         else if(config.shopId==1002||config.shopId==1003){
-            ele_free_btn.visible=false;
+            //ele_free_btn.visible=false;
 
             ele_lvup_btn.visible=true;
             ele_lvup_btn.label="购买";
