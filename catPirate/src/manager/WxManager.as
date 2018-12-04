@@ -25,6 +25,7 @@ public class WxManager {
     private var userInfoButton:Object;
 
     private var _layaAppId:String="wx24c7a0688503db70";
+    private var _netconfigformId:String="XAZWnd7E7L4wawdD";
 
     public function WxManager() {
         init();
@@ -45,6 +46,7 @@ public class WxManager {
         showshareMenu();
         onshareMenu();
         onshow();
+        console.log("-wx.cloud init over");
     }
 
     private function onshow():void
@@ -66,6 +68,18 @@ public class WxManager {
         return _db.collection(name);
     }
 
+    public function getGameConfig(handler:Handler=null):void
+    {
+        _db.collection('gameConfig').doc(_netconfigformId).get({
+            success: function(res) {
+                console.log("-getGameConfig success",res);
+                handler.runWith(res.data);
+            },
+            fail:function (res) {
+                console.log("-getGameConfig fail",res);
+            }
+        });
+    }
 
     public function clodfunc(funcName:String,data:Object,handler:Handler=null):void
     {
@@ -74,9 +88,11 @@ public class WxManager {
             name: funcName,
             data:data,
             complete:function (res) {
+                console.log("-clodfunc complete");
                 if(handler) _cloudHandler.runWith(res);
             },
             fail:function (res) {
+                console.log("-clodfunc fail");
                 clodfunc("add",null,_cloudHandler);
             }
         })

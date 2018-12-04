@@ -33,6 +33,7 @@ public class GamemainC {
     private function Gameload():void
     {
         GameEventDispatch.instance.event(GameEvent.GameSaveInit);//获得存档
+        GameEventDispatch.instance.event(GameEvent.GameNetConfig);//网络配置
         UiManager.instance.loadView("Loadview", null, 1);
     }
 

@@ -1,5 +1,6 @@
 package view.loadview {
 import laya.net.Loader;
+import laya.net.URL;
 import laya.utils.Handler;
 
 import manager.ConfigManager;
@@ -25,7 +26,6 @@ public class Loadview extends GameloadUI implements PanelVo{
         {url:"res/atlas/ui/common_img.atlas",        type:Loader.ATLAS},
         {url:"res/atlas/ui/common_ef.atlas",         type:Loader.ATLAS},
         {url:"res/atlas/ui/shipskin.atlas",          type:Loader.ATLAS},
-        {url:"res/atlas/ui/wxrank.atlas",            type:Loader.ATLAS},
 
         {url:"res/atlas/font.atlas",                 type:Loader.ATLAS},
 
@@ -48,10 +48,17 @@ public class Loadview extends GameloadUI implements PanelVo{
     public function openPanel(param:Object=null):void
     {
         if(GameConfig.onWeiXin){
-            Laya.loader.load(loadRes,null,Handler.create(this,onProgress));
-            setloadBar(0);
+            Laya.loader.load("res/atlas/ui/wxrank.atlas",Handler.create(this,loadNetRes));
         }
     }
+
+    private function loadNetRes():void
+    {
+        URL.basePath=GameConfig.weixinURL;
+        Laya.loader.load(loadRes,null,Handler.create(this,onProgress));
+        setloadBar(0);
+    }
+
 
     private function startLoadRes():void
     {

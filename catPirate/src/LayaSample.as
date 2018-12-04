@@ -1,6 +1,8 @@
 ﻿package src {
 import laya.display.Sprite;
 import laya.display.Stage;
+import laya.net.Loader;
+import laya.net.URL;
 import laya.utils.Browser;
 import laya.utils.Browser;
 import laya.utils.ClassUtils;

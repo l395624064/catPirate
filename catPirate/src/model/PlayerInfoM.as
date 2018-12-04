@@ -74,6 +74,9 @@ public class PlayerInfoM {
 
     private var _score:int=0;
 
+    private var _configShare:Boolean=false;
+    private var _configAD:Boolean=false;
+
     public function PlayerInfoM() {
     }
 
@@ -97,6 +100,24 @@ public class PlayerInfoM {
 
 
 
+
+
+    public function getNetConfigShare():Boolean
+    {
+        return _configShare;
+    }
+    public function setNetConfigShare(value:Boolean):void
+    {
+        _configShare=value;
+    }
+    public function getNetConfigAD():Boolean
+    {
+        return _configAD;
+    }
+    public function setNetConfigAD(value:Boolean):void
+    {
+        _configAD=value;
+    }
 
 
     public function getscore():int

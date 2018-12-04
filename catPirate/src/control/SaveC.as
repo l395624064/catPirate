@@ -36,6 +36,7 @@ public class SaveC {
 
 
     public function SaveC() {
+        GameEventDispatch.instance.on(GameEvent.GameNetConfig,this,GameNetConfig);
         GameEventDispatch.instance.on(GameEvent.GameSaveInit,this,GameSaveInit);
         GameEventDispatch.instance.on(GameEvent.GameSaveRefresh,this,GameSaveRefresh);
     }
@@ -50,6 +51,27 @@ public class SaveC {
         //检测登陆态-更新-登录按钮
         //WxManager.instance.checkSession();
     }
+
+    private function GameNetConfig():void
+    {
+        if(GameConfig.onWeiXin){
+            WxManager.instance.getGameConfig(Handler.create(this,GameNetConfigInit));
+        }
+    }
+    private function GameNetConfigInit(res):void
+    {
+        if(res){
+            if(res.hasOwnProperty('AD')){
+                console.log("-res.AD:",res.AD);
+                PlayerInfoM.instance.setNetConfigAD(res.AD);
+            }
+            if(res.hasOwnProperty('share')){
+                console.log("-res.share:",res.share);
+                PlayerInfoM.instance.setNetConfigShare(res.share);
+            }
+        }
+    }
+
 
     private function GameSaveInit():void
     {

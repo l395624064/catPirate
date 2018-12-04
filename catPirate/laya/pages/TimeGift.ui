@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":3,
-    "selecteID":43,
+    "selecteID":44,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -167,7 +167,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":502,"x":381,"width":125,"var":"getBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":22,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","height":84},
+                    "props":{"y":502,"x":381,"width":125,"visible":false,"var":"getBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":22,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","height":84},
                     "nodeParent":3,
                     "label":"Button(getBtn)",
                     "isDirectory":false,
@@ -175,7 +175,24 @@
                     "hasChild":false,
                     "compId":43,
                     "child":[
-                        ]
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":true
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":519,"x":387,"wordWrap":true,"width":121,"text":"时间结束时-将会获得免费宝箱!请及时领取!","strokeColor":"#ffffff","stroke":2,"height":48,"fontSize":15,"font":"SimHei","color":"#ff0400","bold":true,"align":"center"},
+                    "nodeParent":3,
+                    "label":"Text",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":44,
+                    "child":[
+                        ],
+                    "$LOCKED":false,
+                    "$HIDDEN":false
                 }]
         }],
     "animations":[

@@ -5,6 +5,7 @@ package manager
         //game save
         public static const StartSaveTime:String="StartSaveTime";
         public static const GameSaveInit:String="GameSaveInit";
+        public static const GameNetConfig:String="GameNetConfig";
         public static const GameSaveRefresh:String="GameSaveRefresh";
 
         //loadview
