@@ -75,7 +75,7 @@ public class PlayerInfoM {
     private var _score:int=0;
 
     private var _configShare:Boolean=false;
-    private var _configAD:Boolean=false;
+    private var _configAD:Boolean=true;
 
     public function PlayerInfoM() {
     }
@@ -195,7 +195,9 @@ public class PlayerInfoM {
     }
     public function addshopOwn(shopid:int):void
     {
-        _shopOwnArr.push(shopid);
+        if(_shopOwnArr.indexOf(shopid)==-1){
+            _shopOwnArr.push(shopid);
+        }
     }
 
 

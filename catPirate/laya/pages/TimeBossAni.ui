@@ -38,7 +38,7 @@
             "child":[
                 {
                     "type":"Image",
-                    "props":{"y":490,"x":-649,"width":651,"skin":"ui/common_ex/blank.png","skewY":-7,"sizeGrid":"2,2,2,2","height":192},
+                    "props":{"y":490,"x":-649,"width":651,"skin":"ui/common_ex/blank.png","skewY":-7,"sizeGrid":"2,2,2,2","height":291},
                     "nodeParent":7,
                     "label":"Image",
                     "isDirectory":false,
@@ -52,7 +52,7 @@
                 },
                 {
                     "type":"Animation",
-                    "props":{"y":459,"x":-648,"width":300,"source":"TimeBoss.ani","scaleY":1.5,"scaleX":1.5,"interval":100,"height":129,"autoPlay":true},
+                    "props":{"y":459,"x":-648,"width":300,"source":"TimeBoss.ani","scaleY":2.15,"scaleX":2.15,"interval":100,"height":129,"autoPlay":true},
                     "nodeParent":7,
                     "label":"Animation",
                     "isDirectory":false,

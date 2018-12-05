@@ -88,7 +88,7 @@ public class Gainnewpop extends GainNewpopUI implements PanelVo{
     {
         this.offAll();
         this.once(Event.MOUSE_DOWN,this,function () {
-            console.log("-click this pop");
+            //console.log("-click this pop");
             if(_callback)_callback.run();
             UiManager.instance.closePanel("Gainnewpop");
         });

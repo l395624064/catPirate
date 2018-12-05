@@ -2,6 +2,8 @@ package view.setting {
 import laya.events.Event;
 import laya.media.SoundManager;
 
+import manager.GameSoundManager;
+
 import manager.UiManager;
 
 import model.PlayerInfoM;
@@ -48,14 +50,14 @@ public class Setting extends SettingUI implements PanelVo{
         else if(action=="setMusic"){
             _settingObj.music=!_settingObj.music;
             musicBtn.selected=!_settingObj.music;
-            if(_settingObj.music)SoundManager.musicMuted=false;
-            else SoundManager.musicMuted=true;
+            if(_settingObj.music)GameSoundManager.setmusicMuted(false);
+            else GameSoundManager.setmusicMuted(true);
         }
         else if(action=="setSound"){
             _settingObj.sound=!_settingObj.sound;
             soundBtn.selected=!_settingObj.sound;
-            if(_settingObj.sound) SoundManager.soundMuted=false;
-            else SoundManager.soundMuted=true;
+            if(_settingObj.sound) GameSoundManager.setsoundMuted(false);
+            else GameSoundManager.setsoundMuted(true);
         }
         else if(action=="setShake"){
             _settingObj.shake=!_settingObj.shake;

@@ -14,6 +14,7 @@ import manager.ConfigManager;
 import manager.GameEvent;
 
 import manager.GameEventDispatch;
+import manager.GameSoundManager;
 import manager.TimeManager;
 
 import manager.UiManager;
@@ -43,8 +44,17 @@ public class Timegift extends TimeGiftUI implements PanelVo{
             UiManager.instance.closePanel("Timegift");
         });
 
-        lvupBtn.on(Event.MOUSE_DOWN,this,giftLVUP);
+        if(PlayerInfoM.instance.getNetConfigShare()){
+            getBtn.label="免费领取";
+        }
+        else{
+            getBtn.label="分享好友";
+        }
         getBtn.on(Event.MOUSE_DOWN,this,giftGet);
+
+        if(PlayerInfoM.instance.getNetConfigAD()) lvupBtn.visible=true;
+        else lvupBtn.visible=false;
+        lvupBtn.on(Event.MOUSE_DOWN,this,giftLVUP);
 
         updateTime();//初始化
         updateGiftLV();
@@ -56,20 +66,19 @@ public class Timegift extends TimeGiftUI implements PanelVo{
 
     private function giftLVUP():void
     {
-        //调取微信分享接口-完成后
-        checkGiftBoxLVUP();
+        WxManager.instance.showVideoAd(Handler.create(this,checkGiftBoxLVUP));//视频-升级
     }
 
     private function giftGet():void
     {
-        WxManager.instance.shareApp();
-        /*
         WxManager.instance.shareApp(Handler.create(this,function () {
-            GameEventDispatch.instance.event(GameEvent.MinusBoxTime);
-            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:12}]);
+            if(PlayerInfoM.instance.getNetConfigShare()){
+                GameEventDispatch.instance.event(GameEvent.MinusBoxTime);
+                GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:12}]);
+            }else{
+                GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:16}]);
+            }
         }))
-        */
-        //观看视频-完成后
     }
 
     private function checkGiftResetTime():void

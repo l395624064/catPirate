@@ -58,10 +58,16 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         gameBoxBtn.on(Event.MOUSE_DOWN,this,function () {
             WxManager.instance.navigateToMiniProgram();
         });
+
+
+        if(PlayerInfoM.instance.getNetConfigShare()){
+            moreGiftBtn.label="分享好礼";
+        }else{
+            moreGiftBtn.label="分享好友";
+        }
         moreGiftBtn.offAll();
         moreGiftBtn.on(Event.MOUSE_DOWN,this,function () {
-            WxManager.instance.shareApp();
-//            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
+            WxManager.instance.shareApp(Handler.create(this,shareOverAward));
         })
 
         gameBoxPanel.offAll();
@@ -80,15 +86,17 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
 
     private function shareOverAward():void
     {
-        if(PlayerInfoM.instance.getGiftFromShare()){
-            PlayerInfoM.instance.setGiftFromShare(0);
+        if(PlayerInfoM.instance.getNetConfigShare()) {
+            if(PlayerInfoM.instance.getGiftFromShare()){
+                PlayerInfoM.instance.setGiftFromShare(0);
 
-            var gainD:GainnewD=new GainnewD();
-            gainD.award_type=[11];
-            gainD.award_num=[1];
-            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+                var gainD:GainnewD=new GainnewD();
+                gainD.award_type=[11];
+                gainD.award_num=[1];
+                GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+            }
         }else{
-            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:17}]);
+            GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:16}]);
         }
     }
 

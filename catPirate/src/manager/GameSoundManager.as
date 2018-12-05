@@ -74,5 +74,16 @@ public class GameSoundManager {
             SoundManager.playMusic(GameConfig.weixinURL+"music/endMusic-2.mp3",1);
         }
     }
+
+    public static function setmusicMuted(value:Boolean):void
+    {
+        SoundManager.musicMuted=value;
+    }
+
+    public static function setsoundMuted(value:Boolean):void
+    {
+        SoundManager.soundMuted=value;
+    }
+
 }
 }

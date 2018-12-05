@@ -1,8 +1,7 @@
 {
-    "x":0,
     "type":"View",
-    "selectedBox":7,
-    "selecteID":6,
+    "selectedBox":1,
+    "selecteID":2,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -13,7 +12,6 @@
     "compId":1,
     "child":[
         {
-            "x":15,
             "type":"Image",
             "props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0},
             "nodeParent":1,
@@ -28,7 +26,6 @@
             "$HIDDEN":false
         },
         {
-            "x":15,
             "type":"Box",
             "props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0,"alpha":2},
             "nodeParent":1,
@@ -40,9 +37,8 @@
             "compId":7,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
-                    "props":{"y":490,"x":-649,"width":651,"skin":"ui/common_ex/blank.png","skewY":-5.5,"sizeGrid":"2,2,2,2","height":192},
+                    "props":{"y":490,"x":-649,"width":651,"skin":"ui/common_ex/blank.png","skewY":-5.5,"sizeGrid":"2,2,2,2","height":291},
                     "nodeParent":7,
                     "label":"Image",
                     "isDirectory":false,
@@ -55,7 +51,6 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "props":{"y":687,"x":137,"wordWrap":true,"width":362,"visible":true,"text":"轻点继续","strokeColor":"#000000","stroke":1,"height":47,"fontSize":28,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"alpha":0,"align":"center"},
                     "nodeParent":7,
@@ -70,9 +65,8 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Animation",
-                    "props":{"y":474,"x":-647,"width":300,"source":"TimeOver.ani","scaleY":1.5,"scaleX":1.5,"interval":100,"height":119,"autoPlay":true},
+                    "props":{"y":469,"x":-646,"width":300,"source":"TimeOver.ani","scaleY":2.15,"scaleX":2.15,"interval":100,"height":119,"autoPlay":true},
                     "nodeParent":7,
                     "label":"Animation",
                     "isDirectory":false,
@@ -155,7 +149,7 @@
                                 "index":0
                             },
                             {
-                                "value":315,
+                                "value":300,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":10,
@@ -303,7 +297,7 @@
                     "keyframes":{
                         "y":[
                             {
-                                "value":315,
+                                "value":300,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":10,

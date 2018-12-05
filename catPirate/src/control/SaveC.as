@@ -34,6 +34,8 @@ public class SaveC {
     private var _gender:int;
     private var _province:String;//省份
 
+    private var _openTime:int=1543999354;
+
 
     public function SaveC() {
         GameEventDispatch.instance.on(GameEvent.GameNetConfig,this,GameNetConfig);
@@ -55,20 +57,17 @@ public class SaveC {
     private function GameNetConfig():void
     {
         if(GameConfig.onWeiXin){
-            WxManager.instance.getGameConfig(Handler.create(this,GameNetConfigInit));
-        }
-    }
-    private function GameNetConfigInit(res):void
-    {
-        if(res){
-            if(res.hasOwnProperty('AD')){
-                console.log("-res.AD:",res.AD);
-                PlayerInfoM.instance.setNetConfigAD(res.AD);
+            var localDate:Date=new Date();
+            if(localDate.getTime()>=_openTime*1000){
+                console.log("--开启分享相关功能:",localDate.getTime());
+                console.log("--开启分享相关功能:",_openTime*1000);
+                PlayerInfoM.instance.setNetConfigShare(true);
+            }else {
+                console.log("--关闭分享相关功能:");
+                PlayerInfoM.instance.setNetConfigShare(false);
             }
-            if(res.hasOwnProperty('share')){
-                console.log("-res.share:",res.share);
-                PlayerInfoM.instance.setNetConfigShare(res.share);
-            }
+            PlayerInfoM.instance.setNetConfigAD(true);
+            //WxManager.instance.getGameConfig(Handler.create(this,GameNetConfigInit));
         }
     }
 
@@ -214,7 +213,6 @@ public class SaveC {
         }
 
         var delay:int=Math.floor((localDate.getTime()/1000)-quitDate);
-        console.log("-delay:",delay);
         if(delay>0){
             if(delay>data.giftDelay){
                 PlayerInfoM.instance.setGiftDelay(1);

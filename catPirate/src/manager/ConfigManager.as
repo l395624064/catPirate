@@ -37,11 +37,12 @@ package manager
         public static function init():void
         {
             var dicRes:Object = Laya.loader.getRes(allConfigPath);
+            //console.log("-config json load complete:",manifest.cfg_names);
             for (var sheetName:String in manifest.cfg_names)
             {
                 var a:Object = {};
                 var sheetDicRes:Object = dicRes[sheetName];
-
+                //console.log("-[",sheetName,"]:");
                 var cfg:Object = getClazzBySheetName(sheetName);
                 for (var key:String in sheetDicRes)
                 {

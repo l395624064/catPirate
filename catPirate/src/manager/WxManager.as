@@ -27,6 +27,19 @@ public class WxManager {
     private var _layaAppId:String="wx24c7a0688503db70";
     private var _netconfigformId:String="XAZWnd7E7L4wawdD";
 
+    private var _bannerAd:Object;
+    private var _bannerId:String="adunit-bd91e82f214aecc0";
+
+    private var _videoAd:Object;
+    private var _videoId:String="adunit-f845d317f13b5df3";
+
+    private var _screenWidth:int;
+    private var _screenHeight:int;
+
+    private var _onShowHandler:Handler;
+    private var _outTime:Date;
+    private const _stayTime:int=3000;
+
     public function WxManager() {
         init();
     }
@@ -46,13 +59,31 @@ public class WxManager {
         showshareMenu();
         onshareMenu();
         onshow();
+        //onhide();
         console.log("-wx.cloud init over");
+    }
+
+    private function onhide():void
+    {
+        wx.onHide(function () {
+            var date:Date=new Date();
+            //console.log("-onhide",date.getTime());
+        });
     }
 
     private function onshow():void
     {
         wx.onShow(function () {
-            //console.log("-onshow");
+            var date:Date=new Date();
+            if(_onShowHandler && date.getTime()-_outTime.getTime()>=_stayTime){
+                _onShowHandler.run();
+                _onShowHandler=null;
+                _outTime=null;
+            }
+            if(_outTime){
+                //console.log("-onshow",_outTime.getTime(),date.getTime());
+                //console.log("-true _stayTime",_outTime.getTime()-date.getTime());
+            }
             GameSoundManager.onPlayMusic("");
         });
     }
@@ -68,6 +99,7 @@ public class WxManager {
         return _db.collection(name);
     }
 
+    /*
     public function getGameConfig(handler:Handler=null):void
     {
         _db.collection('gameConfig').doc(_netconfigformId).get({
@@ -79,7 +111,7 @@ public class WxManager {
                 console.log("-getGameConfig fail",res);
             }
         });
-    }
+    }*/
 
     public function clodfunc(funcName:String,data:Object,handler:Handler=null):void
     {
@@ -290,12 +322,16 @@ public class WxManager {
 
     public function shareApp(handler:Handler=null,msg:Object=null):void
     {
+        _onShowHandler=handler;
+        _outTime=new Date();
+
         wx.shareAppMessage({
             title: '来跟柴柴一起钓鱼吧',
             imageUrl:"https://img.catqu.com/images/2018/11/27/7ffd2f18e62eac39f153ea6c9478aaf2.png",
             complete:function (res) {
                 //真机可用
                 //GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:3}]);
+                console.log("-share complete");
                 if(handler){
                     if(msg){
                         handler.runWith(msg);
@@ -428,8 +464,159 @@ public class WxManager {
         Laya.stage.removeChild(_canvasSp);
     }
 
+    public function getSystemInfo():void
+    {
+        wx.getSystemInfo({
+            success:function (res) {
+                //console.log("-pixelRatio:",res.pixelRatio);
+                console.log("-screenWidth or screenHeight:",res.screenWidth,res.screenHeight);
+                _screenWidth=res.screenWidth;
+                _screenHeight=res.screenHeight;
+                //console.log("-windowWidth or windowHeight:",res.windowWidth,res.windowHeight);
+            }
+        });
+    }
 
 
+    public function createBannerAd():void
+    {
+        const _width:int=300;
+        const _height:int=105;
+        if(_bannerAd){
+            showBannerAd();
+            return;
+        }
+        _bannerAd=wx.createBannerAd({
+            adUnitId:_bannerId,
+            style: {
+                left: Math.floor((_screenWidth-_width)/2),
+                top: _screenHeight-_height,
+                width: _width
+            }
+        });
+        _bannerAd.onError(bannerAdError);
+        _bannerAd.onLoad(bannerAdComplete);
+    }
+    private function bannerAdError(res):void
+    {
+        WxManager.instance.hideBannerAd();
+        if(res.errCode==1000){
+            console.log("-bannerAd  Error:1000 后端接口调用失败");
+        }
+        else if(res.errCode==1001){
+            console.log("-bannerAd  Error:1001 参数错误");
+        }
+        else if(res.errCode==1002){
+            console.log("-bannerAd  Error:1002 广告单元无效");
+        }
+        else if(res.errCode==1003){
+            console.log("-bannerAd  Error:1003 内部错误");
+        }
+        else if(res.errCode==1004){
+            console.log("-bannerAd  Error:1004 无合适的广告");
+        }
+        else if(res.errCode==1005){
+            console.log("-bannerAd  Error:1005 广告组件审核中");
+        }
+        else if(res.errCode==1006){
+            console.log("-bannerAd  Error:1006 广告组件被驳回");
+        }
+        else if(res.errCode==1007){
+            console.log("-bannerAd  Error:1007 广告组件被封禁");
+        }
+        else if(res.errCode==1008){
+            console.log("-bannerAd  Error:1008 广告单元已关闭");
+        }
+    }
+    private function bannerAdComplete(res):void
+    {
+        console.log("-bannerAd create complete");
+        //WxManager.instance.showBannerAd();
+    }
+
+    public function showBannerAd():void
+    {
+        _bannerAd.show();
+    }
+    public function hideBannerAd():void
+    {
+        _bannerAd.hide();
+    }
+
+
+
+    public function createVideoAd():void
+    {
+        _videoAd=wx.createRewardedVideoAd({
+            adUnitId:_videoId
+        });
+        _videoAd.onLoad(videoAdComplete);
+        _videoAd.onError(videoAdError);
+        _videoAd.onClose(videoAdOver);
+    }
+    private function videoAdError(res):void
+    {
+        if(res.errCode==1000){
+            console.log("-videoAd  Error:1000 广告单元已关闭");
+        }
+        else if(res.errCode==1001){
+            console.log("-videoAd  Error:1001 参数错误");
+        }
+        else if(res.errCode==1002){
+            console.log("-videoAd  Error:1002 广告单元无效");
+        }
+        else if(res.errCode==1003){
+            console.log("-videoAd  Error:1003 内部错误");
+        }
+        else if(res.errCode==1004){
+            console.log("-videoAd  Error:1004 无合适的广告");
+        }
+        else if(res.errCode==1005){
+            console.log("-videoAd  Error:1005 广告组件审核中");
+        }
+        else if(res.errCode==1006){
+            console.log("-videoAd  Error:1006 广告组件被驳回");
+        }
+        else if(res.errCode==1007){
+            console.log("-videoAd  Error:1007 广告组件被封禁");
+        }
+        else if(res.errCode==1008){
+            console.log("-videoAd  Error:1008 广告单元已关闭");
+        }
+        WxManager.instance.reloadVideoAd();
+    }
+    private function videoAdComplete():void
+    {
+        console.log("-videoAd create complete");
+    }
+    public function reloadVideoAd():void
+    {
+        _videoAd.load();
+    }
+
+    public var _videoCloseHandler:Handler;
+    public function showVideoAd(handler:Handler):void
+    {
+        _videoAd.show();
+        _videoCloseHandler=handler;
+
+        GameSoundManager.setmusicMuted(true);//关闭音乐
+        GameSoundManager.setsoundMuted(true);//关闭音乐
+    }
+
+    private function videoAdOver(res):void
+    {
+        GameSoundManager.setmusicMuted(false);
+        GameSoundManager.setsoundMuted(false);
+        console.log("--videoAdOver:",res);
+        if(res && res.isEnded || res === undefined){
+            // 正常播放结束，可以下发游戏奖励
+            WxManager.instance._videoCloseHandler.run();
+        }else{
+            // 播放中途退出
+        }
+
+    }
 
 }
 }

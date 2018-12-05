@@ -5,6 +5,7 @@ import manager.GameEventDispatch;
 import manager.GameInit;
 import manager.GameSoundManager;
 import manager.UiManager;
+import manager.WxManager;
 
 import model.GamemainM;
 import model.PlayerInfoM;
@@ -32,8 +33,7 @@ public class GamemainC {
 
     private function Gameload():void
     {
-        GameEventDispatch.instance.event(GameEvent.GameSaveInit);//获得存档
-        GameEventDispatch.instance.event(GameEvent.GameNetConfig);//网络配置
+        //save CDN res Ad 由loadview创建
         UiManager.instance.loadView("Loadview", null, 1);
     }
 
@@ -52,12 +52,20 @@ public class GamemainC {
                 UiManager.instance.loadView("Gameguide",null,0,"UITYPE_ANI");
             });
         }
+
+        if(PlayerInfoM.instance.getNetConfigAD()){
+            WxManager.instance.showBannerAd();
+        }
     }
 
 
     private function GameReady():void
     {
         UiManager.instance.loadView("TimestartAni",null,0,"UITYPE_ANI");
+        //bannerAd
+        if(PlayerInfoM.instance.getNetConfigAD()){
+            WxManager.instance.hideBannerAd();
+        }
     }
     private function GameStart():void
     {

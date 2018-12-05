@@ -79,9 +79,10 @@ public class PlayerInfoC {
             Laya.timer.clear(this,changeGiftBoxTimeState);
         }
         else if(action=="minus"){
-            var _sharedelay:int=PlayerInfoM.instance.getGiftDelay();
-            _sharedelay-=60;
-            PlayerInfoM.instance.setGiftDelay(_sharedelay);
+            //var _sharedelay:int=PlayerInfoM.instance.getGiftDelay();
+            //_sharedelay-=60;
+            //PlayerInfoM.instance.setGiftDelay(_sharedelay);
+            PlayerInfoM.instance.setGiftDelay(3);
             changeGiftBoxTimeState("update");
         }
     }

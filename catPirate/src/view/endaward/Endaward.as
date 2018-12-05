@@ -21,6 +21,8 @@ public class Endaward extends EndawardUI implements PanelVo{
     public static var _instance:Endaward;
     public static var _maxWeight:Number=0;
 
+    private var _weight:int;
+
     public function Endaward() {
         super();
     }
@@ -37,19 +39,67 @@ public class Endaward extends EndawardUI implements PanelVo{
         backBtn.on(Event.MOUSE_DOWN,this,function () {
             GameEventDispatch.instance.event(GameEvent.GameOver);
         });
-        shareBtn.offAll();
-        shareBtn.on(Event.MOUSE_DOWN,this,function () {
-            WxManager.instance.shareApp();
-            //WxManager.instance.shareApp(Handler.create(this,shareOverAward));
-        })
-
         playerImg.skin = param['img'];
         playerImg.size(105,105);
         _maxWeight=param['maxweight'];
-        playertitle.text=Gamefame.instance.getPlayerTitle(param['weight'],_maxWeight);
-        weightTxt.text=param['weight']+"kg";
+        _weight=param['weight'];
+        playertitle.text=Gamefame.instance.getPlayerTitle(_weight,_maxWeight);
+        weightTxt.text=_weight+"kg";
 
         updatescore(Math.floor(param['weight']));
+
+        if(PlayerInfoM.instance.getNetConfigAD()){
+            videoAdBtn.disabled=false;
+            videoAdBtn.visible=true;
+        }else{
+            videoAdBtn.visible=false;
+        }
+        videoAdBtn.offAll();
+        videoAdBtn.on(Event.MOUSE_DOWN,this,function () {
+            videoAdBtn.disabled=true;
+            WxManager.instance.showVideoAd(Handler.create(this,videoOverAward));//视频-奖励翻倍
+        });
+
+        shareBtn.offAll();
+        shareBtn.on(Event.MOUSE_DOWN,this,function () {
+            WxManager.instance.shareApp();
+        })
+
+        getAward.disabled=false;
+        getAward.offAll();
+        getAward.on(Event.MOUSE_DOWN,this,function () {
+            getAward.disabled=true;
+            getendAward(_weight);
+        });
+    }
+
+    private function getendAward(weight:int):void
+    {
+        var awardTypeArr:Array=[1];
+        var awardNumArr:Array=[weight];
+        var num:int;
+        const plankFloor:int=300;
+        const pearlFloor:int=500;
+        if(weight>=plankFloor){
+            awardTypeArr.push(2);
+            num=Math.ceil(weight-plankFloor);
+            awardNumArr.push(num);
+        }
+        if(weight>=pearlFloor){
+            awardTypeArr.push(3);
+            num=Math.ceil(weight/100);
+            awardNumArr.push(num);
+        }
+        var gainD:GainnewD=new GainnewD();
+        gainD.award_type=awardTypeArr;
+        gainD.award_num=awardNumArr;
+        GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+    }
+
+    private function videoOverAward():void
+    {
+        var doubleWeight:int=_weight*2;
+        getendAward(doubleWeight);
     }
 
     private function updatescore(score:int):void

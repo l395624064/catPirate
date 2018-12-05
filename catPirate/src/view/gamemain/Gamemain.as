@@ -70,6 +70,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
     private const maxFishhook:int=500;
 
     private var _gamemode:String="normal";
+    private var _roleSk:SimpleRole;
 
     public function Gamemain() {
         super();
@@ -95,11 +96,19 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
         GameEventDispatch.instance.event(GameEvent.ShipSlotInit);
 
-        //test creatRole
+        //test img creatRole
+        /*
         var roleDate:ShipRoleD=new ShipRoleD();
         roleDate.skin="ui/common/captain_1.png";
         roleDate.job="captain";
         GameEventDispatch.instance.event(GameEvent.CreatShipRole,[roleDate]);
+        */
+
+        //db role
+        _roleSk=new SimpleRole();
+        captainsk.load("DB/DB_dog/dog.sk",Handler.create(this,function () {
+            _roleSk.init("captain",captainsk);
+        }))
     }
 
 
@@ -226,10 +235,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
         if(!canDropMatch) return;
         if(e)e.stopPropagation();
         changeDropFishBoxState("start");
-        Laya.stage.offAll();
-        Laya.stage.once(Event.MOUSE_DOWN,this,function () {
-            changeDropFishBoxState("stop");
-        });
     }
 
     //刷新鱼
@@ -295,13 +300,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 e.stopPropagation();
                 changeDropFishBoxState("start");
                 GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
-                Laya.stage.offAll();
-                Laya.stage.once(Event.MOUSE_DOWN,this,function (e:Event) {
-                    GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
-                    e.stopPropagation();
-                    changeDropFishBoxState("stop");
-                    //GameEventDispatch.instance.event(GameEvent.GameReady);
-                })
             });
         }
         else if(_gamemode=="match"){
@@ -343,45 +341,62 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
+    private function overAni():void
+    {
+        fishhookImg.x=minFishhook;
+        fishhookImg.visible=true;//normal mode
+        drawFishline("start");
+        changeFishhookTime("start");
+
+        if(_gamemode=="normal"){
+            Laya.stage.offAll();
+            Laya.stage.once(Event.MOUSE_DOWN,this,function (e:Event) {
+                GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
+                e.stopPropagation();
+                changeDropFishBoxState("stop");
+                //GameEventDispatch.instance.event(GameEvent.GameReady);
+            })
+        }
+        else if(_gamemode=="boss" || _gamemode=="match"){
+            Laya.stage.offAll();
+            Laya.stage.once(Event.MOUSE_DOWN,this,function () {
+                changeDropFishBoxState("stop");
+            });
+        }
+    }
 
     //鱼钩box状态
     private function changeDropFishBoxState(action:String):void
     {
+        const delayTime:int=500;
         if(action=="start"){
-            if(_gamemode=="normal"){
-                fishhookImg.x=minFishhook;
-                fishhookImg.visible=true;//normal mode
+            _roleSk.skplay("shuai");//sk
 
+            if(_gamemode=="normal"){
                 dropFishBox.visible=true;
                 canDrop=false;
 
                 getColorImg();
-                drawFishline("start");
 
-                changeFishhookTime("start");
+                Laya.timer.clear(this,overAni);
+                Laya.timer.once(delayTime,this,overAni);
             }
             else if(_gamemode=="match"){
-                //角色鱼钩动画
-                fishhookImg.x=minFishhook;
-                fishhookImg.visible=true;
                 canDropMatch=false;//关闭
-                drawFishline("start");//鱼线动画
-                changeFishhookTime("start");
+
+                Laya.timer.clear(this,overAni);
+                Laya.timer.once(delayTime,this,overAni);
             }
             else if(_gamemode=="boss"){
                 //fishhook 降速
+                Laya.timer.clear(this,overAni);
+                Laya.timer.once(delayTime,this,overAni);
+
                 changeEffectAniState("refresh","open");
                 refreshAni.on(Event.COMPLETE,this,function () {
-                    fishhookImg.x=minFishhook;
-                    fishhookImg.visible=true;
-
                     changeEffectAniState("refresh","close");
                     canDropMatch=false;//关闭
-
-                    drawFishline("start");//刷新动画后 开启鱼线动画
                     getFishImg();//刷新动画后更新 fishhookImg
-
-                    changeFishhookTime("start");
                 });
             }
 
@@ -395,6 +410,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
                 refreshFish();
             }
             else if(_gamemode=="boss"){
+                _roleSk.skplay("surprised");//sk ani
+
                 fishhookImg.visible=false;//收杆
                 changeFishhookTime("over");
                 refreshFish();
@@ -404,9 +421,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
         }
 
         else if(action=="stop"){
+            _roleSk.skplay("shou");//sk ani
+
             if(_gamemode=="normal"){
                 fishhookImg.visible=false;
-                //动画播放完毕后重置canDrop=true
                 drapNormal();
                 changeFishhookTime("over");
             }
@@ -426,7 +444,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
     {
         if(action=="start"){
             changeFishhookState("rightMove");
-
             Laya.timer.frameLoop(1,this,fishhookMove);
         }
         else if(action=="over"){
@@ -632,6 +649,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
             changeBossPowerState("over");
             changeBossMarkState("over");
+
+            _roleSk.skplay("shock");//sk
             return;
         }
         changeBossMarkState("close");
@@ -998,12 +1017,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
             _fishlineSp||=new Sprite();
             this.addChild(_fishlineSp);
-
             Laya.timer.frameLoop(1,this,onfishLineTime);
         }
         else if(action=="over"){
             _hookState="fishover";
-
             //收竿
             var hookPot:Point=new Point(fishhookImg.x,fishhookImg.y-fishhookImg.height/2);
             hookPot=dropFishBox.localToGlobal(hookPot);
@@ -1013,6 +1030,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
             this.addChild(_hookImgANI);
             Tween.to(_hookImgANI,{x:GameConfig.width/2,y:GameConfig.height/2},300,null,Handler.create(this,function(){
                 canDropMatch=true;//收杆动作结束后，再重置 canDropMatch
+                //canDrop=true;
                 drawFishline("clear");
             }));
         }
@@ -1022,14 +1040,19 @@ public class Gamemain extends GameMainUI implements PanelVo {
             Laya.timer.clear(this,onfishLineTime);
         }
     }
+
+    private var _lineHeaddx:int;
+    private var _lineHeaddy:int;
     private function onfishLineTime():void
     {
         var rodPot:Point;
         if(_hookState=="fishstart"){
             _fishlineSp.graphics.clear();
-            rodPot=new Point(captainImg.x-50,captainImg.y-20);
+            rodPot=new Point(captainImg.x-80,captainImg.y-10);
             rodPot=shipBox.localToGlobal(rodPot);
             rodPot=this.globalToLocal(rodPot);
+            _lineHeaddx=rodPot.x;
+            _lineHeaddy=rodPot.y;
             var hookPot:Point=new Point(fishhookImg.x,fishhookImg.y-fishhookImg.height/2);
             hookPot=dropFishBox.localToGlobal(hookPot);
             hookPot=this.globalToLocal(hookPot);
@@ -1037,10 +1060,16 @@ public class Gamemain extends GameMainUI implements PanelVo {
         }
         else if(_hookState=="fishover"){
             _fishlineSp.graphics.clear();
-            rodPot=new Point(captainImg.x-50,captainImg.y-20);
+            rodPot=new Point(captainImg.x-80,captainImg.y-10);
             rodPot=shipBox.localToGlobal(rodPot);
             rodPot=this.globalToLocal(rodPot);
-            _fishlineSp.graphics.drawLine(rodPot.x,rodPot.y,_hookImgANI.x,_hookImgANI.y,"#ff0000");
+            _lineHeaddx+=2;
+            _lineHeaddy-=2;
+//            if(_lineHeaddx>=rodPot.x+8){
+//                _lineHeaddx-=1.5;
+//                _lineHeaddy-=1.5;
+//            }
+            _fishlineSp.graphics.drawLine(_lineHeaddx,_lineHeaddy,_hookImgANI.x,_hookImgANI.y,"#ff0000");
         }
     }
 

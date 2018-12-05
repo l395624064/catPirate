@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":360,
-    "selecteID":371,
+    "selectedBox":3,
+    "selecteID":8,
     "props":{"width":640,"sceneColor":"#999999","mouseThrough":true,"height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -18,13 +18,14 @@
             "props":{"y":0,"x":0,"width":640,"visible":false,"var":"guideTip","height":1136},
             "nodeParent":1,
             "label":"Box(guideTip)",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":3,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136},
                     "nodeParent":3,
@@ -40,6 +41,7 @@
                     "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":515,"x":66,"width":498,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":196},
                     "nodeParent":3,
@@ -52,6 +54,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Text",
                     "props":{"y":566,"x":227,"wordWrap":true,"width":305,"text":"进入新手引导,可以获得礼包嚯!","strokeColor":"#a43c6d","stroke":6,"height":67,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                     "nodeParent":3,
@@ -65,6 +68,7 @@
                     "$LOCKED":false
                 },
                 {
+                    "x":30,
                     "type":"Button",
                     "props":{"y":626,"x":246,"width":94,"var":"confirmBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"进入","hitTestPrior":true,"height":65},
                     "nodeParent":3,
@@ -78,6 +82,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Button",
                     "props":{"y":626,"x":421,"width":97,"var":"cancelBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"取消","hitTestPrior":true,"height":65},
                     "nodeParent":3,
@@ -91,6 +96,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "props":{"y":569,"x":90,"width":119,"skin":"ui/common_img/role3.png","height":116},
                     "nodeParent":3,
@@ -103,7 +109,7 @@
                         ]
                 }],
             "$LOCKED":true,
-            "$HIDDEN":true
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -3266,7 +3272,7 @@
                     "$HIDDEN":true
                 }],
             "$LOCKED":true,
-            "$HIDDEN":false
+            "$HIDDEN":true
         }],
     "animations":[
         {

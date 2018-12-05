@@ -1,4 +1,5 @@
 package view.gameshop {
+import data.GainnewD;
 import data.TipsD;
 
 import laya.display.Text;
@@ -14,6 +15,7 @@ import manager.GameEventDispatch;
 import manager.GameSoundManager;
 
 import manager.UiManager;
+import manager.WxManager;
 
 import model.FishM;
 import model.PlayerInfoM;
@@ -27,6 +29,9 @@ import view.PanelVo;
 
 public class Gameshop extends GameShopUI implements PanelVo{
     public static var _instance:Gameshop;
+
+    public var _videoAwardObj:Object;
+
     public function Gameshop() {
         super();
     }
@@ -177,8 +182,8 @@ public class Gameshop extends GameShopUI implements PanelVo{
                 return;
             }
 
-            /*
-            ele_free_btn.visible=true;
+            ele_free_btn.labelSize=18;
+            ele_free_btn.label="免费金币";
             ele_free_btn.offAll();
             ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
                 e.stopPropagation();
@@ -186,13 +191,37 @@ public class Gameshop extends GameShopUI implements PanelVo{
                 UiManager.instance.loadView("Timegift",null,0,"UITYPE_NORMAL");
                 //console.log("-get AD video");
             });
-            */
 
             ele_lvup_btn.visible=true;
             ele_lvup_btn.label="升级";
         }
-        else if(config.shopId==1002||config.shopId==1003){
-            //ele_free_btn.visible=false;
+        else if(config.shopId==1002 || config.shopId==1003){
+            if(config.shopId==1002){
+                if(PlayerInfoM.instance.getNetConfigShare()){
+                    ele_free_btn.labelSize=12;
+                    ele_free_btn.label="看视频免费领";
+                    ele_free_btn.visible=true;//AD免费获得
+                }else{
+                    ele_free_btn.visible=false;
+                }
+                ele_free_btn.offAll();
+                ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
+                    e.stopPropagation();
+                    _videoAwardObj=config;
+                    WxManager.instance.showVideoAd(Handler.create(this,videoOverAward));//视频-购买装备
+                });
+            }
+            else if(config.shopId==1003){
+                ele_free_btn.labelSize=18;
+                ele_free_btn.label="更多珍珠";
+                ele_free_btn.offAll();
+                ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
+                    e.stopPropagation();
+                    UiManager.instance.closePanel("Gameshop");
+                    UiManager.instance.loadView("Luckwheel",null,0,"UITYPE_NORMAL");
+                });
+            }
+
 
             ele_lvup_btn.visible=true;
             ele_lvup_btn.label="购买";
@@ -205,6 +234,9 @@ public class Gameshop extends GameShopUI implements PanelVo{
                 })
                 return;
             }
+        }
+        else if(config.shopId==1004){
+
         }
 
 
@@ -259,6 +291,20 @@ public class Gameshop extends GameShopUI implements PanelVo{
         PlayerInfoM.instance.addshopOwn(param.id);
         shoplist.array=ShopM.instance.getShoplist(2);
         shoplist.refresh();
+    }
+
+    private function videoOverAward():void
+    {
+        if(_videoAwardObj){
+            var gainD:GainnewD=new GainnewD();
+            gainD.res=_videoAwardObj.res;
+            gainD.name=_videoAwardObj.name;
+            gainD.explain_content=_videoAwardObj.explain_content;
+            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+
+            shiprefitBuySucceed(_videoAwardObj);
+            _videoAwardObj=null;
+        }
     }
 
 

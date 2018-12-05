@@ -80,10 +80,11 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
             GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
         });
 
-        shareBtn.offAll();
-        shareBtn.on(Event.MOUSE_DOWN,this,function () {
-            WxManager.instance.shareApp();
-            //WxManager.instance.shareApp(Handler.create(this,shareOverAward));
+        if(PlayerInfoM.instance.getNetConfigAD()) videoAdBtn.visible=true;
+        else videoAdBtn.visible=false;
+        videoAdBtn.offAll();
+        videoAdBtn.on(Event.MOUSE_DOWN,this,function () {
+            WxManager.instance.showVideoAd(Handler.create(this,videoOverAward));//视频-加次数
         });
 
         explainBtn.offAll();
@@ -96,7 +97,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
         });
     }
 
-    private function shareOverAward():void
+    private function videoOverAward():void
     {
         GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:13}]);
         GameEventDispatch.instance.event(GameEvent.ADDwheelNumFromShare);
@@ -205,7 +206,7 @@ public class Luckwheel extends LuckwheelUI implements PanelVo{
     private function setPopArr():void
     {
         if(GamemainM.instance.getGuideIng()){
-            popArr=[1,1,1];
+            popArr=[0,0,0];
         }else{
             popArr=[];
             var num:int;

@@ -392,17 +392,18 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":745,"x":354,"width":149,"visible":false,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":28,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","height":100},
+                    "props":{"y":745,"x":354,"width":149,"var":"videoAdBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","labelStrokeColor":"#393838","labelStroke":7,"labelSize":20,"labelFont":"SimHei","labelColors":"#ffffff","label":"看视频/免费转","height":100},
                     "nodeParent":3,
-                    "label":"Button(shareBtn)",
+                    "label":"Button(videoAdBtn)",
+                    "isOpen":true,
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":50,
                     "child":[
                         ],
-                    "$LOCKED":true,
-                    "$HIDDEN":true
+                    "$LOCKED":false,
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
