@@ -1,7 +1,6 @@
 {
-    "x":0,
     "type":"View",
-    "selectedBox":3,
+    "selectedBox":1,
     "selecteID":31,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
@@ -13,7 +12,6 @@
     "compId":1,
     "child":[
         {
-            "x":15,
             "type":"Image",
             "props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0},
             "nodeParent":1,
@@ -28,7 +26,6 @@
             "$HIDDEN":false
         },
         {
-            "x":15,
             "type":"Box",
             "props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},
             "nodeParent":1,
@@ -40,7 +37,6 @@
             "compId":3,
             "child":[
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":542,"x":322,"scaleY":1,"scaleX":1,"centerY":-23,"centerX":0,"anchorY":0.5,"anchorX":0.5,"alpha":1},
                     "nodeParent":3,
@@ -52,7 +48,6 @@
                     "compId":29,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"width":452,"skin":"ui/common_ex/endtitle.png","height":416},
                             "nodeParent":29,
@@ -65,7 +60,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "props":{"y":95,"x":101,"width":123,"text":"称号:","strokeColor":"#224882","stroke":10,"rotation":-7,"height":50,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},
                             "nodeParent":29,
@@ -78,7 +72,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "props":{"y":157,"x":121,"wordWrap":true,"width":123,"var":"playertitle","text":"钓鱼大师","strokeColor":"#224882","stroke":10,"rotation":-7,"padding":"20,10,10,10","leading":20,"height":166,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                             "nodeParent":29,
@@ -91,7 +84,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"y":154,"x":261,"width":110,"var":"playerImg","skin":"ui/common_ex/ico1.png","skewX":0,"rotation":-8,"height":110},
                             "nodeParent":29,
@@ -106,19 +98,17 @@
                     "$LOCKED":true
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "props":{"y":741,"x":149,"centerY":210,"centerX":1,"alpha":1},
                     "nodeParent":3,
                     "label":"Box",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":30,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "props":{"width":407,"skin":"ui/common_ex/d.png","sizeGrid":"27,24,38,22","height":72},
                             "nodeParent":30,
@@ -131,7 +121,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "props":{"y":10,"x":36,"width":174,"text":"总重量:","strokeColor":"#f90a06","stroke":10,"rotation":0,"height":51,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},
                             "nodeParent":30,
@@ -144,7 +133,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "props":{"y":12,"x":231,"width":172,"var":"weightTxt","text":"125kg","strokeColor":"#f90a06","stroke":10,"rotation":0,"height":54,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},
                             "nodeParent":30,
@@ -160,21 +148,21 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Button",
-                    "props":{"y":929,"x":233,"width":178,"var":"getAward","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#ffffff","label":"领取奖励","hitTestPrior":true,"height":72,"alpha":1},
+                    "props":{"y":930,"x":241,"width":178,"visible":false,"var":"getAward","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#ffffff","label":"领取奖励","hitTestPrior":true,"height":72,"alpha":1},
                     "nodeParent":3,
                     "label":"Button(getAward)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":31,
                     "child":[
-                        ]
+                        ],
+                    "$LOCKED":true,
+                    "$HIDDEN":true
                 },
                 {
-                    "x":30,
                     "type":"Button",
                     "props":{"y":837,"x":133,"width":178,"var":"videoAdBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#000000","labelStroke":2,"labelSize":35,"labelFont":"SimHei","labelColors":"#ffffff","label":"奖励翻倍","hitTestPrior":true,"height":72,"alpha":1},
                     "nodeParent":3,
@@ -213,9 +201,8 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Button",
-                    "props":{"y":995,"x":233,"width":179,"var":"backBtn","stateNum":"1","skin":"ui/common_ex/btn_s_g.png","sizeGrid":"23,24,25,28","labelStrokeColor":"#ffffff","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#fb0905","label":"返回","hitTestPrior":true,"height":73},
+                    "props":{"y":930,"x":242,"width":179,"var":"backBtn","stateNum":"1","skin":"ui/common_ex/btn_s_g.png","sizeGrid":"23,24,25,28","labelStrokeColor":"#ffffff","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#fb0905","label":"返回","hitTestPrior":true,"height":73},
                     "nodeParent":3,
                     "label":"Button(backBtn)",
                     "isDirectory":false,
@@ -226,7 +213,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Button",
                     "props":{"y":838,"x":335,"width":178,"var":"shareBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#000000","labelStroke":2,"labelSize":35,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","hitTestPrior":true,"height":72,"alpha":1},
                     "nodeParent":3,
@@ -961,7 +947,7 @@
                                 "index":18
                             },
                             {
-                                "value":979,
+                                "value":911,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":36,
@@ -970,7 +956,7 @@
                                 "index":26
                             },
                             {
-                                "value":991,
+                                "value":926,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":36,

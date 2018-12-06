@@ -66,7 +66,7 @@ public class Gameend extends GameendUI implements PanelVo{
             putFishInBox("start");
             Laya.timer.frameLoop(1,this,onFishTime);
         }else{
-
+            putFishInBox("end");
         }
     }
 
@@ -110,6 +110,10 @@ public class Gameend extends GameendUI implements PanelVo{
                 var param:Object={weight:_totalWeight,maxweight:waterBox.maxWeight};
                 GameEventDispatch.instance.event(GameEvent.GameEndAward,param);
             })
+        }
+        else if(action=="end"){
+            var param:Object={weight:_totalWeight,maxweight:waterBox.maxWeight};
+            GameEventDispatch.instance.event(GameEvent.GameEndAward,param);
         }
     }
 

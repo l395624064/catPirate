@@ -50,7 +50,7 @@ package manager
         //boss coming
         public static const BossComIngMode:String="BossComIngAni";
 
-        public static const ClearClick:String="ClearClick";
+        public static const GameTimeOver:String="GameTimeOver";
 
         //playerInfoC
         public static const ADDwheelNum:String="ADDwheelNum";

@@ -957,7 +957,7 @@
                 {
                     "x":30,
                     "type":"Sprite",
-                    "props":{"y":684,"x":0,"width":640,"var":"dropSp","height":241},
+                    "props":{"y":695,"x":0,"width":640,"var":"dropSp","height":230},
                     "nodeParent":72,
                     "label":"Sprite(dropSp)",
                     "isDirectory":false,

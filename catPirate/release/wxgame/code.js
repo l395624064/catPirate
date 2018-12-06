@@ -775,7 +775,7 @@ var GamemainC=(function(){
 	}
 
 	__proto.GameTimeout=function(){
-		GameEventDispatch.instance.event("ClearClick");
+		GameEventDispatch.instance.event("GameTimeOver");
 		UiManager.instance.loadView("TimeoverAni",null,0,"UITYPE_ANI");
 	}
 
@@ -2120,7 +2120,7 @@ var GameEvent=(function(){
 	GameEvent.ShowRedPoint="ShowRedPoint";
 	GameEvent.RemoveRedPoint="RemoveRedPoint";
 	GameEvent.BossComIngMode="BossComIngAni";
-	GameEvent.ClearClick="ClearClick";
+	GameEvent.GameTimeOver="GameTimeOver";
 	GameEvent.ADDwheelNum="ADDwheelNum";
 	GameEvent.MinuswheelNum="MinuswheelNum";
 	GameEvent.ADDwheelNumFromShare="ADDwheelNumFromShare";
@@ -3822,6 +3822,18 @@ var GamemainM=(function(){
 
 	__proto.clearFishBox=function(){
 		this._fishBoxDic={};
+	}
+
+	__proto.deleteFishBox=function(name){
+		if(this._fishBoxDic.hasOwnProperty(name)){
+			delete this._fishBoxDic[name];
+		}
+	}
+
+	__proto.putOutFishBox=function(name,num){
+		if(this._fishBoxDic.hasOwnProperty(name)){
+			this._fishBoxDic[name]-=num;
+		}
 	}
 
 	__proto.putInFishBox=function(name,num){
@@ -52288,7 +52300,7 @@ var EndawardUI=(function(_super){
 		this.createView(EndawardUI.uiView);
 	}
 
-	EndawardUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},"child":[{"type":"Box","props":{"y":542,"x":322,"scaleY":1,"scaleX":1,"centerY":-23,"centerX":0,"anchorY":0.5,"anchorX":0.5,"alpha":1},"compId":29,"child":[{"type":"Image","props":{"width":452,"skin":"ui/common_ex/endtitle.png","height":416}},{"type":"Label","props":{"y":95,"x":101,"width":123,"text":"称号:","strokeColor":"#224882","stroke":10,"rotation":-7,"height":50,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Label","props":{"y":157,"x":121,"wordWrap":true,"width":123,"var":"playertitle","text":"钓鱼大师","strokeColor":"#224882","stroke":10,"rotation":-7,"padding":"20,10,10,10","leading":20,"height":166,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},"compId":24},{"type":"Image","props":{"y":154,"x":261,"width":110,"var":"playerImg","skin":"ui/common_ex/ico1.png","skewX":0,"rotation":-8,"height":110},"compId":27}]},{"type":"Box","props":{"y":741,"x":149,"centerY":210,"centerX":1,"alpha":1},"compId":30,"child":[{"type":"Image","props":{"width":407,"skin":"ui/common_ex/d.png","sizeGrid":"27,24,38,22","height":72}},{"type":"Label","props":{"y":10,"x":36,"width":174,"text":"总重量:","strokeColor":"#f90a06","stroke":10,"rotation":0,"height":51,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Label","props":{"y":12,"x":231,"width":172,"var":"weightTxt","text":"125kg","strokeColor":"#f90a06","stroke":10,"rotation":0,"height":54,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},"compId":26}]},{"type":"Button","props":{"y":929,"x":233,"width":178,"var":"getAward","stateNum":1,"skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#ffffff","label":"领取奖励","hitTestPrior":true,"height":72,"alpha":1},"compId":31},{"type":"Button","props":{"y":837,"x":133,"width":178,"var":"videoAdBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#000000","labelStroke":2,"labelSize":35,"labelFont":"SimHei","labelColors":"#ffffff","label":"奖励翻倍","hitTestPrior":true,"height":72,"alpha":1},"compId":33,"child":[{"type":"Image","props":{"y":14,"x":-77,"width":69,"skin":"ui/common_ex/video-2.png","height":43}},{"type":"Text","props":{"y":66,"x":-8,"wordWrap":true,"width":194,"text":"观看视频广告/奖励翻倍","strokeColor":"#224882","stroke":5,"height":19,"fontSize":15,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}}]},{"type":"Button","props":{"y":995,"x":233,"width":179,"var":"backBtn","stateNum":1,"skin":"ui/common_ex/btn_s_g.png","sizeGrid":"23,24,25,28","labelStrokeColor":"#ffffff","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#fb0905","label":"返回","hitTestPrior":true,"height":73},"compId":36},{"type":"Button","props":{"y":838,"x":335,"width":178,"var":"shareBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#000000","labelStroke":2,"labelSize":35,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","hitTestPrior":true,"height":72,"alpha":1},"compId":38}]}],"animations":[{"nodes":[{"target":30,"keyframes":{"x":[{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"x","index":0},{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"key":"x","index":5},{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"x","index":11},{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"x","index":13}],"centerY":[{"value":600,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerY","index":0},{"value":600,"tweenMethod":"linearNone","tween":true,"target":30,"key":"centerY","index":5},{"value":190,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerY","index":11},{"value":210,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerY","index":13}],"centerX":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"key":"centerX","index":5},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerX","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerX","index":13}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":30,"key":"alpha","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"key":"alpha","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"alpha","index":13}]}},{"target":29,"keyframes":{"x":[{"value":322,"tweenMethod":"linearNone","tween":true,"target":29,"key":"x","index":0},{"value":322,"tweenMethod":"linearNone","tween":true,"target":29,"key":"x","index":6},{"value":322,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"x","index":8}],"scaleY":[{"value":5,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleY","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleY","index":6},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"scaleY","index":8}],"scaleX":[{"value":5,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleX","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleX","index":6},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"scaleX","index":8}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":29,"key":"alpha","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"key":"alpha","index":6},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"alpha","index":8}]}},{"target":26,"keyframes":{"x":[{"value":240,"tweenMethod":"linearNone","tween":true,"target":26,"key":"x","index":0},{"value":231,"tweenMethod":"linearNone","tween":true,"target":26,"key":"x","index":20}],"width":[{"value":135,"tweenMethod":"linearNone","tween":true,"target":26,"key":"width","index":0},{"value":172,"tweenMethod":"linearNone","tween":true,"target":26,"key":"width","index":20}],"var":[{"value":"weightTxt","tweenMethod":"linearNone","tween":false,"target":26,"key":"var","index":0},{"value":"weightTxt","tweenMethod":"linearNone","tween":false,"target":26,"key":"var","index":20}],"height":[{"value":60,"tweenMethod":"linearNone","tween":true,"target":26,"key":"height","index":0},{"value":54,"tweenMethod":"linearNone","tween":true,"target":26,"key":"height","index":20}]}},{"target":27,"keyframes":{"var":[{"value":"playerImg","tweenMethod":"linearNone","tween":false,"target":27,"key":"var","index":0},{"value":"playerImg","tweenMethod":"linearNone","tween":false,"target":27,"key":"var","index":20}]}},{"target":24,"keyframes":{"var":[{"value":"playertitle","tweenMethod":"linearNone","tween":false,"target":24,"key":"var","index":0},{"value":"playertitle","tweenMethod":"linearNone","tween":false,"target":24,"key":"var","index":20}]}},{"target":33,"keyframes":{"y":[{"value":883,"tweenMethod":"linearNone","tween":true,"target":33,"key":"y","index":0},{"value":883,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"y","index":18},{"value":821,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"y","index":21},{"value":833,"tweenMethod":"linearNone","tween":true,"target":33,"key":"y","index":24}],"x":[{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"key":"x","index":0},{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"x","index":18},{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"x","index":21},{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"key":"x","index":24}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":33,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"alpha","index":21},{"value":1,"tweenMethod":"linearNone","tween":true,"target":33,"key":"alpha","index":24}]}},{"target":38,"keyframes":{"y":[{"value":884,"tweenMethod":"linearNone","tween":true,"target":38,"key":"y","index":0},{"value":884,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"y","index":18},{"value":822,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"y","index":22},{"value":834,"tweenMethod":"linearNone","tween":true,"target":38,"key":"y","index":25}],"x":[{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"key":"x","index":0},{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"x","index":18},{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"x","index":22},{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"key":"x","index":25}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":38,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"alpha","index":22},{"value":1,"tweenMethod":"linearNone","tween":true,"target":38,"key":"alpha","index":25}]}},{"target":31,"keyframes":{"y":[{"value":975,"tweenMethod":"linearNone","tween":true,"target":31,"key":"y","index":0},{"value":975,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"y","index":18},{"value":913,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"y","index":25},{"value":925,"tweenMethod":"linearNone","tween":true,"target":31,"key":"y","index":28}],"x":[{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"key":"x","index":0},{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"x","index":18},{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"x","index":25},{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"key":"x","index":28}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":31,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"alpha","index":25},{"value":1,"tweenMethod":"linearNone","tween":true,"target":31,"key":"alpha","index":28}]}},{"target":36,"keyframes":{"y":[{"value":1041,"tweenMethod":"linearNone","tween":true,"target":36,"key":"y","index":0},{"value":1041,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"y","index":18},{"value":979,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"y","index":26},{"value":991,"tweenMethod":"linearNone","tween":true,"target":36,"key":"y","index":29}],"x":[{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"key":"x","index":0},{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"x","index":18},{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"x","index":26},{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"key":"x","index":29}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":36,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"alpha","index":26},{"value":1,"tweenMethod":"linearNone","tween":true,"target":36,"key":"alpha","index":29}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
+	EndawardUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","height":1136,"centerY":0,"centerX":0},"child":[{"type":"Box","props":{"y":542,"x":322,"scaleY":1,"scaleX":1,"centerY":-23,"centerX":0,"anchorY":0.5,"anchorX":0.5,"alpha":1},"compId":29,"child":[{"type":"Image","props":{"width":452,"skin":"ui/common_ex/endtitle.png","height":416}},{"type":"Label","props":{"y":95,"x":101,"width":123,"text":"称号:","strokeColor":"#224882","stroke":10,"rotation":-7,"height":50,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Label","props":{"y":157,"x":121,"wordWrap":true,"width":123,"var":"playertitle","text":"钓鱼大师","strokeColor":"#224882","stroke":10,"rotation":-7,"padding":"20,10,10,10","leading":20,"height":166,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},"compId":24},{"type":"Image","props":{"y":154,"x":261,"width":110,"var":"playerImg","skin":"ui/common_ex/ico1.png","skewX":0,"rotation":-8,"height":110},"compId":27}]},{"type":"Box","props":{"y":741,"x":149,"centerY":210,"centerX":1,"alpha":1},"compId":30,"child":[{"type":"Image","props":{"width":407,"skin":"ui/common_ex/d.png","sizeGrid":"27,24,38,22","height":72}},{"type":"Label","props":{"y":10,"x":36,"width":174,"text":"总重量:","strokeColor":"#f90a06","stroke":10,"rotation":0,"height":51,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"Label","props":{"y":12,"x":231,"width":172,"var":"weightTxt","text":"125kg","strokeColor":"#f90a06","stroke":10,"rotation":0,"height":54,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true},"compId":26}]},{"type":"Button","props":{"y":930,"x":241,"width":178,"visible":false,"var":"getAward","stateNum":1,"skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#ffffff","label":"领取奖励","hitTestPrior":true,"height":72,"alpha":1},"compId":31},{"type":"Button","props":{"y":837,"x":133,"width":178,"var":"videoAdBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#000000","labelStroke":2,"labelSize":35,"labelFont":"SimHei","labelColors":"#ffffff","label":"奖励翻倍","hitTestPrior":true,"height":72,"alpha":1},"compId":33,"child":[{"type":"Image","props":{"y":14,"x":-77,"width":69,"skin":"ui/common_ex/video-2.png","height":43}},{"type":"Text","props":{"y":66,"x":-8,"wordWrap":true,"width":194,"text":"观看视频广告/奖励翻倍","strokeColor":"#224882","stroke":5,"height":19,"fontSize":15,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}}]},{"type":"Button","props":{"y":930,"x":242,"width":179,"var":"backBtn","stateNum":1,"skin":"ui/common_ex/btn_s_g.png","sizeGrid":"23,24,25,28","labelStrokeColor":"#ffffff","labelStroke":2,"labelSize":35,"labelPadding":"0,0,0,5","labelFont":"SimHei","labelColors":"#fb0905","label":"返回","hitTestPrior":true,"height":73},"compId":36},{"type":"Button","props":{"y":838,"x":335,"width":178,"var":"shareBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,18,21,22","labelStrokeColor":"#000000","labelStroke":2,"labelSize":35,"labelFont":"SimHei","labelColors":"#ffffff","label":"分享好友","hitTestPrior":true,"height":72,"alpha":1},"compId":38}]}],"animations":[{"nodes":[{"target":30,"keyframes":{"x":[{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"x","index":0},{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"key":"x","index":5},{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"x","index":11},{"value":149,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"x","index":13}],"centerY":[{"value":600,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerY","index":0},{"value":600,"tweenMethod":"linearNone","tween":true,"target":30,"key":"centerY","index":5},{"value":190,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerY","index":11},{"value":210,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerY","index":13}],"centerX":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"key":"centerX","index":5},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerX","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"centerX","index":13}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":30,"key":"alpha","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"key":"alpha","index":11},{"value":1,"tweenMethod":"linearNone","tween":true,"target":30,"label":null,"key":"alpha","index":13}]}},{"target":29,"keyframes":{"x":[{"value":322,"tweenMethod":"linearNone","tween":true,"target":29,"key":"x","index":0},{"value":322,"tweenMethod":"linearNone","tween":true,"target":29,"key":"x","index":6},{"value":322,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"x","index":8}],"scaleY":[{"value":5,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleY","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleY","index":6},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"scaleY","index":8}],"scaleX":[{"value":5,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleX","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":29,"key":"scaleX","index":6},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"scaleX","index":8}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":29,"key":"alpha","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"key":"alpha","index":6},{"value":1,"tweenMethod":"linearNone","tween":true,"target":29,"label":null,"key":"alpha","index":8}]}},{"target":26,"keyframes":{"x":[{"value":240,"tweenMethod":"linearNone","tween":true,"target":26,"key":"x","index":0},{"value":231,"tweenMethod":"linearNone","tween":true,"target":26,"key":"x","index":20}],"width":[{"value":135,"tweenMethod":"linearNone","tween":true,"target":26,"key":"width","index":0},{"value":172,"tweenMethod":"linearNone","tween":true,"target":26,"key":"width","index":20}],"var":[{"value":"weightTxt","tweenMethod":"linearNone","tween":false,"target":26,"key":"var","index":0},{"value":"weightTxt","tweenMethod":"linearNone","tween":false,"target":26,"key":"var","index":20}],"height":[{"value":60,"tweenMethod":"linearNone","tween":true,"target":26,"key":"height","index":0},{"value":54,"tweenMethod":"linearNone","tween":true,"target":26,"key":"height","index":20}]}},{"target":27,"keyframes":{"var":[{"value":"playerImg","tweenMethod":"linearNone","tween":false,"target":27,"key":"var","index":0},{"value":"playerImg","tweenMethod":"linearNone","tween":false,"target":27,"key":"var","index":20}]}},{"target":24,"keyframes":{"var":[{"value":"playertitle","tweenMethod":"linearNone","tween":false,"target":24,"key":"var","index":0},{"value":"playertitle","tweenMethod":"linearNone","tween":false,"target":24,"key":"var","index":20}]}},{"target":33,"keyframes":{"y":[{"value":883,"tweenMethod":"linearNone","tween":true,"target":33,"key":"y","index":0},{"value":883,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"y","index":18},{"value":821,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"y","index":21},{"value":833,"tweenMethod":"linearNone","tween":true,"target":33,"key":"y","index":24}],"x":[{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"key":"x","index":0},{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"x","index":18},{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"x","index":21},{"value":133,"tweenMethod":"linearNone","tween":true,"target":33,"key":"x","index":24}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":33,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":33,"label":null,"key":"alpha","index":21},{"value":1,"tweenMethod":"linearNone","tween":true,"target":33,"key":"alpha","index":24}]}},{"target":38,"keyframes":{"y":[{"value":884,"tweenMethod":"linearNone","tween":true,"target":38,"key":"y","index":0},{"value":884,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"y","index":18},{"value":822,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"y","index":22},{"value":834,"tweenMethod":"linearNone","tween":true,"target":38,"key":"y","index":25}],"x":[{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"key":"x","index":0},{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"x","index":18},{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"x","index":22},{"value":335,"tweenMethod":"linearNone","tween":true,"target":38,"key":"x","index":25}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":38,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":38,"label":null,"key":"alpha","index":22},{"value":1,"tweenMethod":"linearNone","tween":true,"target":38,"key":"alpha","index":25}]}},{"target":31,"keyframes":{"y":[{"value":975,"tweenMethod":"linearNone","tween":true,"target":31,"key":"y","index":0},{"value":975,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"y","index":18},{"value":913,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"y","index":25},{"value":925,"tweenMethod":"linearNone","tween":true,"target":31,"key":"y","index":28}],"x":[{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"key":"x","index":0},{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"x","index":18},{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"x","index":25},{"value":233,"tweenMethod":"linearNone","tween":true,"target":31,"key":"x","index":28}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":31,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":31,"label":null,"key":"alpha","index":25},{"value":1,"tweenMethod":"linearNone","tween":true,"target":31,"key":"alpha","index":28}]}},{"target":36,"keyframes":{"y":[{"value":1041,"tweenMethod":"linearNone","tween":true,"target":36,"key":"y","index":0},{"value":1041,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"y","index":18},{"value":911,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"y","index":26},{"value":926,"tweenMethod":"linearNone","tween":true,"target":36,"key":"y","index":29}],"x":[{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"key":"x","index":0},{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"x","index":18},{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"x","index":26},{"value":233,"tweenMethod":"linearNone","tween":true,"target":36,"key":"x","index":29}],"alpha":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":36,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"alpha","index":18},{"value":1,"tweenMethod":"linearNone","tween":true,"target":36,"label":null,"key":"alpha","index":26},{"value":1,"tweenMethod":"linearNone","tween":true,"target":36,"key":"alpha","index":29}]}}],"name":"ani1","id":1,"frameRate":24,"action":0}]};
 	return EndawardUI;
 })(View)
 
@@ -52465,7 +52477,7 @@ var GameMainUI=(function(_super){
 		this.createView(GameMainUI.uiView);
 	}
 
-	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":760,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"visible":false,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}},{"type":"SkeletonPlayer","props":{"y":124,"x":52,"width":42,"var":"captainsk","scaleY":0.6,"scaleX":0.6,"height":30}}]},{"type":"Button","props":{"y":311,"x":229,"width":133,"var":"gameStartBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,16,25,27","labelSize":50,"labelFont":"Microsoft YaHei","height":105},"child":[{"type":"Image","props":{"y":10,"x":41,"width":53,"skin":"ui/gamemain/btn1.png","height":82}}]}]},{"type":"Image","props":{"y":674,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":22,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":209,"x":511,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":73}},{"type":"Button","props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":77}},{"type":"Image","props":{"y":90,"x":58,"width":70,"var":"shareBtn","skin":"ui/common_ex/shareBtn.png","height":74},"child":[{"type":"Text","props":{"y":47,"x":9,"width":43,"text":"分享","strokeColor":"#224882","stroke":5,"name":"giftnum","height":20,"fontSize":18,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}}]},{"type":"AdvImage","props":{"y":91,"x":-29,"width":71,"iconSign":"ADSprite","height":71}}]},{"type":"Box","props":{"y":30,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"visible":false,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65}},{"type":"Button","props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":800,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5}},{"type":"Image","props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":684,"x":0,"width":640,"var":"dropSp","height":241}},{"type":"Image","props":{"x":68,"width":533,"visible":false,"skin":"ui/common_ex/blank.png","height":168,"centerY":472},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":30,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
+	GameMainUI.uiView={"type":"View","props":{"width":640,"height":1136},"child":[{"type":"Image","props":{"width":1080,"var":"bmask","skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","height":2244,"centerY":0,"centerX":0}},{"type":"Box","props":{"width":640,"var":"panelbox","scaleY":1,"scaleX":1,"height":1136,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":0,"width":640,"var":"bgImg","skin":"ui/gamemain/gamemain_0.png","height":1136}},{"type":"Animation","props":{"y":581,"x":346,"width":284,"visible":false,"var":"skystarAni","source":"GameMain_skystar.ani","height":549,"autoPlay":false,"alpha":0.8}},{"type":"Image","props":{"y":821,"x":-34,"width":747,"skin":"ui/gamemain/bowen.png","skewY":0,"skewX":0,"height":322,"alpha":1},"compId":87},{"type":"Box","props":{"y":760,"x":327,"width":584,"var":"shipBox","rotation":0.5,"pivotY":489,"pivotX":293,"height":485},"child":[{"type":"Image","props":{"y":98,"x":458,"width":89,"var":"shipmateImg","height":105}},{"type":"Image","props":{"y":122,"x":392,"width":199,"skin":"ui/shipskin/cabin_1.png","name":"cabin","height":155}},{"type":"Image","props":{"y":-82,"x":100,"width":101,"var":"shipsoldierImg","pivotY":0,"pivotX":0,"height":113}},{"type":"Image","props":{"y":-110,"x":59,"width":198,"skin":"ui/shipskin/tower_1.png","name":"tower","height":376}},{"type":"Image","props":{"y":125,"x":58,"width":97,"var":"shipchefImg","height":117}},{"type":"Sprite","props":{"y":200,"x":61,"width":210,"var":"fishboxsp","height":50}},{"type":"Image","props":{"y":176,"x":8,"width":551,"skin":"ui/shipskin/shipbody_1.png","name":"body","height":260}},{"type":"Image","props":{"y":-14,"x":271,"width":140,"skin":"ui/shipskin/sail_1.png","name":"sail","height":296}},{"type":"Image","props":{"y":171,"x":271,"width":99,"var":"captainImg","height":117},"child":[{"type":"Image","props":{"y":110,"x":10,"width":7,"visible":false,"skin":"ui/gamemain/yg01.png","rotation":-24,"pivotY":149,"pivotX":4,"height":150}},{"type":"SkeletonPlayer","props":{"y":124,"x":52,"width":42,"var":"captainsk","scaleY":0.6,"scaleX":0.6,"height":30}}]},{"type":"Button","props":{"y":311,"x":229,"width":133,"var":"gameStartBtn","stateNum":1,"skin":"ui/common_ex/btn_s_r.png","sizeGrid":"21,16,25,27","labelSize":50,"labelFont":"Microsoft YaHei","height":105},"child":[{"type":"Image","props":{"y":10,"x":41,"width":53,"skin":"ui/gamemain/btn1.png","height":82}}]}]},{"type":"Image","props":{"y":674,"x":-2,"width":640,"skin":"ui/gamemain/water-2.png","height":120},"compId":88},{"type":"Box","props":{"y":18,"x":6,"visible":false},"child":[{"type":"Image","props":{"y":199,"width":76,"var":"mapBtn","skin":"ui/common_ex/mapBtn.png","height":76}},{"type":"Image","props":{"y":97,"x":6,"width":76,"var":"remouldBtn","skin":"ui/common_ex/remouldBtn.png","height":76}},{"type":"Image","props":{"x":4,"width":69,"var":"bookBtn","skin":"ui/common_ex/bookBtn.png","height":76}}]},{"type":"Box","props":{"y":22,"x":492,"width":158,"var":"scoreBox","height":136},"child":[{"type":"Image","props":{"y":30,"x":71,"width":141,"var":"goldScoreImg","skin":"ui/common_ex/goldScore_di.png","scaleY":1,"scaleX":1,"height":61,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"gold_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":95,"x":71,"var":"plankScoreImg","skin":"ui/common_ex/plankScore_di.png","scaleY":1,"scaleX":1,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":16,"x":9,"width":77,"var":"plank_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]},{"type":"Image","props":{"y":157,"x":69,"var":"pearlScoreImg","skin":"ui/common_ex/pearlScore_di.png","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Label","props":{"y":17,"x":9,"width":77,"var":"pearl_txt","text":"0","height":23,"fontSize":23,"color":"#7d632c","bold":true,"align":"left"}}]}]},{"type":"Box","props":{"y":209,"x":511,"var":"rightbtnBox"},"child":[{"type":"Button","props":{"y":9,"x":-33,"width":78,"var":"friendRankBtn","stateNum":1,"skin":"ui/gamemain/btn9.png","labelSize":35,"height":73}},{"type":"Button","props":{"y":5,"x":53,"width":71,"var":"shopBtn","stateNum":1,"skin":"ui/gamemain/btn4.png","labelSize":35,"height":77}},{"type":"Image","props":{"y":90,"x":58,"width":70,"var":"shareBtn","skin":"ui/common_ex/shareBtn.png","height":74},"child":[{"type":"Text","props":{"y":47,"x":9,"width":43,"text":"分享","strokeColor":"#224882","stroke":5,"name":"giftnum","height":20,"fontSize":18,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"}}]},{"type":"AdvImage","props":{"y":91,"x":-29,"width":71,"iconSign":"ADSprite","height":71}}]},{"type":"Box","props":{"y":30,"x":2,"var":"leftbtnBox"},"child":[{"type":"Image","props":{"y":95,"x":8,"width":67,"var":"timegiftBtn","skin":"ui/gamemain/btn6.png","height":74}},{"type":"Image","props":{"y":-4,"x":102,"width":89,"visible":false,"var":"gameboxBtn","skin":"ui/gamemain/btn5.png","height":63}},{"type":"Image","props":{"y":188,"x":5,"width":78,"var":"boxlibsBtn","skin":"ui/gamemain/btn2.png","height":65}},{"type":"Button","props":{"y":268,"x":7,"width":72,"var":"luckwheelBtn","stateNum":1,"skin":"ui/gamemain/btn3b.png","labelSize":35,"height":74}}]},{"type":"Box","props":{"y":110,"x":233,"width":158,"var":"timeBox","height":124},"child":[{"type":"Text","props":{"y":0,"x":21,"width":110,"text":"剩余:","strokeColor":"#224882","stroke":10,"height":47,"fontSize":50,"font":"SimHei","color":"#ffffff","bold":true}},{"type":"FontClip","props":{"y":59,"x":8,"width":146,"var":"timeclip","value":"30","skin":"font/font_3.png","sheet":"0123456789","height":60,"align":"center"}}]},{"type":"Box","props":{"y":800,"x":58,"var":"dropFishBox"},"child":[{"type":"Animation","props":{"y":1,"x":61,"width":150,"visible":false,"var":"floorbarAni","source":"GameMain_floorbar.ani","scaleY":2.5,"scaleX":3,"height":57}},{"type":"Animation","props":{"y":-82,"x":-27,"width":75,"visible":false,"var":"fireAni","source":"GameMain_fire.ani","scaleY":2,"scaleX":2,"height":91,"autoPlay":false}},{"type":"Box","props":{"y":73,"x":52,"width":100,"var":"powerBox","pivotY":51,"pivotX":54,"height":100},"child":[{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di.png","height":100}},{"type":"Box","props":{"y":2,"x":2},"child":[{"type":"Sprite","props":{"y":0,"x":0,"width":97,"var":"powerMaskSp","renderType":"mask","height":97,"endAngle":-220},"child":[{"type":"Pie","props":{"y":49,"x":48,"startAngle":0,"radius":47,"name":"piemask","lineWidth":1,"fillColor":"#ff0000","endAngle":335}}]},{"type":"Image","props":{"y":0,"x":0,"width":97,"skin":"ui/gamemain/sp_ceil.png","height":97}}]},{"type":"Image","props":{"width":100,"skin":"ui/gamemain/sp_di3.png","height":100}}]},{"type":"Image","props":{"y":32,"x":0,"skin":"ui/gamemain/fishscroll.png"}},{"type":"FontClip","props":{"y":0,"x":61,"width":64,"var":"getScoreClip","value":"+1","skin":"font/font_1.png","sheet":"/.+-0123456789枚万亿","height":43,"anchorY":1,"anchorX":0}},{"type":"Image","props":{"y":53,"x":449,"width":50,"visible":false,"var":"bossmarkImg","skin":"ui/gamemain/bjImg.png","height":80,"anchorY":1,"anchorX":0.5}},{"type":"Image","props":{"y":54,"x":500,"width":54,"visible":false,"var":"fishhookImg","skin":"ui/gamemain/fishhook.png","pivotY":54,"pivotX":27,"height":53}},{"type":"Box","props":{"y":51,"x":75,"width":438,"visible":false,"var":"bossPowerBox","height":48},"child":[{"type":"Image","props":{"y":4,"x":10,"width":427,"skin":"ui/gamemain/power3.png","height":39}},{"type":"Image","props":{"y":-3,"x":10,"width":30,"var":"powermask","skin":"ui/gamemain/color_yellow.png","sizeGrid":"29,29,32,29","renderType":"mask","height":52}}]},{"type":"Box","props":{"y":51,"x":75,"width":468,"var":"fishhookMask","height":48},"child":[{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"yellowImg","skin":"ui/gamemain/color_yellow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"width":90,"var":"blueImg","skin":"ui/gamemain/color_blue.png","height":90,"anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"rainbowImg","skin":"ui/gamemain/color_rainbow.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":18,"x":600,"var":"coloursImg","skin":"ui/gamemain/color_colours.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":4,"x":-4,"width":448,"skin":"ui/gamemain/gfer.png","renderType":"mask","height":39}},{"type":"Animation","props":{"y":2,"x":15,"width":419,"visible":false,"var":"refreshAni","source":"GameMain_refreshFish.ani","scaleY":1,"scaleX":1,"height":44,"autoPlay":false}}]},{"type":"Animation","props":{"y":5,"x":-14,"width":137,"var":"getpowerAni","source":"GameMain_getpower.ani","height":140,"autoPlay":false}}]},{"type":"Sprite","props":{"y":695,"x":0,"width":640,"var":"dropSp","height":230}},{"type":"Image","props":{"x":68,"width":533,"visible":false,"skin":"ui/common_ex/blank.png","height":168,"centerY":472},"child":[{"type":"Text","props":{"y":48,"x":131,"width":338,"text":"banner广告位","height":72,"fontSize":50,"font":"SimHei","color":"#ffffff"}}]},{"type":"Image","props":{"y":30,"x":4,"width":78,"var":"settingBtn","skin":"ui/common_ex/settingBtn.png","height":78}}]}],"animations":[{"nodes":[{"target":87,"keyframes":{"y":[{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":0},{"value":815,"tweenMethod":"linearNone","tween":true,"target":87,"key":"y","index":40},{"value":821,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"y","index":80}],"width":[{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":0},{"value":725,"tweenMethod":"linearNone","tween":true,"target":87,"key":"width","index":40},{"value":747,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"width","index":80}],"skewY":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewY","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewY","index":80}],"skewX":[{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"skewX","index":40},{"value":0,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"skewX","index":80}],"alpha":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":0},{"value":0.8,"tweenMethod":"linearNone","tween":true,"target":87,"key":"alpha","index":40},{"value":1,"tweenMethod":"linearNone","tween":true,"target":87,"label":null,"key":"alpha","index":80}]}},{"target":88,"keyframes":{"y":[{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":0},{"value":695,"tweenMethod":"linearNone","tween":true,"target":88,"key":"y","index":40},{"value":703,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"y","index":80}],"x":[{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"key":"x","index":0},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":40},{"value":-2,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"x","index":80}],"height":[{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":0},{"value":128,"tweenMethod":"linearNone","tween":true,"target":88,"key":"height","index":40},{"value":120,"tweenMethod":"linearNone","tween":true,"target":88,"label":null,"key":"height","index":80}]}}],"name":"ani1","id":1,"frameRate":24,"action":2}]};
 	return GameMainUI;
 })(View)
 
@@ -54039,7 +54051,9 @@ var Gameend=(function(_super){
 		if(this._fishMsgArr.length>0){
 			this.putFishInBox("start");
 			Laya.timer.frameLoop(1,this,this.onFishTime);
-		}else{}
+			}else{
+			this.putFishInBox("over");
+		}
 	}
 
 	__proto.sortFishFromWeight=function(fishBox){
@@ -54267,7 +54281,15 @@ var Gameend=(function(_super){
 var Gamemain=(function(_super){
 	function Gamemain(){
 		this.canDrop=false;
-		this.canDropMatch=false;
+		this.aotoDrop=false;
+		//自动甩杆
+		this.bossName=null;
+		this.catchfish=true;
+		//强制收杆
+		this.stopBossAction=false;
+		//时间停止器
+		this.catchBoss=false;
+		//抓住boss
 		this.fishhookPoint=null;
 		this.minFishhook=75;
 		this.maxFishhook=500;
@@ -54383,27 +54405,33 @@ var Gamemain=(function(_super){
 
 	*/
 	__proto.gameMatch=function(){
+		this.stopBossAction=false;
+		this.catchfish=true;
 		this.changeGameMode("match");
 		GamemainM.instance.setTimeClock("start",this.timeclip);
 		this.refreshFish();
 	}
 
 	__proto.gameBoss=function(){
+		this.catchfish=true;
 		this.changeGameMode("boss");
-		this.matchClick(null);
+	}
+
+	//matchClick(null);
+	__proto.gameTimeOver=function(){
+		this.stopBossAction=true;
+		this.clearClick();
 	}
 
 	__proto.clearClick=function(){
-		if(!this.canDropMatch){
-			this.clearfishImgArr();
-			this.changeDropFishBoxState("stop");
-		}
+		this.catchfish=false;
+		this.clearfishImgArr();
+		this.changeDropFishBoxState("stop");
 		this.dropSp.offAll();
 		Laya.stage.offAll();
 	}
 
 	__proto.matchClick=function(e){
-		if(!this.canDropMatch)return;
 		if(e)e.stopPropagation();
 		this.changeDropFishBoxState("start");
 	}
@@ -54473,11 +54501,10 @@ var Gamemain=(function(_super){
 			this.powerBox.visible=true;
 			this.dropFishBox.visible=true;
 			this.bgImg.skin="ui/gamemain/gamemain_0.png";
-			this.canDropMatch=true;
 			this.changeScoreBoxState("update");
 			this.changePowerBox("init");
 			this.dropSp.offAll();
-			this.dropSp.on("mousedown",this,this.matchClick);
+			this.dropSp.once("mousedown",this,this.matchClick);
 		}
 		else if(this._gamemode=="boss"){
 			this.bgImg.skin="ui/gamemain/gamemain_1.png";
@@ -54485,9 +54512,15 @@ var Gamemain=(function(_super){
 			this.dropSp.offAll();
 			this.dropSp.once("mousedown",this,this.matchClick);
 			GameSoundManager.onPlayMusic("boss");
+			this.changeEffectAniState("refresh","open");
+			this.refreshAni.on("complete",this,function(){
+				_$this.changeEffectAniState("refresh","close");
+				_$this.getFishImg();
+			});
 		}
 	}
 
+	//刷新动画后更新 fishhookImg
 	__proto.overAni=function(){
 		var _$this=this;
 		this.fishhookImg.x=this.minFishhook;
@@ -54512,7 +54545,6 @@ var Gamemain=(function(_super){
 
 	//鱼钩box状态
 	__proto.changeDropFishBoxState=function(action){
-		var _$this=this;
 		var delayTime=500;
 		if(action=="start"){
 			this._roleSk.skplay("shuai");
@@ -54524,19 +54556,12 @@ var Gamemain=(function(_super){
 				Laya.timer.once(delayTime,this,this.overAni);
 			}
 			else if(this._gamemode=="match"){
-				this.canDropMatch=false;
 				Laya.timer.clear(this,this.overAni);
 				Laya.timer.once(delayTime,this,this.overAni);
 			}
 			else if(this._gamemode=="boss"){
 				Laya.timer.clear(this,this.overAni);
 				Laya.timer.once(delayTime,this,this.overAni);
-				this.changeEffectAniState("refresh","open");
-				this.refreshAni.on("complete",this,function(){
-					_$this.changeEffectAniState("refresh","close");
-					_$this.canDropMatch=false;
-					_$this.getFishImg();
-				});
 			}
 			this.changeFishhookSpd("init");
 		}
@@ -54545,9 +54570,17 @@ var Gamemain=(function(_super){
 			else if(this._gamemode=="match"){
 				this.overMatchDrap();
 				this.refreshFish();
+				if(this.catchfish){
+					this.changeDropFishBoxState("start");
+				}
 			}
 			else if(this._gamemode=="boss"){
-				this._roleSk.skplay("surprised");
+				if(this.catchBoss){
+					this._roleSk.skplay("surprised");
+					}else{
+					this._roleSk.skplay("shock");
+				}
+				this.catchBoss=false;
 				this.fishhookImg.visible=false;
 				this.changeFishhookTime("over");
 				this.refreshFish();
@@ -54556,16 +54589,21 @@ var Gamemain=(function(_super){
 			}
 		}
 		else if(action=="stop"){
-			this._roleSk.skplay("shou");
 			if(this._gamemode=="normal"){
+				this._roleSk.skplay("shou");
 				this.fishhookImg.visible=false;
 				this.drapNormal();
 				this.changeFishhookTime("over");
 			}
 			else if(this._gamemode=="match"){
+				this._roleSk.skplay("shou");
 				this.fishhookImg.visible=false;
-				this.drapMatch();
 				this.changeFishhookTime("over");
+				if(this.catchfish){
+					this.drapMatch();
+					}else{
+					this.changeDropFishBoxState("over");
+				}
 			}
 			else if(this._gamemode=="boss"){
 				this.changeFishhookTime("stop");
@@ -54611,10 +54649,11 @@ var Gamemain=(function(_super){
 			if(this.powerIndex>=endAngleArr.length-4){
 				this.changeEffectAniState("fire","open");
 			}
-			if(this.powerIndex>=endAngleArr.length-1){
+			if(this.powerIndex>=endAngleArr.length-1 && !this.stopBossAction){
 				this.powerIndex=endAngleArr.length-1;
 				UiManager.instance.loadView("TimebossAni",null,0,"UITYPE_ANI");
 				GamemainM.instance.setTimeClock("stop",this.timeclip);
+				this.clearClick()
 			}
 		}
 		else if(action=="max"){
@@ -54749,6 +54788,7 @@ var Gamemain=(function(_super){
 			this._roleSk.skplay("shock");
 			return;
 		}
+		this.bossName=getdropObj.cfg.name;
 		this.changeBossMarkState("close");
 		var efData=new EffectD();
 		efData.startPoint=new Point(GameConfig.width/2-120,GameConfig.height/3*2);
@@ -54779,8 +54819,10 @@ var Gamemain=(function(_super){
 			this.powermask.width=maxNum;
 			Laya.stage.offAll("mousedown");
 			Laya.timer.clear(this,this.bossPowerTime);
+			this._roleSk.skplay("shou");
 			this.fishhookImg.visible=false;
 			this.changeFishhookTime("over");
+			this.catchBoss=true;
 			var bossMsg=this.fishImgArr[0].dataSource;
 			this.clearfishImgArr();
 			var efData=new EffectD();
@@ -54817,6 +54859,8 @@ var Gamemain=(function(_super){
 	__proto.bossPowerTime=function(){
 		this.powermask.width-=1;
 		if(this.powermask.width<=0){
+			this.catchBoss=false;
+			GamemainM.instance.deleteFishBox(this.bossName);
 			this.getMissImgEffect();
 			this.changeBossPowerState("over");
 		}
@@ -54904,7 +54948,8 @@ var Gamemain=(function(_super){
 			this.getMissImgEffect();
 			if(PlayerInfoM.instance.getGameSetting().shake){
 				WxManager.instance.shakeLong();
-			}
+			};
+			this.changeDropFishBoxState("over");
 			return;
 		}
 		else if(getdropObj.type=="pop"){}
@@ -55037,7 +55082,6 @@ var Gamemain=(function(_super){
 			this._hookImgANI.anchorY=0.5;
 			this.addChild(this._hookImgANI);
 			Tween.to(this._hookImgANI,{x:GameConfig.width/2,y:GameConfig.height/2},300,null,Handler.create(this,function(){
-				_$this.canDropMatch=true;
 				_$this.drawFishline("clear");
 			}));
 		}
@@ -55067,7 +55111,7 @@ var Gamemain=(function(_super){
 			rodPot=new Point(this.captainImg.x-80,this.captainImg.y-10);
 			rodPot=this.shipBox.localToGlobal(rodPot);
 			rodPot=this.globalToLocal(rodPot);
-			this._lineHeaddx+=2;
+			this._lineHeaddx+=9.5;
 			this._lineHeaddy-=2;
 			this._fishlineSp.graphics.drawLine(this._lineHeaddx,this._lineHeaddy,this._hookImgANI.x,this._hookImgANI.y,"#ff0000");
 		}
@@ -55275,7 +55319,7 @@ var Gamemain=(function(_super){
 		GameEventDispatch.instance.on("ShowRedPoint",this,this.showRedPoint);
 		GameEventDispatch.instance.on("RemoveRedPoint",this,this.removeRedPoint);
 		GameEventDispatch.instance.on("BossComIngAni",this,this.gameBoss);
-		GameEventDispatch.instance.on("ClearClick",this,this.clearClick);
+		GameEventDispatch.instance.on("GameTimeOver",this,this.gameTimeOver);
 	}
 
 	__proto.unRegister=function(){
@@ -55293,7 +55337,7 @@ var Gamemain=(function(_super){
 		GameEventDispatch.instance.off("ShowRedPoint",this,this.showRedPoint);
 		GameEventDispatch.instance.off("RemoveRedPoint",this,this.removeRedPoint);
 		GameEventDispatch.instance.off("BossComIngAni",this,this.gameBoss);
-		GameEventDispatch.instance.off("ClearClick",this,this.clearClick);
+		GameEventDispatch.instance.off("GameTimeOver",this,this.gameTimeOver);
 	}
 
 	__proto.closePanel=function(){
@@ -55964,18 +56008,19 @@ var Gamemap=(function(_super){
 var Loadview=(function(_super){
 	function Loadview(){
 		this.loadRes=[
-		{url:"res/atlas/comp.atlas",type:"atlas"},
-		{url:"res/atlas/ui/common.atlas",type:"atlas"},
-		{url:"res/atlas/ui/common_ex.atlas",type:"atlas"},
-		{url:"res/atlas/ui/common_img.atlas",type:"atlas"},
-		{url:"res/atlas/ui/common_ef.atlas",type:"atlas"},
-		{url:"res/atlas/ui/shipskin.atlas",type:"atlas"},
-		{url:"DB/DB_dog/dog.sk",type:"arraybuffer"},
-		{url:"res/atlas/ui/gamemain.atlas",type:"atlas"},
-		{url:"ui/gamemain/gamemain_0.png",type:"image"},
-		{url:"ui/gamemain/gamemain_1.png",type:"image"},
-		{url:"res/atlas/font.atlas",type:"atlas"},
-		{url:ConfigManager.getConfigPath(),type:"json"}];
+		{url:"res/atlas/comp.atlas",type:"atlas",priority:3},
+		{url:"res/atlas/ui/common.atlas",type:"atlas",priority:4},
+		{url:"res/atlas/ui/common_ex.atlas",type:"atlas",priority:1},
+		{url:"res/atlas/ui/common_img.atlas",type:"atlas",priority:4},
+		{url:"res/atlas/ui/common_ef.atlas",type:"atlas",priority:4},
+		{url:"res/atlas/ui/shipskin.atlas",type:"atlas",priority:2},
+		{url:"DB/DB_dog/dog.sk",type:"arraybuffer",priority:1},
+		{url:"res/atlas/ui/gamemain.atlas",type:"atlas",priority:1},
+		{url:"ui/gamemain/gamemain_0.png",type:"image",priority:1},
+		{url:"ui/gamemain/gamemain_1.png",type:"image",priority:4},
+		{url:"res/atlas/font.atlas",type:"atlas",priority:4},
+		{url:ConfigManager.getConfigPath(),type:"json",priority:0}];
+		this.fakeNum=0;
 		Loadview.__super.call(this);
 	}
 
@@ -55989,24 +56034,33 @@ var Loadview=(function(_super){
 	}
 
 	__proto.loadNetRes=function(){
-		var _$this=this;
 		URL.basePath=GameConfig.weixinURL;
 		Laya.loader.load(this.loadRes,Handler.create(this,function(){
 			console.log("-res load complete");
-			_$this.setloadBar(0.8);
 			GameEventDispatch.instance.event("GameSaveInit");
 			GameEventDispatch.instance.event("GameNetConfig");
-		}),Handler.create(this,this.onProgress));
-		this.setloadBar(0);
+		}));
 		if(PlayerInfoM.instance.getNetConfigAD()){
 			WxManager.instance.getSystemInfo();
 			WxManager.instance.createBannerAd();
 			WxManager.instance.createVideoAd();
 		}
+		this.setloadBar(0);
+		Laya.timer.loop(100,this,this.fakeloader);
+	}
+
+	__proto.fakeloader=function(){
+		this.fakeNum+=0.03;
+		if(this.fakeNum>=.9){
+			Laya.timer.clear(this,this.fakeloader);
+			this.fakeNum=.9;
+		}
+		this.setloadBar(this.fakeNum);
 	}
 
 	__proto.startLoadRes=function(){
 		if(GameConfig.onWeiXin){
+			Laya.timer.clear(this,this.fakeloader);
 			this.loadComplete();
 			}else {
 			Laya.loader.load(this.loadRes,Handler.create(this,this.loadComplete),Handler.create(this,this.onProgress));
@@ -56015,11 +56069,9 @@ var Loadview=(function(_super){
 	}
 
 	__proto.loadComplete=function(){
-		var _$this=this;
-		this.setloadBar(0.9);
+		this.setloadBar(1);
 		UiManager.instance.baseTipInit();
-		Laya.timer.once(2000,this,function(){
-			_$this.setloadBar(1);
+		Laya.timer.once(1000,this,function(){
 			ConfigManager.init();
 			UiManager.instance.closePanel("Loadview");
 			GameEventDispatch.instance.event("GameLoadOver");

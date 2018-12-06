@@ -8,8 +8,7 @@ package src {
 		public static var onWeiXin:Boolean=true;
 		public static var weixinURL:String="https://6361-catpirate-data-a98557-1258046007.tcb.qcloud.la/gameRes/";
 
-		//?sign=5d70318a18398985f3d464deba208c17&t=1543903960
-		//?sign=20afb5b679a086b5baeb027e19b50720&t=1543903915
+
 		public static var width:int = 640;
 		public static var height:int = 1136;
 		public static var scaleNum:Number=0.56;//宽高比

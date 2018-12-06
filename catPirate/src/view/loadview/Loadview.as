@@ -23,23 +23,25 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     public static var _instance:Loadview;
     private var loadRes:Array=[
-        {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS},
-        {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS},
-        {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS},
-        {url:"res/atlas/ui/common_img.atlas",        type:Loader.ATLAS},
-        {url:"res/atlas/ui/common_ef.atlas",         type:Loader.ATLAS},
-        {url:"res/atlas/ui/shipskin.atlas",          type:Loader.ATLAS},
+        {url:"res/atlas/comp.atlas",                 type:Loader.ATLAS,  priority:3},
+        {url:"res/atlas/ui/common.atlas",            type:Loader.ATLAS,  priority:4},
+        {url:"res/atlas/ui/common_ex.atlas",         type:Loader.ATLAS,  priority:1},
+        {url:"res/atlas/ui/common_img.atlas",        type:Loader.ATLAS,  priority:4},
+        {url:"res/atlas/ui/common_ef.atlas",         type:Loader.ATLAS,  priority:4},
+        {url:"res/atlas/ui/shipskin.atlas",          type:Loader.ATLAS,  priority:2},
 
-        {url:"DB/DB_dog/dog.sk",                     type:Loader.BUFFER},
+        {url:"DB/DB_dog/dog.sk",                     type:Loader.BUFFER, priority:1},
 
-        {url:"res/atlas/ui/gamemain.atlas",          type:Loader.ATLAS},
-        {url:"ui/gamemain/gamemain_0.png",           type:Loader.IMAGE},
-        {url:"ui/gamemain/gamemain_1.png",           type:Loader.IMAGE},
+        {url:"res/atlas/ui/gamemain.atlas",          type:Loader.ATLAS,  priority:1},
+        {url:"ui/gamemain/gamemain_0.png",           type:Loader.IMAGE,  priority:1},
+        {url:"ui/gamemain/gamemain_1.png",           type:Loader.IMAGE,  priority:4},
 
-        {url:"res/atlas/font.atlas",                 type:Loader.ATLAS},
+        {url:"res/atlas/font.atlas",                 type:Loader.ATLAS,  priority:4},
 
-        {url:ConfigManager.getConfigPath(),           type:Loader.JSON}
+        {url:ConfigManager.getConfigPath(),           type:Loader.JSON,  priority:0}
     ];
+
+    private var fakeNum:Number=0;
 
     public function Loadview() {
         super();
@@ -66,11 +68,9 @@ public class Loadview extends GameloadUI implements PanelVo{
         URL.basePath=GameConfig.weixinURL;
         Laya.loader.load(loadRes,Handler.create(this,function () {
             console.log("-res load complete");
-            setloadBar(0.8);
             GameEventDispatch.instance.event(GameEvent.GameSaveInit);//获得存档
             GameEventDispatch.instance.event(GameEvent.GameNetConfig);//网络配置
-        }),Handler.create(this,onProgress));
-        setloadBar(0);
+        }));
 
         //bannerAd
         if(PlayerInfoM.instance.getNetConfigAD()){
@@ -78,12 +78,25 @@ public class Loadview extends GameloadUI implements PanelVo{
             WxManager.instance.createBannerAd();
             WxManager.instance.createVideoAd();
         }
+
+        setloadBar(0);
+        Laya.timer.loop(100,this,fakeloader);
+    }
+    private function fakeloader():void
+    {
+        fakeNum+=0.03;
+        if(fakeNum>=.9){
+            Laya.timer.clear(this,fakeloader);
+            fakeNum=.9;
+        }
+        setloadBar(fakeNum);
     }
 
 
     private function startLoadRes():void
     {
         if(GameConfig.onWeiXin){
+            Laya.timer.clear(this,fakeloader);
             loadComplete();
         }else {
             Laya.loader.load(loadRes,Handler.create(this, loadComplete),Handler.create(this,onProgress));
@@ -93,11 +106,10 @@ public class Loadview extends GameloadUI implements PanelVo{
 
     private function loadComplete():void
     {
-        setloadBar(0.9);
+        setloadBar(1);
         UiManager.instance.baseTipInit();
 
-        Laya.timer.once(2000,this,function () {
-            setloadBar(1);
+        Laya.timer.once(1000,this,function () {
             ConfigManager.init();
             UiManager.instance.closePanel("Loadview");
             GameEventDispatch.instance.event(GameEvent.GameLoadOver);

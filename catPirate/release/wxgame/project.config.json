@@ -10,7 +10,7 @@
 	"compileType": "game",
 	"libVersion": "2.4.1",
 	"appid": "wx71eb9a58b97e0417",
-	"projectname": "catpirate",
+	"projectname": "catpirateGame",
 	"condition": {
 		"search": {
 			"current": -1,

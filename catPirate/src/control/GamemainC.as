@@ -77,7 +77,7 @@ public class GamemainC {
     }
     private function GameTimeout():void
     {
-        GameEventDispatch.instance.event(GameEvent.ClearClick);
+        GameEventDispatch.instance.event(GameEvent.GameTimeOver);
         UiManager.instance.loadView("TimeoverAni",null,0,"UITYPE_ANI");
     }
 

@@ -257,6 +257,20 @@ public class GamemainM {
         return _fishBoxDic;
     }
 
+
+    public function deleteFishBox(name:String):void
+    {
+        if(_fishBoxDic.hasOwnProperty(name)){
+            delete _fishBoxDic[name];
+        }
+    }
+    public function putOutFishBox(name:String,num:int):void
+    {
+        if(_fishBoxDic.hasOwnProperty(name)){
+            _fishBoxDic[name]-=num;
+        }
+    }
+
     public function putInFishBox(name:String,num:int):void
     {
         if(_fishBoxDic.hasOwnProperty(name)){
