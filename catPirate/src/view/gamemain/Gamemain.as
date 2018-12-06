@@ -64,13 +64,10 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
     private var canDrop:Boolean;
 
-    private var aotoDrop:Boolean;//自动甩杆
-
     private var bossName:String;
     private var catchfish:Boolean=true;//强制收杆
-
+    private var missfish:Boolean=false;//是否miss
     private var stopBossAction:Boolean=false;//时间停止器
-
     private var catchBoss:Boolean=false;//抓住boss
 
     private var fishhookPoint:Point;
@@ -420,8 +417,13 @@ public class Gamemain extends GameMainUI implements PanelVo {
         else if(action=="over"){
             if(_gamemode=="normal") overNormalDrap();
             else if(_gamemode=="match") {
-                overMatchDrap();
-                refreshFish();
+
+                if(!missfish) {
+                    //dropFishBox.visible=true;
+                    clearfishImgArr();//清除鱼
+                    refreshFish();//钓起刷新
+                }
+
                 if(catchfish){
                     changeDropFishBoxState("start");//钓动作自动执行
                 }
@@ -863,12 +865,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
-
-    private function overMatchDrap():void
-    {
-        dropFishBox.visible=true;
-        clearfishImgArr();
-    }
     private function drapMatch():void
     {
         //get drop Img And ANI
@@ -876,6 +872,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         var getdropObj:Object=GamemainM.instance.getdropFish(fishhookPoint);
 
         if(!getdropObj){
+            missfish=true;
             changeFishhookSpd("reset");//速度重置
             getMissImgEffect();//miss
             if(PlayerInfoM.instance.getGameSetting().shake){
@@ -891,6 +888,8 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
         }
         else if(getdropObj.type=="fish"){
+            missfish=false;
+
             //if img is Fish
             var minX:int=70,maxX:int=230,minY:int=250,maxY:int=360;
 

@@ -117,7 +117,7 @@ public class Boxlibs extends BoxlibsUI implements PanelVo{
         }
         else if(action=="right"){
             _pageNum++;
-            if(_pageNum==boxlist.array.length-1){
+            if(_pageNum==boxlist.array.length-2){
                 GameEventDispatch.instance.event(GameEvent.GameGuideNext);//新手引导
             }
             if(_pageNum>=boxlist.array.length-1) {

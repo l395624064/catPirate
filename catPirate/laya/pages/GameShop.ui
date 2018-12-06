@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":6,
-    "selecteID":50,
+    "selectedBox":3,
+    "selecteID":68,
     "props":{"width":640,"sceneColor":"#999999","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -42,7 +42,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":142,"x":68,"width":518,"skin":"ui/gameshop/di2.png","sizeGrid":"10,10,10,10","height":774},
+                    "props":{"y":117,"x":66,"width":518,"skin":"ui/gameshop/di2.png","sizeGrid":"10,10,10,10","height":774},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -51,22 +51,21 @@
                     "compId":64,
                     "child":[
                         ],
-                    "$LOCKED":true
+                    "$LOCKED":false
                 },
                 {
                     "x":30,
                     "type":"List",
-                    "props":{"y":208,"x":87,"width":483,"var":"shoplist","spaceY":40,"spaceX":0,"repeatY":5,"repeatX":1,"mouseEnabled":false,"height":697},
+                    "props":{"y":183,"x":85,"width":483,"var":"shoplist","spaceY":40,"spaceX":0,"repeatY":5,"repeatX":1,"mouseEnabled":false,"height":697},
                     "nodeParent":3,
                     "label":"List(shoplist)",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":5,
                     "child":[
                         {
-                            "x":45,
                             "type":"Box",
                             "props":{"y":26,"x":10,"width":470,"renderType":"render","height":102},
                             "nodeParent":5,
@@ -78,7 +77,6 @@
                             "compId":6,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "props":{"y":-4,"x":0,"width":373,"skin":"ui/gameshop/tiao1.png","sizeGrid":"9,12,10,11","height":104},
                                     "nodeParent":6,
@@ -92,7 +90,6 @@
                                     "$HIDDEN":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":8,"x":9,"width":80,"scaleY":1,"scaleX":1,"name":"headimg_box","height":80},
                                     "nodeParent":6,
@@ -146,7 +143,6 @@
                                     "$HIDDEN":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":48,"x":257,"width":107,"name":"cost2_box","height":49},
                                     "nodeParent":6,
@@ -198,7 +194,6 @@
                                     "$LOCKED":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"Text",
                                     "props":{"y":10,"x":104,"width":90,"text":"XXXX鱼","strokeColor":"#ffffff","stroke":3,"name":"name_txt","height":32,"fontSize":25,"font":"SimHei","color":"#0099ff","bold":true,"align":"left"},
                                     "nodeParent":6,
@@ -212,7 +207,6 @@
                                     "$LOCKED":true
                                 },
                                 {
-                                    "x":60,
                                     "type":"Text",
                                     "props":{"y":49,"x":103,"wordWrap":true,"width":143,"text":"升级提升combo获得数量升级提升combo获得数量升级提升combo获得数量","strokeColor":"#224882","stroke":5,"name":"content_txt","height":41,"fontSize":13,"font":"SimHei","color":"#ffffff","bold":true,"align":"left"},
                                     "nodeParent":6,
@@ -226,7 +220,6 @@
                                     "$LOCKED":true
                                 },
                                 {
-                                    "x":60,
                                     "type":"Button",
                                     "props":{"y":48,"x":375,"width":92,"stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","name":"lvupBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"升级","hitTestPrior":true,"height":63},
                                     "nodeParent":6,
@@ -240,7 +233,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Button",
                                     "props":{"y":-12,"x":374,"width":93,"stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","name":"freeBtn","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"免费金币","hitTestPrior":true,"height":63},
                                     "nodeParent":6,
@@ -256,7 +248,6 @@
                                     "$HIDDEN":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":-1,"x":257,"width":107,"name":"cost1_box","height":47},
                                     "nodeParent":6,
@@ -314,7 +305,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":33,"x":34,"width":589,"skin":"ui/gameshop/di1.png","mouseEnabled":false,"height":920},
+                    "props":{"y":8,"x":32,"width":589,"skin":"ui/gameshop/di1.png","mouseEnabled":false,"height":920},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -323,13 +314,13 @@
                     "compId":63,
                     "child":[
                         ],
-                    "$LOCKED":true,
+                    "$LOCKED":false,
                     "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"width":77,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":6,"height":77,"bottom":959},
+                    "props":{"width":77,"var":"closeBtn","skin":"ui/common_ex/closeBtn.png","right":8,"height":77,"bottom":984},
                     "nodeParent":3,
                     "label":"Image(closeBtn)",
                     "isDirectory":false,
@@ -338,13 +329,13 @@
                     "compId":41,
                     "child":[
                         ],
-                    "$LOCKED":true,
+                    "$LOCKED":false,
                     "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":114,"x":50,"width":120,"var":"tab0","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"鱼类","height":80},
+                    "props":{"y":89,"x":48,"width":120,"var":"tab0","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"鱼类","height":80},
                     "nodeParent":3,
                     "label":"Button(tab0)",
                     "isDirectory":false,
@@ -358,7 +349,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":114,"x":187,"width":120,"var":"tab1","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"部件","height":80},
+                    "props":{"y":89,"x":185,"width":120,"var":"tab1","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"部件","height":80},
                     "nodeParent":3,
                     "label":"Button(tab1)",
                     "isDirectory":false,
@@ -372,7 +363,7 @@
                 {
                     "x":30,
                     "type":"Button",
-                    "props":{"y":114,"x":324,"width":120,"var":"tab2","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"船体","height":80},
+                    "props":{"y":89,"x":322,"width":120,"var":"tab2","strokeColors":"#000000,#000000,#000000,#000000","skin":"ui/common_ex/btn_tab.png","labelStrokeColor":"#000000","labelStroke":5,"labelSize":36,"labelFont":"Microsoft YaHei","labelColors":"#ffffff,#ffffff,#ffffff,#ffffff","labelBold":true,"label":"船体","height":80},
                     "nodeParent":3,
                     "label":"Button(tab2)",
                     "isDirectory":false,

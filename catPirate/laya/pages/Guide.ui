@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":8,
+    "selectedBox":75,
+    "selecteID":77,
     "props":{"width":640,"sceneColor":"#999999","mouseThrough":true,"height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -18,14 +18,13 @@
             "props":{"y":0,"x":0,"width":640,"visible":false,"var":"guideTip","height":1136},
             "nodeParent":1,
             "label":"Box(guideTip)",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":3,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136},
                     "nodeParent":3,
@@ -41,7 +40,6 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":515,"x":66,"width":498,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":196},
                     "nodeParent":3,
@@ -54,7 +52,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Text",
                     "props":{"y":566,"x":227,"wordWrap":true,"width":305,"text":"进入新手引导,可以获得礼包嚯!","strokeColor":"#a43c6d","stroke":6,"height":67,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                     "nodeParent":3,
@@ -68,7 +65,6 @@
                     "$LOCKED":false
                 },
                 {
-                    "x":30,
                     "type":"Button",
                     "props":{"y":626,"x":246,"width":94,"var":"confirmBtn","stateNum":"1","skin":"ui/common_ex/btn_s_y.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"进入","hitTestPrior":true,"height":65},
                     "nodeParent":3,
@@ -82,7 +78,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Button",
                     "props":{"y":626,"x":421,"width":97,"var":"cancelBtn","stateNum":"1","skin":"ui/common_ex/btn_s_r.png","sizeGrid":"24,27,25,33","labelStrokeColor":"#5d1514","labelStroke":5,"labelSize":18,"labelFont":"Microsoft YaHei","labelColors":"#ffffff","label":"取消","hitTestPrior":true,"height":65},
                     "nodeParent":3,
@@ -96,7 +91,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "props":{"y":569,"x":90,"width":119,"skin":"ui/common_img/role3.png","height":116},
                     "nodeParent":3,
@@ -109,7 +103,7 @@
                         ]
                 }],
             "$LOCKED":true,
-            "$HIDDEN":false
+            "$HIDDEN":true
         },
         {
             "x":15,
@@ -117,13 +111,14 @@
             "props":{"y":0,"x":0,"visible":false,"name":"taskBox_1","mouseThrough":true,"mouseEnabled":true},
             "nodeParent":1,
             "label":"Box(taskBox_1)",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":44,
             "child":[
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_1","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":44,
@@ -253,20 +248,22 @@
                             "$LOCKED":false
                         }],
                     "$LOCKED":true,
-                    "$HIDDEN":false
+                    "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_2","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":44,
                     "label":"Box(stepbox_2)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":75,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"bg","height":1136},
                             "nodeParent":75,
@@ -282,8 +279,9 @@
                             "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
-                            "props":{"y":730,"x":18,"width":602,"name":"area","height":231},
+                            "props":{"y":709,"x":18,"width":602,"name":"area","height":231},
                             "nodeParent":75,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -307,8 +305,9 @@
                             "$LOCKED":true
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":732,"alpha":0},
+                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":722,"alpha":0},
                             "nodeParent":75,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -318,12 +317,13 @@
                             "compId":79,
                             "child":[
                                 ],
-                            "$LOCKED":true,
+                            "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":965,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":172,"alpha":0},
+                            "props":{"y":913,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":224,"alpha":0},
                             "nodeParent":75,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -333,12 +333,13 @@
                             "compId":440,
                             "child":[
                                 ],
-                            "$LOCKED":true,
+                            "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":551,"x":95,"width":415,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":169},
+                            "props":{"y":494,"x":101,"width":415,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":169},
                             "nodeParent":75,
                             "label":"Image",
                             "isDirectory":false,
@@ -350,8 +351,9 @@
                             "$LOCKED":true
                         },
                         {
+                            "x":45,
                             "type":"Text",
-                            "props":{"y":609,"x":277,"wordWrap":true,"width":200,"text":"点击以下区域,扔下鱼钩","strokeColor":"#a43c6d","stroke":6,"height":62,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":552,"x":283,"wordWrap":true,"width":200,"text":"点击以下区域,扔下鱼钩","strokeColor":"#a43c6d","stroke":6,"height":62,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":75,
                             "label":"Text",
                             "isDirectory":false,
@@ -363,8 +365,9 @@
                             "$LOCKED":true
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":589,"x":119,"width":148,"skin":"ui/common_img/role1.png","height":104},
+                            "props":{"y":532,"x":125,"width":148,"skin":"ui/common_img/role1.png","height":104},
                             "nodeParent":75,
                             "label":"Image",
                             "isDirectory":false,
@@ -376,9 +379,10 @@
                             "$LOCKED":true
                         }],
                     "$LOCKED":true,
-                    "$HIDDEN":true
+                    "$HIDDEN":false
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_3","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":44,
@@ -406,7 +410,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":813,"x":18,"width":602,"name":"area","height":156},
+                            "props":{"y":756,"x":18,"width":602,"name":"area","height":156},
                             "nodeParent":60,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -430,7 +434,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":812,"alpha":0},
+                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":757,"alpha":0},
                             "nodeParent":60,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -445,7 +449,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":968,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":170,"alpha":0},
+                            "props":{"y":921,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":217,"alpha":0},
                             "nodeParent":60,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -455,12 +459,12 @@
                             "compId":444,
                             "child":[
                                 ],
-                            "$LOCKED":true,
+                            "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
                             "type":"Image",
-                            "props":{"y":610,"x":90,"width":490,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":197},
+                            "props":{"y":521,"x":86,"width":490,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":197},
                             "nodeParent":60,
                             "label":"Image",
                             "isDirectory":false,
@@ -472,7 +476,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":660,"x":115,"width":140,"skin":"ui/common_img/role2.png","height":120},
+                            "props":{"y":571,"x":111,"width":140,"skin":"ui/common_img/role2.png","height":120},
                             "nodeParent":60,
                             "label":"Image",
                             "isDirectory":false,
@@ -484,7 +488,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":672,"x":257,"wordWrap":true,"width":301,"text":"再次点击可以收杆啦！(鱼钩越靠近色块中间,奖励越高哦)","strokeColor":"#a43c6d","stroke":6,"height":96,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":583,"x":261,"wordWrap":true,"width":278,"text":"点击任意区域收杆！(鱼钩越靠近色块中间,奖励越高哦)","strokeColor":"#a43c6d","stroke":6,"height":96,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":60,
                             "label":"Text",
                             "isDirectory":false,
@@ -499,6 +503,7 @@
                     "$HIDDEN":true
                 },
                 {
+                    "x":30,
                     "type":"Box",
                     "props":{"y":0,"x":0,"width":640,"visible":false,"name":"stepbox_4","mouseThrough":true,"mouseEnabled":true,"height":1136,"cacheAs":"bitmap"},
                     "nodeParent":44,
@@ -526,7 +531,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":1,"x":491,"width":148,"name":"area","height":175},
+                            "props":{"y":23,"x":478,"width":148,"name":"area","height":175},
                             "nodeParent":86,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -617,7 +622,7 @@
                     "$HIDDEN":true
                 }],
             "$LOCKED":true,
-            "$HIDDEN":true
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -795,7 +800,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":298,"x":459,"width":100,"name":"area","height":100},
+                            "props":{"y":300,"x":466,"width":100,"name":"area","height":100},
                             "nodeParent":115,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -941,7 +946,7 @@
                             "child":[
                                 {
                                     "type":"Circle",
-                                    "props":{"y":50,"x":50,"radius":50,"lineWidth":1,"fillColor":"#ff0000"},
+                                    "props":{"y":50,"x":50,"radius":62,"lineWidth":1,"fillColor":"#ff0000"},
                                     "nodeParent":156,
                                     "label":"Circle",
                                     "isDirectory":false,
@@ -1134,7 +1139,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":912,"x":261,"width":305,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":143},
+                            "props":{"y":741,"x":321,"width":305,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":143},
                             "nodeParent":123,
                             "label":"Image",
                             "isDirectory":false,
@@ -1146,7 +1151,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":936,"x":422,"skin":"ui/common_img/role8.png"},
+                            "props":{"y":765,"x":482,"skin":"ui/common_img/role8.png"},
                             "nodeParent":123,
                             "label":"Image",
                             "isDirectory":false,
@@ -1158,7 +1163,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":945,"x":315,"wordWrap":true,"width":126,"text":"让我们转起来!","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":774,"x":375,"wordWrap":true,"width":126,"text":"让我们转起来!","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":123,
                             "label":"Text",
                             "isDirectory":false,
@@ -1239,7 +1244,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":805,"x":213,"width":318,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":154},
+                            "props":{"y":726,"x":198,"width":318,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":154},
                             "nodeParent":185,
                             "label":"Image",
                             "isDirectory":false,
@@ -1251,7 +1256,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":800,"x":371,"width":144,"skin":"ui/common_img/role6.png","height":136},
+                            "props":{"y":721,"x":356,"width":144,"skin":"ui/common_img/role6.png","height":136},
                             "nodeParent":185,
                             "label":"Image",
                             "isDirectory":false,
@@ -1263,7 +1268,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":854,"x":244,"wordWrap":true,"width":150,"text":"稍等片刻.祈祷好运","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":775,"x":229,"wordWrap":true,"width":150,"text":"稍等片刻.祈祷好运","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":185,
                             "label":"Text",
                             "isDirectory":false,
@@ -1330,7 +1335,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":383,"alpha":0},
+                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":401,"alpha":0},
                             "nodeParent":131,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1360,7 +1365,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":812,"x":221,"width":340,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":158},
+                            "props":{"y":774,"x":286,"width":340,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":158},
                             "nodeParent":131,
                             "label":"Image",
                             "isDirectory":false,
@@ -1372,7 +1377,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":848,"x":266,"wordWrap":true,"width":166,"text":"吼,中大奖了呢(其实是送你的)","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":810,"x":331,"wordWrap":true,"width":166,"text":"吼,中大奖了呢(其实是送你的)","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":131,
                             "label":"Text",
                             "isDirectory":false,
@@ -1385,7 +1390,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":851,"x":409,"skin":"ui/common_img/role8.png"},
+                            "props":{"y":813,"x":474,"skin":"ui/common_img/role8.png"},
                             "nodeParent":131,
                             "label":"Image",
                             "isDirectory":false,
@@ -1712,7 +1717,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":193,"x":565,"width":70,"name":"area","height":120},
+                            "props":{"y":104,"x":563,"width":70,"name":"area","height":120},
                             "nodeParent":207,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -1736,7 +1741,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":189,"alpha":0},
+                            "props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":95,"alpha":0},
                             "nodeParent":207,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1746,12 +1751,12 @@
                             "compId":211,
                             "child":[
                                 ],
-                            "$LOCKED":true,
+                            "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
                             "type":"Image",
-                            "props":{"y":320,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":813,"alpha":0},
+                            "props":{"y":232,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":901,"alpha":0},
                             "nodeParent":207,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1766,7 +1771,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":158,"x":0,"width":558,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":206,"alpha":0},
+                            "props":{"y":94,"x":0,"width":558,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":270,"alpha":0},
                             "nodeParent":207,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1776,12 +1781,12 @@
                             "compId":213,
                             "child":[
                                 ],
-                            "$LOCKED":true,
+                            "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
                             "type":"Image",
-                            "props":{"y":19,"x":99,"width":380,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":179},
+                            "props":{"y":271,"x":139,"width":380,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":179},
                             "nodeParent":207,
                             "label":"Image",
                             "isDirectory":false,
@@ -1793,7 +1798,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":33,"x":121,"width":146,"skin":"ui/common_img/role3.png","scaleX":1,"height":139},
+                            "props":{"y":285,"x":161,"width":146,"skin":"ui/common_img/role3.png","scaleX":1,"height":139},
                             "nodeParent":207,
                             "label":"Image",
                             "isDirectory":false,
@@ -1805,7 +1810,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":73,"x":281,"wordWrap":true,"width":166,"text":"让我们来找到刚才的宝箱吧","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":323,"x":311,"wordWrap":true,"width":194,"text":"点击右侧按钮,找到刚才获得的宝箱吧","strokeColor":"#a43c6d","stroke":6,"height":94,"fontSize":28,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":207,
                             "label":"Text",
                             "isDirectory":false,
@@ -1847,7 +1852,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":180,"x":81,"width":485,"name":"area","height":683},
+                            "props":{"y":73,"x":77,"width":485,"name":"area","height":683},
                             "nodeParent":217,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -1868,11 +1873,11 @@
                                     "child":[
                                         ]
                                 }],
-                            "$LOCKED":true
+                            "$LOCKED":false
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":186,"alpha":0},
+                            "props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":74,"alpha":0},
                             "nodeParent":217,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1887,7 +1892,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":849,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":284,"alpha":0},
+                            "props":{"y":755,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":378,"alpha":0},
                             "nodeParent":217,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1902,7 +1907,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":124,"x":0,"width":327,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":235,"alpha":0},
+                            "props":{"y":2,"x":0,"width":89,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":828,"alpha":0},
                             "nodeParent":217,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -1917,7 +1922,22 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":712,"x":237,"width":372,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":181},
+                            "props":{"y":-3,"x":554,"width":89,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":828,"alpha":0},
+                            "nodeParent":217,
+                            "label":"Image(item0)",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":468,
+                            "child":[
+                                ],
+                            "$LOCKED":false,
+                            "$HIDDEN":false
+                        },
+                        {
+                            "type":"Image",
+                            "props":{"y":760,"x":237,"width":372,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":181},
                             "nodeParent":217,
                             "label":"Image",
                             "isDirectory":false,
@@ -1929,7 +1949,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":740,"x":439,"skin":"ui/common_img/role9.png"},
+                            "props":{"y":788,"x":439,"skin":"ui/common_img/role9.png"},
                             "nodeParent":217,
                             "label":"Image",
                             "isDirectory":false,
@@ -1941,7 +1961,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":764,"x":274,"wordWrap":true,"width":166,"text":"把宝箱拖进来,将会有好事发生哦!","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":812,"x":274,"wordWrap":true,"width":166,"text":"把宝箱拖进来,将会有好事发生哦!","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":217,
                             "label":"Text",
                             "isDirectory":false,
@@ -1983,7 +2003,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":400,"x":130,"width":380,"name":"area","height":320},
+                            "props":{"y":292,"x":132,"width":380,"name":"area","height":320},
                             "nodeParent":237,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -2022,7 +2042,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":804,"x":214,"width":322,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":156},
+                            "props":{"y":766,"x":250,"width":322,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":156},
                             "nodeParent":237,
                             "label":"Image",
                             "isDirectory":false,
@@ -2034,7 +2054,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":800,"x":369,"width":144,"skin":"ui/common_img/role6.png","height":136},
+                            "props":{"y":762,"x":405,"width":144,"skin":"ui/common_img/role6.png","height":136},
                             "nodeParent":237,
                             "label":"Image",
                             "isDirectory":false,
@@ -2046,7 +2066,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":866,"x":248,"wordWrap":true,"width":138,"text":"好运快来,好运快来","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":828,"x":284,"wordWrap":true,"width":138,"text":"好运快来,好运快来","strokeColor":"#a43c6d","stroke":6,"height":70,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":237,
                             "label":"Text",
                             "isDirectory":false,
@@ -2088,7 +2108,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":409,"x":122,"width":400,"name":"area","height":400},
+                            "props":{"y":331,"x":138,"width":400,"name":"area","height":400},
                             "nodeParent":245,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -2113,7 +2133,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":383,"alpha":0},
+                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":325,"alpha":0},
                             "nodeParent":245,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2128,7 +2148,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":819,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":319,"alpha":0},
+                            "props":{"y":733,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":405,"alpha":0},
                             "nodeParent":245,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2143,7 +2163,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":809,"x":227,"width":317,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":159},
+                            "props":{"y":765,"x":321,"width":317,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":159},
                             "nodeParent":245,
                             "label":"Image",
                             "isDirectory":false,
@@ -2155,7 +2175,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":854,"x":263,"wordWrap":true,"width":150,"text":"哇哦,开到好东西了呢","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":836,"x":393,"wordWrap":true,"width":96,"text":"哇哦！","strokeColor":"#a43c6d","stroke":6,"height":45,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":245,
                             "label":"Text",
                             "isDirectory":false,
@@ -2168,7 +2188,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":848,"x":400,"skin":"ui/common_img/role8.png"},
+                            "props":{"y":804,"x":494,"skin":"ui/common_img/role8.png"},
                             "nodeParent":245,
                             "label":"Image",
                             "isDirectory":false,
@@ -2209,7 +2229,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":38,"x":519,"width":120,"name":"area","height":120},
+                            "props":{"y":-20,"x":-21,"width":120,"name":"area","height":120},
                             "nodeParent":254,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -2233,7 +2253,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":513,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":197,"alpha":0},
+                            "props":{"y":0,"x":125,"width":513,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":197,"alpha":0},
                             "nodeParent":254,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2248,7 +2268,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":167,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":971,"alpha":0},
+                            "props":{"y":108,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":1030,"alpha":0},
                             "nodeParent":254,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2263,7 +2283,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":40,"x":146,"width":341,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":163},
+                            "props":{"y":60,"x":116,"width":341,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":163},
                             "nodeParent":254,
                             "label":"Image",
                             "isDirectory":false,
@@ -2275,7 +2295,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":88,"x":295,"skin":"ui/common_img/role4.png","scaleX":-1},
+                            "props":{"y":109,"x":303,"skin":"ui/common_img/role4.png","scaleX":1},
                             "nodeParent":254,
                             "label":"Image",
                             "isDirectory":false,
@@ -2287,7 +2307,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":77,"x":293,"wordWrap":true,"width":150,"text":"开箱越多,幸运值越高哟!","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":105,"x":152,"wordWrap":true,"width":150,"text":"开箱越多,幸运值越高哟!","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":254,
                             "label":"Text",
                             "isDirectory":false,
@@ -2480,7 +2500,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":350,"x":493,"width":102,"name":"area","height":57},
+                            "props":{"y":260,"x":459,"width":120,"name":"area","height":60},
                             "nodeParent":278,
                             "label":"Sprite(area)",
                             "isOpen":false,
@@ -2491,7 +2511,7 @@
                             "child":[
                                 {
                                     "type":"Rect",
-                                    "props":{"width":102,"lineWidth":1,"height":57,"fillColor":"#ff0000"},
+                                    "props":{"width":120,"lineWidth":1,"height":60,"fillColor":"#ff0000"},
                                     "nodeParent":280,
                                     "label":"Rect",
                                     "isDirectory":false,
@@ -2504,7 +2524,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":346,"alpha":0},
+                            "props":{"y":0,"x":0,"width":643,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":268,"alpha":0},
                             "nodeParent":278,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2514,12 +2534,12 @@
                             "compId":282,
                             "child":[
                                 ],
-                            "$LOCKED":true,
+                            "$LOCKED":false,
                             "$HIDDEN":false
                         },
                         {
                             "type":"Image",
-                            "props":{"y":417,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":716,"alpha":0},
+                            "props":{"y":321,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":812,"alpha":0},
                             "nodeParent":278,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2534,7 +2554,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":16,"x":80,"width":386,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":184},
+                            "props":{"y":60,"x":62,"width":386,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":184},
                             "nodeParent":278,
                             "label":"Image",
                             "isDirectory":false,
@@ -2546,7 +2566,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":35,"x":102,"width":146,"skin":"ui/common_img/role3.png","scaleX":1,"height":139},
+                            "props":{"y":79,"x":84,"width":146,"skin":"ui/common_img/role3.png","scaleX":1,"height":139},
                             "nodeParent":278,
                             "label":"Image",
                             "isDirectory":false,
@@ -2558,7 +2578,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":71,"x":255,"wordWrap":true,"width":188,"text":"升级后可增加最大重量及出现概率哟","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":115,"x":237,"wordWrap":true,"width":188,"text":"升级后可增加最大重量及出现概率哟","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":278,
                             "label":"Text",
                             "isDirectory":false,
@@ -2669,7 +2689,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":781,"x":103,"width":413,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":185},
+                            "props":{"y":759,"x":103,"width":377,"skin":"ui/common_ex/word-di.png","sizeGrid":"23,38,28,31","height":163},
                             "nodeParent":338,
                             "label":"Image",
                             "isDirectory":false,
@@ -2681,7 +2701,7 @@
                         },
                         {
                             "type":"Text",
-                            "props":{"y":839,"x":302,"wordWrap":true,"width":198,"text":"升级等级越高,需要花费越高,请留心","strokeColor":"#a43c6d","stroke":6,"height":63,"fontSize":30,"font":"SimHei","color":"#ffffff"},
+                            "props":{"y":803,"x":292,"wordWrap":true,"width":168,"text":"升级等级越高,需要花费越高,请留心","strokeColor":"#a43c6d","stroke":6,"height":73,"fontSize":25,"font":"SimHei","color":"#ffffff"},
                             "nodeParent":338,
                             "label":"Text",
                             "isDirectory":false,
@@ -2694,7 +2714,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":836,"x":128,"width":171,"skin":"ui/common_img/role1.png","height":103},
+                            "props":{"y":795,"x":123,"width":171,"skin":"ui/common_img/role1.png","height":103},
                             "nodeParent":338,
                             "label":"Image",
                             "isDirectory":false,
@@ -2853,7 +2873,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":120,"alpha":0},
+                            "props":{"y":0,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":68,"alpha":0},
                             "nodeParent":298,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2868,7 +2888,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":209,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":926,"alpha":0},
+                            "props":{"y":159,"x":0,"width":640,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":976,"alpha":0},
                             "nodeParent":298,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2883,7 +2903,7 @@
                         },
                         {
                             "type":"Image",
-                            "props":{"y":33,"x":0,"width":548,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":264,"alpha":0},
+                            "props":{"y":1,"x":0,"width":548,"skin":"ui/common_ex/blank.png","sizeGrid":"2,2,2,2","name":"item0","mouseEnabled":true,"height":296,"alpha":0},
                             "nodeParent":298,
                             "label":"Image(item0)",
                             "isOpen":true,
@@ -2898,7 +2918,7 @@
                         },
                         {
                             "type":"Sprite",
-                            "props":{"y":119,"x":552,"width":90,"name":"area","height":90},
+                            "props":{"y":70,"x":546,"width":90,"name":"area","height":90},
                             "nodeParent":298,
                             "label":"Sprite(area)",
                             "isOpen":false,

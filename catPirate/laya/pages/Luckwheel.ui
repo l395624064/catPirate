@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":3,
-    "selecteID":50,
+    "selectedBox":109,
+    "selecteID":124,
     "props":{"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -463,13 +463,14 @@
                     "props":{"width":642,"visible":false,"var":"explainBox","height":1136,"centerY":0,"centerX":-1},
                     "nodeParent":3,
                     "label":"Box(explainBox)",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":109,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"y":0,"x":0,"width":642,"skin":"ui/common_ex/blank.png","height":1136},
                             "nodeParent":109,
@@ -484,8 +485,9 @@
                             "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "props":{"y":245,"width":545,"skin":"ui/common_ex/di2.png","sizeGrid":"25,23,28,26","height":754,"centerX":1},
+                            "props":{"y":245,"width":545,"skin":"ui/common_ex/di2.png","sizeGrid":"25,23,28,26","height":690,"centerX":1},
                             "nodeParent":109,
                             "label":"Image",
                             "isDirectory":false,
@@ -498,6 +500,7 @@
                             "$HIDDEN":false
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "props":{"width":107,"var":"explainCloseBtn","skin":"ui/common_ex/closeBtn.png","right":2,"height":107,"bottom":823},
                             "nodeParent":109,
@@ -510,8 +513,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Text",
-                            "props":{"y":275,"x":210,"width":255,"text":"轮盘规则说明","strokeColor":"#224882","stroke":5,"height":45,"fontSize":40,"font":"SimHei","color":"#ffffff","bold":true},
+                            "props":{"y":271,"x":210,"width":255,"text":"轮盘规则说明","strokeColor":"#224882","stroke":5,"height":45,"fontSize":40,"font":"SimHei","color":"#ffffff","bold":true},
                             "nodeParent":109,
                             "label":"Text",
                             "isDirectory":false,
@@ -522,8 +526,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Text",
-                            "props":{"y":361,"x":89,"width":452,"text":"相同三种图案可获得奖励如下","strokeColor":"#224882","stroke":5,"height":40,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
+                            "props":{"y":326,"x":89,"width":452,"text":"相同三种图案可获得奖励如下","strokeColor":"#224882","stroke":5,"height":34,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                             "nodeParent":109,
                             "label":"Text",
                             "isDirectory":false,
@@ -534,8 +539,9 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"List",
-                            "props":{"y":434,"x":85,"width":467,"var":"explainlist","spaceY":15,"repeatY":5,"repeatX":1,"renderType":"render","height":536},
+                            "props":{"y":370,"x":85,"width":467,"var":"explainlist","spaceY":15,"repeatY":5,"repeatX":1,"renderType":"render","height":536},
                             "nodeParent":109,
                             "label":"List(explainlist)",
                             "isOpen":true,
@@ -545,6 +551,7 @@
                             "compId":132,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Box",
                                     "props":{"y":0,"x":0,"renderType":"render"},
                                     "nodeParent":132,
@@ -556,6 +563,7 @@
                                     "compId":133,
                                     "child":[
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"y":0,"x":0,"width":464,"skin":"ui/common_ex/tiao1.png","sizeGrid":"7,17,10,13","height":95},
                                             "nodeParent":133,
@@ -569,6 +577,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Image",
                                             "props":{"y":8,"x":18,"skin":"ui/common_ef/luck5.png","name":"popImg"},
                                             "nodeParent":133,
@@ -581,6 +590,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Text",
                                             "props":{"y":32,"x":112,"width":49,"text":"*3","strokeColor":"#224882","stroke":5,"height":45,"fontSize":40,"font":"SimHei","color":"#ffffff","bold":true},
                                             "nodeParent":133,
@@ -593,6 +603,7 @@
                                                 ]
                                         },
                                         {
+                                            "x":75,
                                             "type":"Box",
                                             "props":{"y":20,"x":321,"name":"award1_box"},
                                             "nodeParent":133,
@@ -644,6 +655,7 @@
                                             "$LOCKED":false
                                         },
                                         {
+                                            "x":75,
                                             "type":"Box",
                                             "props":{"y":20,"x":178,"name":"award2_box"},
                                             "nodeParent":133,
@@ -696,7 +708,7 @@
                                         }]
                                 }]
                         }],
-                    "$HIDDEN":true
+                    "$HIDDEN":false
                 }]
         }],
     "animations":[
