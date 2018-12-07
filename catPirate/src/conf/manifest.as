@@ -7,6 +7,8 @@ package conf
     
     import conf.cfg_fish;
     
+    import conf.cfg_fishhook;
+    
     import conf.cfg_giftbox;
     
     import conf.cfg_module_ship;
@@ -25,6 +27,8 @@ package conf
                 "cfg_currency":cfg_currency,
                 
                 "cfg_fish":cfg_fish,
+                
+                "cfg_fishhook":cfg_fishhook,
                 
                 "cfg_giftbox":cfg_giftbox,
                 

@@ -65,6 +65,10 @@ public class Gameshop extends GameShopUI implements PanelVo{
             changeTabBtnState(2);
             onSelectTab(2);
         });
+        tab3.on(Event.MOUSE_DOWN,this,function () {
+            changeTabBtnState(3);
+            onSelectTab(3);
+        });
     }
     private function initNum():void
     {
@@ -76,12 +80,15 @@ public class Gameshop extends GameShopUI implements PanelVo{
         tab0.selected=false;
         tab1.selected=false;
         tab2.selected=false;
+        tab3.selected=false;
         switch (index){
             case 0:tab0.selected=true;
                 break;
             case 1:tab1.selected=true;
                 break;
             case 2:tab2.selected=true;
+                break;
+            case 3:tab3.selected=true;
                 break;
         }
     }
@@ -113,7 +120,19 @@ public class Gameshop extends GameShopUI implements PanelVo{
         var ele_free_btn:Button=cell.getChildByName("freeBtn") as Button;
         var ele_lvup_btn:Button=cell.getChildByName("lvupBtn") as Button;
 
+        //content
+        if(config.shopId==1001){
+            ele_content_txt.fontSize=16;
+        }
+        else if(config.shopId==1002||config.shopId==1003){
+            ele_content_txt.fontSize=13;
+        }
+        else if(config.shopId==1004){
+            ele_content_txt.fontSize=16;
+        }
         ele_content_txt.text=config['explain_content']+"";
+
+        //name msg
         if(config.shopId==1001){
             if(lv>0)ele_name_txt.text="LV."+lv+"-"+config['name']+"";
             else ele_name_txt.text=config['name']+"";
@@ -121,7 +140,11 @@ public class Gameshop extends GameShopUI implements PanelVo{
         else if(config.shopId==1002||config.shopId==1003){
             ele_name_txt.text=config['name']+"";
         }
+        else if(config.shopId==1004){
+            ele_name_txt.text=config['name']+"";
+        }
 
+        //lock img
         var headImg:Image=ele_head_box.getChildByName("head_img") as Image;
         var lockImg:Image=ele_head_box.getChildByName("lock_img") as Image;
         var img:Image=new Image(config['res']);
@@ -133,6 +156,11 @@ public class Gameshop extends GameShopUI implements PanelVo{
             if(lv>0) lockImg.visible=false;
         }
         else if(config.shopId==1002||config.shopId==1003){
+            if(shopOwnArr.indexOf(config.id)!=-1){
+                lockImg.visible=false;
+            }
+        }
+        else if(config.shopId==1004){
             if(shopOwnArr.indexOf(config.id)!=-1){
                 lockImg.visible=false;
             }
@@ -168,7 +196,10 @@ public class Gameshop extends GameShopUI implements PanelVo{
                 //shipRefit:1002
                 costnum=config['cost'+i+'_num'][0];
             }
-
+            else if(config.shopId==1004){
+                //fishhook:1004
+                costnum=config['cost'+i+'_num'][0];
+            }
             ele_txt_const.text=costnum + "";
             costNumArr.push(costnum);
         }
@@ -179,11 +210,15 @@ public class Gameshop extends GameShopUI implements PanelVo{
             if(lv>=config['cost1_num'].length){
                 //ele_free_btn.visible=false;
                 ele_lvup_btn.visible=false;
-                return;
+            }else{
+                ele_lvup_btn.visible=true;
+                ele_lvup_btn.label="升级";
+
+                ele_free_btn.labelSize=18;
+                ele_free_btn.label="免费金币";
+                ele_free_btn.visible=true;
             }
 
-            ele_free_btn.labelSize=18;
-            ele_free_btn.label="免费金币";
             ele_free_btn.offAll();
             ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
                 e.stopPropagation();
@@ -191,14 +226,11 @@ public class Gameshop extends GameShopUI implements PanelVo{
                 UiManager.instance.loadView("Timegift",null,0,"UITYPE_NORMAL");
                 //console.log("-get AD video");
             });
-
-            ele_lvup_btn.visible=true;
-            ele_lvup_btn.label="升级";
         }
         else if(config.shopId==1002 || config.shopId==1003){
-            if(PlayerInfoM.instance.getNetConfigShare()){
-                ele_free_btn.labelSize=12;
-                ele_free_btn.label="看视频免费领";
+            if(PlayerInfoM.instance.getNetConfigAD() && shopOwnArr.indexOf(config.id)==-1){
+                ele_free_btn.labelSize=15;
+                ele_free_btn.label="视频/免费领";
                 ele_free_btn.visible=true;//AD免费获得
             }else{
                 ele_free_btn.visible=false;
@@ -225,7 +257,33 @@ public class Gameshop extends GameShopUI implements PanelVo{
             }
         }
         else if(config.shopId==1004){
+            if(PlayerInfoM.instance.getNetConfigAD() && shopOwnArr.indexOf(config.id)==-1){
+                ele_free_btn.labelSize=15;
+                ele_free_btn.label="视频/享试用";
+                ele_free_btn.visible=true;
+            }else{
+                ele_free_btn.visible=false;
+            }
 
+            ele_free_btn.offAll();
+            ele_free_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
+                e.stopPropagation();
+                _videoAwardObj=config;
+                WxManager.instance.showVideoAd(Handler.create(this,videoOverTimeAward));//视频-购买装备
+            });
+
+
+            ele_lvup_btn.visible=true;
+            ele_lvup_btn.label="购买";
+            if(shopOwnArr.indexOf(config.id)!=-1){
+                ele_lvup_btn.label="装备";
+                ele_lvup_btn.offAll();
+                ele_lvup_btn.on(Event.MOUSE_DOWN,this,function (e:Event) {
+                    e.stopPropagation();
+                    GameEventDispatch.instance.event(GameEvent.FishhookEquip,[config]);
+                })
+                return;
+            }
         }
 
 
@@ -249,6 +307,9 @@ public class Gameshop extends GameShopUI implements PanelVo{
             }
             else if(config.shopId==1003){
                 info.buySucceedCallback=new Handler(this,shipbodyBuySucceed);
+            }
+            else if(config.shopId==1004){
+                info.buySucceedCallback=new Handler(this,fishhookBuySucceed);
             }
             GameEventDispatch.instance.event(GameEvent.ShowTips,[info]);
         });
@@ -280,6 +341,27 @@ public class Gameshop extends GameShopUI implements PanelVo{
         PlayerInfoM.instance.addshopOwn(param.id);
         shoplist.array=ShopM.instance.getShoplist(2);
         shoplist.refresh();
+    }
+    private function fishhookBuySucceed(param:Object):void
+    {
+        PlayerInfoM.instance.addshopOwn(param.id);
+        shoplist.array=ShopM.instance.getShoplist(3);
+        shoplist.refresh();
+    }
+
+    private function videoOverTimeAward():void
+    {
+        //限时礼品-fishhook
+        if(_videoAwardObj){
+            var gainD:GainnewD=new GainnewD();
+            gainD.res=_videoAwardObj.res;
+            gainD.name=_videoAwardObj.name;
+            gainD.explain_content=_videoAwardObj.explain_content+"(免费试用一次,退出游戏时失效)";
+            GameEventDispatch.instance.event(GameEvent.GainNewPOP,[gainD]);
+
+            GameEventDispatch.instance.event(GameEvent.TimeAwardEquip,_videoAwardObj);
+            _videoAwardObj=null;
+        }
     }
 
     private function videoOverAward():void

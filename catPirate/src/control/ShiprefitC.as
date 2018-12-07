@@ -1,4 +1,5 @@
 package control {
+import conf.cfg_fishhook;
 import conf.cfg_module_ship;
 
 import data.TipsD;
@@ -18,6 +19,8 @@ public class ShiprefitC {
     public function ShiprefitC() {
         GameEventDispatch.instance.on(GameEvent.ShipSlotInit,this,shipSlotInit);
         GameEventDispatch.instance.on(GameEvent.ShipSlotEquip,this,shipSlotEquip);
+        GameEventDispatch.instance.on(GameEvent.TimeAwardEquip,this,timeAwardEquip);
+        GameEventDispatch.instance.on(GameEvent.FishhookEquip,this,fishhookEquip);
     }
 
     public static function get instance():ShiprefitC
@@ -36,7 +39,38 @@ public class ShiprefitC {
         var cabinId:int=PlayerInfoM.instance.getshipEquipIdByName("cabin");
         var cabin:Object=cfg_module_ship.instance(cabinId+"");
 
-        ShiprefitM.instance.setShipslotDic({body:body,sail:sail,tower:tower,cabin:cabin});
+        /*
+        *添加装备
+        * */
+        var fishhookId:int=PlayerInfoM.instance.getshipEquipIdByName("fishhook");
+        if(!fishhookId){
+            fishhookId=501;
+        }
+        var fishhook:Object=cfg_fishhook.instance(fishhookId+"");
+
+        ShiprefitM.instance.setShipslotDic({body:body,sail:sail,tower:tower,cabin:cabin,fishhook:fishhook});
+        GameEventDispatch.instance.event(GameEvent.UpdateShipslot);
+    }
+
+    private function fishhookEquip(param:Object):void
+    {
+        var relationId:int=param.relationId;
+        var fishhookParam:Object=cfg_fishhook.instance(relationId+"");
+        ShiprefitM.instance.setShipslotByName("fishhook",fishhookParam);
+        PlayerInfoM.instance.setshipEquipIdByName("fishhook",relationId);
+
+        GameEventDispatch.instance.event(GameEvent.ShowStips,[{id:5}]);
+        GameEventDispatch.instance.event(GameEvent.UpdateShipslot);
+    }
+
+    private function timeAwardEquip(param:Object):void
+    {
+        var relationId:int=param.relationId;
+        if(param.shopId=1004){
+            var fishhookParam:Object=cfg_fishhook.instance(relationId+"");
+            ShiprefitM.instance.setShipslotByName("fishhook",fishhookParam);
+        }
+
         GameEventDispatch.instance.event(GameEvent.UpdateShipslot);
     }
 

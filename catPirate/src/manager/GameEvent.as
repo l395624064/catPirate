@@ -78,6 +78,8 @@ package manager
         public static const ShowStips:String="ShowStips";
         //shiprefitC
         public static const ShipSlotEquip:String="ShipSlotEquip";
+        public static const FishhookEquip:String="FishhookEquip";
+        public static const TimeAwardEquip:String="TimeAwardEquip";
         public static const ShipSlotInit:String="ShipSlotInit";
         //ShipRoleC
         public static const CreatShipRole:String="CreatShipRole";

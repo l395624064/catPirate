@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":6,
-    "selecteID":7,
+    "selecteID":11,
     "props":{"x":0,"width":640,"sceneColor":"#cccccc","height":1136},
     "nodeParent":-1,
     "label":"View",
@@ -100,9 +100,9 @@
                         {
                             "x":45,
                             "type":"Text",
-                            "props":{"y":99,"x":138,"width":399,"text":"游戏版本号:1.0.50","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
+                            "props":{"y":99,"x":211,"width":172,"text":"游戏版本号:","strokeColor":"#224882","stroke":5,"height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"left"},
                             "nodeParent":6,
-                            "label":"Text(proname_txt0)",
+                            "label":"Text",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
@@ -114,13 +114,27 @@
                         {
                             "x":45,
                             "type":"Text",
-                            "props":{"y":137,"x":138,"width":399,"text":"Powered by LayaAir Engine","strokeColor":"#224882","stroke":5,"name":"proname_txt0","height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
+                            "props":{"y":137,"x":138,"width":399,"text":"Powered by LayaAir Engine","strokeColor":"#224882","stroke":5,"height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"center"},
                             "nodeParent":6,
-                            "label":"Text(proname_txt0)",
+                            "label":"Text",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":8,
+                            "child":[
+                                ],
+                            "$LOCKED":false
+                        },
+                        {
+                            "x":45,
+                            "type":"Text",
+                            "props":{"y":99,"x":391,"width":126,"var":"gameversionTxt","text":"1.0.50","strokeColor":"#224882","stroke":5,"height":32,"fontSize":30,"font":"SimHei","color":"#ffffff","bold":true,"align":"left"},
+                            "nodeParent":6,
+                            "label":"Text(gameversionTxt)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":11,
                             "child":[
                                 ],
                             "$LOCKED":false

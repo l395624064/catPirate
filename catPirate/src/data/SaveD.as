@@ -44,7 +44,7 @@ public class SaveD {
         美人鱼:0
     };
 
-    public var shipEquipDic:Object={body:401,sail:null,tower:null,cabin:null};//body sail tower cabin
+    public var shipEquipDic:Object={body:401,sail:null,tower:null,cabin:null,fishhook:501};//body sail tower cabin
     public var shopOwnArr:Array=[15];//已购买 shopId
 
 

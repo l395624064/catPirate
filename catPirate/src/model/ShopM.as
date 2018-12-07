@@ -49,7 +49,10 @@ public class ShopM {
             //fishHook
             id=1003;
         }
-
+        else if(index==3){
+            //fishHook
+            id=1004;
+        }
         arr=ConfigManager.filter("cfg_shop",function (item) {
             if(item['shopId']==id) return true;
         },function (a,b) {

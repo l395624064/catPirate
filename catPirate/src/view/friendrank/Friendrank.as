@@ -14,6 +14,8 @@ import manager.Gamefame;
 import manager.UiManager;
 import manager.WxManager;
 
+import model.PlayerInfoM;
+
 import src.GameConfig;
 
 import ui.FriendRankUI;
@@ -32,10 +34,17 @@ public class Friendrank extends FriendRankUI implements PanelVo{
 
     public function openPanel(param:Object=null):void
     {
+        if(PlayerInfoM.instance.getNetConfigAD()){
+            WxManager.instance.hideBannerAd();
+        }
+
         closeBtn.on(Event.MOUSE_DOWN,this,function () {
             UiManager.instance.closePanel("Friendrank");
             if(GameConfig.onWeiXin){
                 WxManager.instance.closeWXFriendRank();
+            }
+            if(PlayerInfoM.instance.getNetConfigAD()){
+                WxManager.instance.showBannerAd();
             }
         });
 

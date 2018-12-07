@@ -6,8 +6,12 @@ package src {
 	 */
 	public class GameConfig {
 		public static var onWeiXin:Boolean=true;
-		public static var weixinURL:String="https://6361-catpirate-data-a98557-1258046007.tcb.qcloud.la/gameRes/";
+		public static var weixinSoundURL:String="https://6361-catpirate-data-a98557-1258046007.tcb.qcloud.la/gameRes/";
+        public static var weixinResURL:String="";
 
+		public static var weixinAd:Boolean=true;
+
+		public static var gameVersion:String="1.1.78";
 
 		public static var width:int = 640;
 		public static var height:int = 1136;

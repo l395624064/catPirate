@@ -46,8 +46,8 @@ public class PlayerInfoM {
         美人鱼:0
     };
 
-    private var _shipEquipDic:Object={body:401,sail:null,tower:null,cabin:null};//body sail tower cabin
-    private var _shopOwnArr:Array=[15];//已购买 shopId
+    private var _shipEquipDic:Object={body:401,sail:null,tower:null,cabin:null,fishhook:501};//body sail tower cabin
+    private var _shopOwnArr:Array=[15,36];//已购买 shopId
 
 
 
@@ -164,13 +164,25 @@ public class PlayerInfoM {
         return _nickName;
     }
 
+
+
+
+    //set new equip free
+    private function checkNewEquip(value:Object):Object
+    {
+        //add free  fishhook,shopid:36
+        if(!value.hasOwnProperty('fishhook')){
+            value.fishhook=501;
+        }
+        return value;
+    }
     public function getshipEquipDic():Object
     {
         return _shipEquipDic;
     }
     public function setshipEquipDic(value:Object):void
     {
-        _shipEquipDic=value;
+        _shipEquipDic=checkNewEquip(value);
     }
 
     public function getshipEquipIdByName(name:String):int
@@ -185,9 +197,20 @@ public class PlayerInfoM {
         _shipEquipDic[name]=shopId;
     }
 
+
+
+    //give new shop free pop
+    private function giveNewFree(value:Array):Array
+    {
+        //add free  fishhook,shopid:36
+        if(value.indexOf(36)==-1){
+            value.push(36);
+        }
+        return value;
+    }
     public function setshopOwnArr(value:Array):void
     {
-        _shopOwnArr=value;
+        _shopOwnArr=giveNewFree(value);
     }
     public function getshopOwnArr():Array
     {

@@ -15,7 +15,7 @@ public class ShiprefitM {
         [1,1,1,1,1,1]
     ];
 
-    private var _shipslotDic:Object={body:null,sail:null,tower:null,cabin:null};//body sail tower cabin
+    private var _shipslotDic:Object={body:null,sail:null,tower:null,cabin:null,fishhook:null};//body sail tower cabin fishhook
 
     //min:0 max:100
     /*耐久度(船体):CON

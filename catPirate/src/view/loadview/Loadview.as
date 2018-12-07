@@ -61,11 +61,16 @@ public class Loadview extends GameloadUI implements PanelVo{
         if(GameConfig.onWeiXin){
             Laya.loader.load("res/atlas/ui/wxrank.atlas",Handler.create(this,loadNetRes));
         }
+
+
+        if(this.hasOwnProperty('gameversionTxt')){
+            gameversionTxt.text=GameConfig.gameVersion;
+        }
     }
 
     private function loadNetRes():void
     {
-        URL.basePath=GameConfig.weixinURL;
+        URL.basePath=GameConfig.weixinResURL;
         Laya.loader.load(loadRes,Handler.create(this,function () {
             console.log("-res load complete");
             GameEventDispatch.instance.event(GameEvent.GameSaveInit);//获得存档

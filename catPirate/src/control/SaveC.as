@@ -34,7 +34,7 @@ public class SaveC {
     private var _gender:int;
     private var _province:String;//省份
 
-    private var _openTime:int=1543999354;
+    private var _openTime:int=1544415498;
 
 
     public function SaveC() {
@@ -59,14 +59,13 @@ public class SaveC {
         if(GameConfig.onWeiXin){
             var localDate:Date=new Date();
             if(localDate.getTime()>=_openTime*1000){
-                console.log("--开启分享相关功能:",localDate.getTime());
-                console.log("--开启分享相关功能:",_openTime*1000);
+                console.log("--open share");
                 PlayerInfoM.instance.setNetConfigShare(true);
             }else {
-                console.log("--关闭分享相关功能:");
+                console.log("--close share");
                 PlayerInfoM.instance.setNetConfigShare(false);
             }
-            PlayerInfoM.instance.setNetConfigAD(true);
+            PlayerInfoM.instance.setNetConfigAD(GameConfig.weixinAd);
             //WxManager.instance.getGameConfig(Handler.create(this,GameNetConfigInit));
         }
     }

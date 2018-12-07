@@ -533,11 +533,22 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
-    private var _fishhookBossSpd:int=3;
-    private var _fishhookMatchSpd:int=4.5;
-    private var _fishhookNormalSpd:int=5;
+    private var _fishhookBossSpd:Number=3;
+    private var _fishhookMatchSpd:Number=4.5;
+    private var _fishhookNormalSpd:Number=5;
+    private var _fishhookMatchAddSpd:Number=0.15;
     private function changeFishhookSpd(action:String,newSpd:Number=undefined,delay:int=0):void
     {
+        var fishhookConfig:Object=ShiprefitM.instance.getShipslotByName("fishhook");
+        if(fishhookConfig){
+            _fishhookNormalSpd=fishhookConfig.normalBaseSpd;
+            _fishhookBossSpd=fishhookConfig.bossBaseSpd;
+
+            _fishhookMatchSpd=fishhookConfig.matchBaseSpd;
+            _fishhookMatchAddSpd=fishhookConfig.matchAddSpd;
+        }
+
+
         if(action=="init"){
             if(_gamemode=="normal")fishhookImg['spd']=_fishhookNormalSpd;
             else if(_gamemode=="match"){
@@ -554,7 +565,7 @@ public class Gamemain extends GameMainUI implements PanelVo {
         else if(action=="update"){
             //combo lvup
             if(_gamemode=="match"){
-                const updateSpd:Number=0.15;
+                const updateSpd:Number=_fishhookMatchAddSpd;
                 fishhookImg['updateSpd']+=updateSpd;
             }
         }
@@ -1058,6 +1069,12 @@ public class Gamemain extends GameMainUI implements PanelVo {
             //收竿
             var hookPot:Point=new Point(fishhookImg.x,fishhookImg.y-fishhookImg.height/2);
             hookPot=dropFishBox.localToGlobal(hookPot);
+
+            var fishhookConfig:Object=ShiprefitM.instance.getShipslotByName("fishhook");
+            if(fishhookConfig){
+                _hookImgANI.skin=fishhookConfig.res;
+            }
+
             _hookImgANI.pos(hookPot.x,hookPot.y);
             _hookImgANI.anchorX=0.5;
             _hookImgANI.anchorY=0.5;
@@ -1112,10 +1129,6 @@ public class Gamemain extends GameMainUI implements PanelVo {
 
 
 
-
-
-
-
     public function updateShipslot():void
     {
         //body sail tower cabin
@@ -1138,6 +1151,11 @@ public class Gamemain extends GameMainUI implements PanelVo {
         var cabinConfig:Object=ShiprefitM.instance.getShipslotByName("cabin");
         if(cabinConfig)cabinImg.skin=cabinConfig['res'];
         else cabinImg.skin="";
+
+
+        //get fishhook
+        var fishhookConfig:Object=ShiprefitM.instance.getShipslotByName("fishhook");
+        if(fishhookConfig) fishhookImg.skin=fishhookConfig['res'];
     }
 
 
